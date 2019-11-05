@@ -16,15 +16,19 @@ struct Strings {
 
 struct Storyboard {
     static let main = UIStoryboard(name: StoryboardName.main, bundle: nil)
+     static let login = UIStoryboard(name: StoryboardName.login, bundle: nil)
+    
 }
 
 struct StoryboardName {
     static let main = "Main"
+    static let login = "Login"
 }
 
 struct Color {
     static let purple = UIColor.initWithHex(hex: "6558A7")
     static let blue = UIColor.initWithHex(hex: "002981")
+    static let red = UIColor.initWithHex(hex: "cc0000")
     static let ghostwhite = UIColor.initWithHex(hex: "F8F8FF")
     static let whitesmoke = UIColor.initWithHex(hex: "F5F5F5")
 }

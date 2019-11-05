@@ -43,14 +43,24 @@ class SplashVC: BaseViewController {
                     self.view.layoutIfNeeded()
                     self.activityIndicatorView.isHidden = true
                 }, completion: nil)
-
-                if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
-                    let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                    let mainVC = nvc.viewControllers[0] as? MainVC {
-                    mainVC.companyDetails = companyDetails
-                    mainVC.deliveryZoneType = companyDetails.deliveryZoneType.name //"POSTALCODE"
-
-                    UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+                if let _ = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+                    if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+                        let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+                        let mainVC = nvc.viewControllers[0] as? MainVC {
+                        mainVC.companyDetails = companyDetails
+                        mainVC.deliveryZoneType = companyDetails.deliveryZoneType.name //"POSTALCODE"
+                        
+                        UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+                    }
+                    
+                    
+                }
+                else{
+                    if let loginVC = Storyboard.login.instantiateViewController(withIdentifier: LoginViewController.identifier) as? UIViewController{
+                    loginVC.title = "Signin"
+                    UIApplication.shared.keyWindow!.replaceRootViewControllerWith(loginVC, animated: true, completion: nil)
+                
+                    }
                 }
 
             } catch let myJSONError {

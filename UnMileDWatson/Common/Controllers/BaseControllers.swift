@@ -22,27 +22,22 @@ class BaseViewController: UIViewController {
     var totalPrice = 0.0
     var saveCustomerAddress : [Address]!
     private var customerAddressDetails : [Address]!
+    var companyObject: CompanyDetails!
     let activityIndicatorView:UIActivityIndicatorView = UIActivityIndicatorView()
     override func viewDidLoad() {
         super.viewDidLoad()
-
-//        self.navigationController?.navigationBar.backIndicatorImage = UIImage(named: "back")
-//
-//        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(named: "back")
-//
-//        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItemStyle.plain, target: nil, action: nil)
+        if let _ = UserDefaults.standard.object(forKey: keyForSavedCompany) as? Data{
+        companyObject = getCompanyObject(keyForSavedCompany)
+        }
     }
 
-//    func dismissHUD() {
-//        DispatchQueue.main.async {
-//            SVProgressHUD.dismiss()
-//        }
-//    }
-//
-//    func showHUD() {
-//        SVProgressHUD.show()
-//    }
-
+    func makeAPhoneCall()  {
+        
+        
+        guard let number = URL(string: "tel://" + companyObject.companyEmailDetails.phone) else { return }
+        UIApplication.shared.open(number)
+        
+    }
     func showToast(controller: UIViewController , message: String , seconds: Double){
         
         
@@ -117,8 +112,9 @@ class BaseViewController: UIViewController {
             
             deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                
-                    UserDefaults.standard.removeObject(forKey: "savedCustomer")//(forKey: "savedCustomer")
+                    UserDefaults.standard.removeObject(forKey: keyForSavedCustomer)//(forKey: "savedCustomer")
                     UserDefaults.standard.removeObject(forKey: "customerName")
+                
                     dataTable.reloadData()
             }))
             
@@ -138,7 +134,7 @@ class BaseViewController: UIViewController {
         orderAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
             
             let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc : UIViewController = storyboard.instantiateViewController(withIdentifier: "CompleteSummeryVC") as! CompleteSummeryVC
+            let vc : UIViewController = storyboard.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
                 self.present(vc, animated: true, completion: nil)
         }))
         
@@ -237,8 +233,10 @@ class BaseViewController: UIViewController {
     
     func getUserDetail() -> ([Address]?,CustomerDetail?){
         self.startActivityIndicator()
-        if let Id = UserDefaults.standard.object(forKey: "customerId") as? Int{
-            customerId = Id
+        if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+            let decoder = JSONDecoder()
+            let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
+            customerId = customer!.id
          let path = URL(string: Path.customerUrl + "/\(customerId)")
         let session = URLSession.shared
         let task = session.dataTask(with: path!) { data, response, error in
@@ -274,6 +272,13 @@ class BaseViewController: UIViewController {
         }
         
         task.resume()
+        }
+        else{
+            
+            let loginVC = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: LoginViewController.identifier)
+            loginVC.title = "Signin"
+            self.navigationController?.pushViewController(loginVC, animated: true)
+            
         }
     return (customerAddressDetails,customerCheck)
     }
@@ -380,39 +385,7 @@ class BaseViewController: UIViewController {
 
     }
     
-    func getTotalPriceFromCart() -> Double  {
-        
-        let docsURL = FileManager.documentsURL
-        let docsFileURL = docsURL.appendingPathComponent("cart.json")
-        
-        let data = try! Data(contentsOf: docsFileURL, options: [])
-        if JSONSerialization.isValidJSONObject(data) {
-            print("Valid Json")
-        } else {
-            print("InValid Json")
-        }
-        let jsonResult = try? JSONSerialization.jsonObject(with: data, options: [])
-        let jsonArray = jsonResult as! [NSDictionary]
-        for anItem in jsonArray{
-            
-            do {
-                let jsonData = try JSONSerialization.data(withJSONObject: anItem, options: .prettyPrinted)
-                // here "jsonData" is the dictionary encoded in JSON data
-                let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-                let jsonData1 = encodedObjectJsonString.data(using: .utf8)
-                
-                let itemBac = try? JSONDecoder().decode(CustomerOrderItem.self, from: jsonData1!)
-                
-                totalPrice += (Double((itemBac?.purchaseSubTotal)!) * (Double((itemBac?.quantity)!)))
-                
-                
-            } catch {
-                print(error.localizedDescription)
-            }
-        }
-        
-        return totalPrice
-    }
+   
     
     func setDict(dict: NSDictionary) {
         let data = NSKeyedArchiver.archivedData(withRootObject: dict)

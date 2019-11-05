@@ -176,10 +176,13 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
             let IndexPaths = NSArray(array:[indexPath])
             let alreadyAddress = addressList
             if (alreadyAddress?.count != 0){
+                
                 deleteAddress(addressId: (addressList?[indexPath.row].id)!)
+                tableView.beginUpdates()
                 totalAddress.remove(at: indexPath.row)
-                self.tblAddress.deleteRows(at: IndexPaths as! [IndexPath] , with: .automatic)
-                //tblAddress.reloadData()
+                //tableView.deleteRows(at: IndexPaths as! [IndexPath] , with: .automatic)
+                tableView.endUpdates()
+                tblAddress.reloadData()
                 }
             }
         }

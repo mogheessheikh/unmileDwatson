@@ -1,5 +1,5 @@
 //
-//  RestaurantDetailVC.swift
+//  BranchCategoryProductsVC.swift
 //  UnMile
 //
 //  Created by Adnan Asghar on 1/31/19.
@@ -9,8 +9,9 @@
 import UIKit
 import AlamofireImage
 import Foundation
+import ScrollableSegmentedControl
 
-class RestaurantDetailVC: BaseViewController {
+class BranchCategoryProductsVC: BaseViewController {
 
     @IBOutlet weak var collectionViewProduct: UICollectionView!
     @IBOutlet weak var restaurantImage: UIImageView!
@@ -22,8 +23,11 @@ class RestaurantDetailVC: BaseViewController {
     @IBOutlet weak var serviceImage1: UIImageView!
     @IBOutlet weak var serviceImage2: UIImageView!
     @IBOutlet weak var serviceImage3: UIImageView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-
+    
+    @IBOutlet weak var segmentscrollview: UIScrollView!
+    @IBOutlet weak var segmentControl: UISegmentedControl!
+    @IBOutlet weak var segementView: UIView!
+    @IBOutlet weak var productSearchBar: UISearchBar!
     
     var product : Product!
     var fetchingMore = false
@@ -32,55 +36,71 @@ class RestaurantDetailVC: BaseViewController {
     var productWraper: ProductWraper!
     var catagoryId = 0
     var categoryLocationId = 0
+    var isSearching = false
+    var categoryNameArray:[String] = []
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        minimumOrderLabel.text = branchDetails.branch.city
-        cuisineLabel.text = branchDetails.branch.addressLine1
-        if let urlString = branchDetails.branch.locationWebLogoURL,
-            let url = URL(string: urlString) {
 
-            restaurantImage.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: false)
-        }
-        
-        
-        serviceImage1.tintColor = Color.blue
-        serviceImage2.tintColor = Color.blue
-        serviceImage3.tintColor = Color.blue
 
         title = branchDetails.branch.name
         print(branchDetails)
         print("Number of Cat\(branchDetails.categories.count)")
         
-        segmentedControl.backgroundColor = Color.ghostwhite
-        segmentedControl.tintColor = Color.blue
-        segmentedControl.apportionsSegmentWidthsByContent = true
-        segmentedControl.autoresizingMask = .flexibleLeftMargin
-        let attr = NSDictionary(object: UIFont(name: "HelveticaNeue-Bold", size: 10)!, forKey: NSAttributedString.Key.font as NSCopying)
-        segmentedControl.setTitleTextAttributes(attr as [NSObject : AnyObject] as [NSObject : AnyObject] as? [NSAttributedString.Key : Any] , for: .normal)
-        for (i,segment) in branchDetails.categories.enumerated() {
-            self.segmentedControl.setTitle(segment.name, forSegmentAt: i)
-            
-        }
-        let segement = segmentedControl.selectedSegmentIndex
+       
+       // segmentControl.fixedSegmentWidth = false
+       
+        //segmentedControl.backgroundColor = Color.ghostwhite
+        //segmentedControl.tintColor = Color.blue
+        
+        //segmentedControl.autoresizingMask = .flexibleLeftMargin
+        
+//
+//        for (i,segment) in branchDetails.categories.enumerated() {
+//
+//            segmentControl.setTitle(segment.name, forSegmentAt: i)
+//            categoryNameArray.append( segment.name)
+//        }
+//        var scrollViewWidth:Float = 0.0
+//        for (index, element) in categoryNameArray.enumerated() {
+//            let size = element.size(withAttributes: [NSAttributedString.Key.font: UIFont.systemFont(ofSize: 20.0)]) //you can change font as you want
+//            segmentControl.setWidth(size.width, forSegmentAt: index)
+//            scrollViewWidth = scrollViewWidth + Float(size.width)
+//        }
+//
+//        segmentscrollview.contentSize = CGSize(width: Int(scrollViewWidth), height: 40)
+//        segmentControl.frame = CGRect(x: 0,y: 0,width: Int(scrollViewWidth) ,height: 60)
         if(catagoryId != 0){
             getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
-            segmentedControl.selectedSegmentIndex = categoryLocationId
+
         }
         else{
-              getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchDetails.categories[segement].id)")
+          //  let segment = segmentControl.selectedSegmentIndex
+              getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchDetails.categories[0].id)")
         }
-     
+//
     }
+    
+    override var preferredStatusBarStyle : UIStatusBarStyle {
+        return .lightContent
+    }
+    @objc func segmentedValueChanged(_ sender:UISegmentedControl!)
+    {
+        
+        getProductsBy(pageNo: "0", pageSize: "10", categoryId: "\(branchDetails.categories[0].id)")
+        print("Selected Segment Index is : \(sender.selectedSegmentIndex)")
+    }
+   
     func getProductsBy(pageNo: String, pageSize: String , productName: String = "", categoryId: String) {
         self.startActivityIndicator()
-        fetchingMore = true
+         
         let parameters: [String : Any] = ["pageNo":pageNo,
                                           "pageSize": pageSize,
                                           "categoryId": categoryId,
                                           "productName":productName]
         print(parameters)
-//        let path = URL(string: Path.productUrl + "/get-active-bycategoryId/")
+
         NetworkManager.getDetails(path: Path.productUrl + "/get-active-bycategoryId/", params: parameters, success: { (json, isError) in
             
             self.view.endEditing(true)
@@ -96,9 +116,12 @@ class RestaurantDetailVC: BaseViewController {
                 } else {
                     self.productWrapperlist =  self.productWrapperlist! + self.productWraper.productWrapperList
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
+               // self.productSearchBar.becomeFirstResponder()
+                self.fetchingMore = false
                 self.collectionViewProduct.reloadData()
                  self.stopActivityIndicator()
+                  
                     })
             } catch let myJSONError {
                 print(myJSONError)
@@ -122,12 +145,33 @@ class RestaurantDetailVC: BaseViewController {
     }
     
     @IBAction func segementDidChange(_ sender: UISegmentedControl) {
-        let segement = segmentedControl.selectedSegmentIndex
-        getProductsBy(pageNo: "0", pageSize: "10", categoryId: "\(branchDetails.categories[segement].id)")
+        let segment = segmentControl.selectedSegmentIndex
+        getProductsBy(pageNo: "0", pageSize: "10", categoryId: "\(branchDetails.categories[segment].id)")
+    }
+    
+    
+}
+
+extension BranchCategoryProductsVC:UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        
+        isSearching = text.isEmpty
+        
+        return true
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+        getProductsBy(pageNo: "0", pageSize: "10", productName: searchText, categoryId: "\(branchDetails.categories[0].id)")
+      
+        
+    }
+    func didPresentSearchController(searchController: UISearchController) {
+        productSearchBar.becomeFirstResponder()
     }
 }
 
-extension RestaurantDetailVC: UICollectionViewDataSource,UICollectionViewDelegate {
+extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return category[section].products?.count ?? 0
         return productWrapperlist?.count ?? 10
@@ -135,6 +179,8 @@ extension RestaurantDetailVC: UICollectionViewDataSource,UICollectionViewDelegat
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! branchCategoriesCellCollectionViewCell
+        cell.layer.borderWidth = 2.0
+        cell.layer.borderColor = UIColor.gray.cgColor
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
             let url = URL(string: urlString) {
             cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: false)
@@ -154,19 +200,20 @@ extension RestaurantDetailVC: UICollectionViewDataSource,UICollectionViewDelegat
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         if offsetY > contentHeight - scrollView.frame.height {
-            if fetchingMore{
-            if self.productWraper.hasNext {
-                getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: "10", categoryId: "4547")
+            if !fetchingMore{
+                if self.productWraper.hasNext {
+              
+                getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: "10", categoryId: "\(branchDetails.categories[0].id)")
             }
+                fetchingMore = true
             }
     }
 }
 }
-extension RestaurantDetailVC : addItemDelegate{
+extension BranchCategoryProductsVC : addItemDelegate{
     
     func didTappedAddButton(cell: RestaurantDetailCell) {
-        
-        
+   
     }
 }
 

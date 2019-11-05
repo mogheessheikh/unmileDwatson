@@ -8,9 +8,10 @@
 
 import UIKit
 
-protocol plusMinusDelegate {
+protocol CartDelegate {
     func didTappedAddButton(cell: CartTableViewCell)
     func didTappedMinusButton(cell: CartTableViewCell)
+    func didTappedDeleteButton(cell: CartTableViewCell)
 }
 class CartTableViewCell: UITableViewCell {
 
@@ -22,7 +23,8 @@ class CartTableViewCell: UITableViewCell {
     @IBOutlet var SpecialInstruction: UILabel!
     @IBOutlet var ProductImage: UIImageView!
     
-    var delegate: plusMinusDelegate?
+    @IBOutlet weak var btnDelete: UIButton!
+    var delegate: CartDelegate?
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,4 +45,7 @@ class CartTableViewCell: UITableViewCell {
         delegate?.didTappedMinusButton(cell: self)
     }
     
+    @IBAction func btnDeleteTapped(_ sender: Any) {
+        delegate?.didTappedDeleteButton(cell: self)
+    }
 }

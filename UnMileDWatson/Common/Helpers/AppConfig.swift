@@ -11,6 +11,7 @@ import Foundation
 public var companyId = 70
 public var keyForSavedCompany = "SavedCompany"
 public var keyForSavedBranch =  "SavedBranch"
+public var keyForSavedCustomer =  "SavedCustomer"
 public var customerId = 0
 public var branchId = 846
 public var restResponse = false

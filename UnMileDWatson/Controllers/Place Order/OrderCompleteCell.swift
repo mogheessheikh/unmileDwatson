@@ -10,6 +10,11 @@ import UIKit
 
 class OrderCompleteCell: UITableViewCell {
 
+    @IBOutlet weak var lblSurCharge: UILabel!
+    @IBOutlet weak var lblOrderTime: UILabel!
+    @IBOutlet weak var lblSubTotal: UILabel!
+    @IBOutlet weak var lblDiscount: UILabel!
+    @IBOutlet weak var lblGST: UILabel!
     @IBOutlet weak var lblAmount: UILabel!
     @IBOutlet weak var lblAmountValue: UILabel!
     override func awakeFromNib() {

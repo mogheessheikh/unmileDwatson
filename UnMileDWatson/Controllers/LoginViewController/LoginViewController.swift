@@ -84,7 +84,8 @@ class LoginViewController: BaseViewController {
                                 self.stopActivityIndicator()
                                 UserDefaults.standard.setValue(customer.firstName, forKey: "customerName")
                                 UserDefaults.standard.set(customer.id, forKey: "customerId")
-                                //self.saveCustomerObj(obj: customer, key: "savedCustomer" )
+                               
+                                self.saveCustomerObj(obj: customer, key: keyForSavedCustomer )
                                 self.getUserDetail()
                                 //switching the screen
                                 if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,

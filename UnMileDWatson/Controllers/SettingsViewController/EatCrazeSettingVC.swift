@@ -10,7 +10,7 @@ import UIKit
 
 class EatCrazeSettingVC: BaseViewController {
     
-    var companyObject: CompanyDetails!
+    
     
     var userSettingArray = ["User Profile", "Delivery Address", "Update Password","Contact Spport", "Term & Condition", "Logout"]
     var UserSettingLogos: [UIImage] = [UIImage(named: "user-1")!, UIImage(named: "location1")!,UIImage(named: "lock")!, UIImage(named: "chat")!,UIImage(named: "globe-search")!,UIImage(named: "logout")!]
@@ -24,13 +24,7 @@ class EatCrazeSettingVC: BaseViewController {
        
 
     }
-    func makeAPhoneCall()  {
-    
-
-        guard let number = URL(string: "tel://" + companyObject.companyEmailDetails.phone) else { return }
-        UIApplication.shared.open(number)
-        
-    }
+   
 
 }
 extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
@@ -83,7 +77,7 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
             self.navigationController?.pushViewController(userAddress, animated: true)
             }
             else if (indexPath.row == 2){
-                let userUpdatePassword = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "ForgotPasswordViewController")
+                let userUpdatePassword = Storyboard.login.instantiateViewController(withIdentifier: "ForgotPasswordViewController")
                 userUpdatePassword.title = "Update Password"
                 self.navigationController?.pushViewController(userUpdatePassword, animated: true)
                 

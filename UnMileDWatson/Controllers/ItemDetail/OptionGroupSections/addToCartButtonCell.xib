@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell6" id="KGk-i7-Jjw" customClass="addToCartButtonCell" customModule="UnMile" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+            <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
+                <rect key="frame" x="0.0" y="0.0" width="320" height="43.5"/>
+                <autoresizingMask key="autoresizingMask"/>
+                <subviews>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Price" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qAB-SC-fsZ">
+                        <rect key="frame" x="16" y="11" width="42" height="20.5"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="pkr 300" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="g4q-ev-V9y">
+                        <rect key="frame" x="82" y="11" width="47" height="20.5"/>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="13"/>
+                        <color key="textColor" red="0.80000000000000004" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eN6-4g-JwC">
+                        <rect key="frame" x="187" y="5" width="117" height="33"/>
+                        <color key="backgroundColor" red="0.80000000000000004" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="33" id="gAI-UY-WLx"/>
+                        </constraints>
+                        <fontDescription key="fontDescription" type="system" weight="light" pointSize="15"/>
+                        <inset key="imageEdgeInsets" minX="-19" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <state key="normal" title="Add Item" image="add to cart">
+                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <connections>
+                            <action selector="addItemPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="RuU-Pa-YCI"/>
+                        </connections>
+                    </button>
+                </subviews>
+                <constraints>
+                    <constraint firstAttribute="bottom" secondItem="eN6-4g-JwC" secondAttribute="bottom" constant="5" id="1A6-al-JsN"/>
+                    <constraint firstAttribute="trailing" secondItem="eN6-4g-JwC" secondAttribute="trailing" constant="16" id="2Iq-Vx-ECN"/>
+                    <constraint firstItem="qAB-SC-fsZ" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="GZM-lc-eTW"/>
+                    <constraint firstItem="eN6-4g-JwC" firstAttribute="leading" secondItem="g4q-ev-V9y" secondAttribute="trailing" constant="58" id="MoO-WQ-AP1"/>
+                    <constraint firstAttribute="bottom" secondItem="qAB-SC-fsZ" secondAttribute="bottom" constant="10" id="Pzp-H5-v2j"/>
+                    <constraint firstItem="eN6-4g-JwC" firstAttribute="leading" secondItem="g4q-ev-V9y" secondAttribute="trailing" constant="58" id="Y4D-hR-QAl"/>
+                    <constraint firstItem="qAB-SC-fsZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="Y6z-Wt-n9c"/>
+                    <constraint firstAttribute="bottom" secondItem="g4q-ev-V9y" secondAttribute="bottom" constant="10" id="dtO-Th-qD5"/>
+                    <constraint firstItem="g4q-ev-V9y" firstAttribute="leading" secondItem="qAB-SC-fsZ" secondAttribute="trailing" constant="24" id="g1L-ow-ibR"/>
+                    <constraint firstItem="g4q-ev-V9y" firstAttribute="leading" secondItem="qAB-SC-fsZ" secondAttribute="trailing" constant="24" id="k4m-00-deb"/>
+                    <constraint firstItem="g4q-ev-V9y" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="ujr-Mw-wJR"/>
+                    <constraint firstItem="eN6-4g-JwC" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="5" id="ukl-hs-UCQ"/>
+                </constraints>
+            </tableViewCellContentView>
+            <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
+            <connections>
+                <outlet property="addItemButton" destination="eN6-4g-JwC" id="OW2-Wa-uQQ"/>
+                <outlet property="productPrice" destination="g4q-ev-V9y" id="CVq-a4-iSY"/>
+            </connections>
+            <point key="canvasLocation" x="137.68115942028987" y="90.401785714285708"/>
+        </tableViewCell>
+    </objects>
+    <resources>
+        <image name="add to cart" width="30" height="30"/>
+    </resources>
+</document>

@@ -1,0 +1,6 @@
+module ScrollableSegmentedControl {
+  umbrella header "ScrollableSegmentedControl-umbrella.h"
+
+  export *
+  module * { export * }
+}

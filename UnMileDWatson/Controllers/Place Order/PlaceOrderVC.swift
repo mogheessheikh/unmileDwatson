@@ -11,6 +11,8 @@ import Alamofire
 class PlaceOrderVC: BaseViewController {
 
     @IBOutlet weak var tblOrderSummery: UITableView!
+    @IBOutlet weak var btnPlacedOrder: UIButton!
+    
     var customerOrder: CustomerOrder!
     var customer: CustomerOrder!
     var OrderItem : [CustomerOrderItem]!
@@ -24,8 +26,8 @@ class PlaceOrderVC: BaseViewController {
     var branchWrapper : BranchWrapperAppList!
     var surCharges = 0.0
     var sectionTitle = ["","Route","Order Summery","Detail","Contact Support"]
-    var sectionOneArrayTitle = ["Total","Sur Charge","GST","Discount","Sub Total","Order Time"]
-    var sectionOneArrayValue:[String]!
+    
+   
     var routeLogo: [UIImage] = [UIImage(named: "restaurant")! , UIImage(named: "location1")!]
     var routeArray:[String]!
     var restuarentAddress: String!
@@ -38,8 +40,11 @@ class PlaceOrderVC: BaseViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        btnPlacedOrder.layer.cornerRadius = 7
+        tblOrderSummery.rowHeight = UITableView.automaticDimension
+        tblOrderSummery.estimatedRowHeight = UITableView.automaticDimension
         print(customerOrder.branchID)
-     company  = getCompanyObject("SavedCompany")
+        company  = getCompanyObject("SavedCompany")
         
         itemSummery = getAlreadyCartItems()
         if let savedBranch = UserDefaults.standard.object(forKey: keyForSavedBranch) as? Data  {
@@ -57,7 +62,7 @@ class PlaceOrderVC: BaseViewController {
         surCharges = chargeSurcharge(customerOrder:customerOrder, paymentMethod: paymentMethod)
         orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
         finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount + orderDiscount)
-        sectionOneArrayValue = ["\(customerOrder.subTotal)","\(round(surCharges))","\(round(taxAmount))","\(round(orderDiscount))","\(finalsubTotal)","\(currentDateTime())"]
+        
     
        
     
@@ -155,6 +160,7 @@ class PlaceOrderVC: BaseViewController {
                    ] as [String : Any]
 
         print(postString )
+        
         guard let url = URL(string: Path.customerOrderUrl + "/create") else { return }
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = postString as? [String : String]
@@ -364,14 +370,14 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(section == 0)
         {
-            return sectionOneArrayTitle.count
+            return 1
             
         }
-        else if(section == 1)
+        else if(section == 3)
         {
             return routeArray.count
         }
-        else if(section == 2)
+        else if(section == 0)
         {
             return itemSummery.count
         }
@@ -380,18 +386,23 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        if indexPath.section == 0
+        if indexPath.section == 2
         {
             
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ordercell", for: indexPath) as? OrderCompleteCell
                 else {
                     fatalError("Unknown cell")
             }
-            cell.lblAmount.text = sectionOneArrayTitle[indexPath.row]
-            cell.lblAmountValue.text = sectionOneArrayValue[indexPath.row]
+         
+            cell.lblAmountValue.text = "\(customerOrder.subTotal) PKR"
+            cell.lblOrderTime.text = "\(currentDateTime()) PKR"
+            cell.lblGST.text = "\(round(taxAmount)) PKR"
+            cell.lblSurCharge.text = "\(round(surCharges)) PKR"
+            cell.lblDiscount.text = "\(round(orderDiscount)) PKR"
+            cell.lblSubTotal.text = "\(finalsubTotal) PKR"
             return cell
         }
-        else if(indexPath.section == 1) {
+        else if(indexPath.section == 3) {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "routecell", for: indexPath) as? Route
                 else {
                     fatalError("Unknown cell")
@@ -400,19 +411,15 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             cell.lblRoute.text = routeArray[indexPath.row]
             return cell
         }
-        else if (indexPath.section == 2){
+        else if (indexPath.section == 0){
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "itemcell", for: indexPath) as? OrderItemsSummery
                 else {
                     fatalError("Unknown cell")
             }
-            let items = itemSummery[indexPath.row]
-            cell.lblSummeryItemName.text = items.product.name
-            cell.lblSummeryItemPrice.text = "\(items.product.price)"
-            cell.lblSummeryItemQuantity.text = "\(items.quantity ?? 0)"
-            
+           cell.customerOrderItems = itemSummery
             return cell
         }
-        else if (indexPath.section == 3) {
+        else if (indexPath.section == 1) {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "detailcell", for: indexPath) as? OrderDetail
                 else {
                     fatalError("Unknown cell")
@@ -428,6 +435,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 else {
                     fatalError("Unknown cell")
             }
+            cell.delegate = self
             cell.lblSupport.text = "For Any Qurrey or complain contact to our support Staff"
             
             return cell
@@ -436,37 +444,42 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.section == 4) {
             
-        guard let number = URL(string: "tel://" + company.companyEmailDetails.adminCellNumber ) else { return }
-        UIApplication.shared.open(number, options: [:], completionHandler: nil)
+        makeAPhoneCall()
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(indexPath.section == 2 && indexPath.row == 1 || indexPath.section == 3)
+        if(indexPath.section == 2 )
         {
-            return 100
+            return 434
         }
-        else {return 60}
+        else if (indexPath.section == 0){
+            
+            return 150
+        }
+        else {return UITableView.automaticDimension}
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         
         let headerView = UIView()
-        headerView.frame = CGRect(x: 100, y: 5, width: 200, height: 50)
-        headerView.backgroundColor =  UIColor.initWithHex(hex: "87cefa")
+        headerView.frame = CGRect(x: 100, y: 5, width: 200, height: 30)
+        headerView.backgroundColor = Color.red
         let label = UILabel()
         label.frame = CGRect(x: tableView.bounds.size.width / 3  , y: 13, width: tableView.bounds.size.width - 10, height: 24)
-       
+        label.textColor = Color.blue
+        label.font = UIFont(name: "Bodoni 72", size: 15)
         if section == 0{
             label.font = UIFont.boldSystemFont(ofSize: 12.0)
-            let imageView = UIImageView(frame: CGRect(x: 5, y: 8, width: 40, height: 40))
-            if let savedBranch = UserDefaults.standard.object(forKey: "SavedBranch") as? Data  {
+            let imageView = UIImageView(frame: CGRect(x: 5, y: 8, width: 30, height: 30))
+           
+            if let savedBranch = UserDefaults.standard.object(forKey: keyForSavedBranch) as? Data  {
                 let decoder = JSONDecoder()
-                if let loadedBranch = try? decoder.decode(BranchWrapperAppList.self, from: savedBranch) {
-                    if let urlString = loadedBranch.locationWebLogoURL,
-                        
+                if let loadedBranch = try? decoder.decode(BranchDetailsResponse.self, from: savedBranch) {
+                    if let urlString = loadedBranch.branch.locationWebLogoURL,
                         let url = URL(string: urlString) {
                         imageView.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: false)
-                        label.text = loadedBranch.name
+                        label.text = "Billing Detail"
+                        label.textColor = Color.whitesmoke
                     }
                     
                     headerView.addSubview(imageView)
@@ -474,24 +487,25 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 }
             }
         }
-        else{
-            label.text = sectionTitle[section]
-            headerView.addSubview(label)
-        }
+       
         
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if(section == 0){
         return 50
+        }
+        else {return 0}
+        
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        if section == 0{
-            
+        if section == 4{
             let footerView = UIView()
             footerView.frame = CGRect(x: 100, y: 100, width: 200, height: 50)
             let label = UILabel()
             label.frame = CGRect(x: 14  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
+            label.font = UIFont(name: "Bodoni 72", size: 15)
             label.text = "Delivery Time"
             footerView.addSubview(label)
             let imageView = UIImageView(frame: CGRect(x: tableView.bounds.size.width / 3 , y: 0, width: 25, height: 25))
@@ -500,7 +514,8 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             let label2 = UILabel()
             label2.frame = CGRect(x: (tableView.bounds.size.width / 3) + 30  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
             label2.text = "ASAP 55 Mints"
-            label2.textColor = UIColor.orange
+            label2.font = UIFont(name: "Bodoni 72", size: 15)
+            label2.textColor = Color.red
             footerView.addSubview(label2)
             footerView.addSubview(imageView)
             return footerView
@@ -510,6 +525,14 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     }
     
 }
+extension PlaceOrderVC : contactStaffDelegate{
+    func didpressContactStaff(cell: ContactSupport) {
+        makeAPhoneCall()
+    }
+    
+    
+}
+
 
 struct CustomerType: Codable {
     let id: Int

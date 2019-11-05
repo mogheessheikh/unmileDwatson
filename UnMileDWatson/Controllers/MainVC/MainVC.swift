@@ -25,6 +25,7 @@ class MainVC: BaseViewController {
     @IBOutlet weak var appIcon: UIImageView!
     @IBOutlet weak var orderNow: UIButton!
     
+    @IBOutlet weak var categorySearchBar: UISearchBar!
     @IBOutlet weak var popularCollectionView: UICollectionView!
     var companyDetails: CompanyDetails!
     var branch: BranchDetailsResponse?
@@ -38,38 +39,44 @@ class MainVC: BaseViewController {
     var firstLabel: UILabel!
     var cityAreaView: CityAreaView!
     var deliveryZoneType = DeliveryZoneType.cityArea
-    var imgArr: [UIImage]  = [  UIImage(named:"Order Steps")!,
+    var imgArr: [UIImage]  = [  UIImage(named:"slider-4")!,
+                                UIImage(named:"slider-5")! ,
                                 UIImage(named:"sale")! ,
-                                UIImage(named:"Free Delivery Services")! ,
+                                UIImage(named: "slider-1")!,
+                                UIImage(named: "slider-2")!,
+                                UIImage(named: "slider-3")!
                              ]
     var popularImg:[UIImage] = [ UIImage(named:"1")!,
                                   UIImage(named:"2")!,
-                                   UIImage(named:"3")!,
+                                   UIImage(named:"4")!,
                                     UIImage(named:"4")!,
                                      UIImage(named:"5")!,
                                       UIImage(named:"6")!,
                                        UIImage(named:"7")!,
                                         UIImage(named:"8")!,
                                          UIImage(named:"9")!,
-                                          UIImage(named:"9")!,
-                                           UIImage(named:"9")!
+                                          UIImage(named:"10")!,
+                                           UIImage(named:"12")!
                                 ]
         var timer = Timer()
         var counter = 0
     
         var catagoryId = 0
         var categoryLocationId = 0
+        var categoryName = ""
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        orderNow.layer.cornerRadius = 7
+        
+        self.navigationController!.navigationBar.titleTextAttributes = [NSAttributedString.Key.font: UIFont(name: "Bodoni 72", size: 20)!]
+        
         orderNow.layer.borderWidth = 1
-        sliderCollection.layer.cornerRadius = 7
+        
         
         companyDetails = getCompanyObject(keyForSavedCompany)
         slideMenu()
         getBranchDetail()
-        
+       
         pageControl.numberOfPages = imgArr.count
         pageControl.currentPage = 0
         DispatchQueue.main.async {
@@ -100,10 +107,12 @@ class MainVC: BaseViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "mainTOmenu"{
-             let vc = segue.destination as! RestaurantDetailVC
+             let vc = segue.destination as! BranchCategoryProductsVC
             if(catagoryId != 0){
                vc.catagoryId = self.catagoryId
                 vc.categoryLocationId = categoryLocationId
+                vc.categoryName = self.categoryName
+                
             }
                 vc.branchDetails = self.branch
         }
@@ -129,7 +138,7 @@ class MainVC: BaseViewController {
     func getBranchDetail() {
         
         self.startActivityIndicator()
-        let path = ProductionPath.menuUrl + "/active-category?branchId=\(branchId)&productName=a"
+        let path = ProductionPath.menuUrl + "/active-category?branchId=\(branchId)&productName="
         print(path)
         
         NetworkManager.getDetails(path: path, params: nil, success: { (json, isError) in
@@ -139,6 +148,7 @@ class MainVC: BaseViewController {
                self.branch = try JSONDecoder().decode(BranchDetailsResponse.self, from: jsonData)
                 
                 self.saveBranchObject(Object: self.branch!, key: keyForSavedBranch)
+                
                 self.popularCollectionView.reloadData()
                 self.stopActivityIndicator()
             } catch let myJSONError {
@@ -187,6 +197,24 @@ class MainVC: BaseViewController {
     
 
 }
+extension MainVC: UISearchBarDelegate{
+    
+    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+
+        return true
+    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        
+
+        
+        
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        categorySearchBar.text = ""
+        categorySearchBar.endEditing(true)
+        
+    }
+}
 extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -206,9 +234,7 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
         let cellA = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as! SliderCollectionViewCell
        
-            cellA.layer.cornerRadius = 7
-    
-            cellA.sliderImg.layer.cornerRadius = 7
+            
              cellA.sliderImg.image = imgArr[indexPath.row]
              return cellA
         }
@@ -216,7 +242,8 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
         else
          {
             let cellB = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as! PopularCollectionViewCell
-            
+            cellB.layer.borderWidth = 2.0
+            cellB.layer.borderColor = UIColor.gray.cgColor
             cellB.popularLbl.text = branch?.categories[indexPath.row].name
             cellB.popularImg.image = popularImg[indexPath.row]
             return cellB
@@ -225,12 +252,12 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if (collectionView == popularCollectionView){
             catagoryId = (branch?.categories[indexPath.row].id)!
+            categoryName = (branch?.categories[indexPath.row].name)!
             categoryLocationId = indexPath.row
             performSegue(withIdentifier: "mainTOmenu", sender: self)
         }
     }
 }
-
 
 struct ProductWraper: Codable {
     let hasNext: Bool

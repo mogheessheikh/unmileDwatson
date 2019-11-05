@@ -15,10 +15,10 @@ class CheckOutVC: BaseViewController {
     var userName = ""
     var userEmail = ""
     var userPhone = ""
-    var userLogo: [UIImage] = [UIImage(named: "user")! , UIImage(named: "mail")! , UIImage(named: "phone-1")!]
+    var userL: [String] = ["Name*", "Email*", "Phone*"]
     var paymentLogo: [UIImage] = [UIImage(named: "cash-1")! , UIImage(named: "credit-card")!]
     var branch : BranchDetailsResponse!
-    var sectionTitle = [ "User","Promo Code","Order Type","Delivery Address","Payment Type","Special Instruction(optional)"]
+    var sectionTitle = [ "User","Order Type","Delivery Address","Payment Type","Special Instruction(optional)"]
     var oderType = ""
     var paymentType = ""
     var selectedAddress: CustomerOrderAddress!
@@ -43,6 +43,10 @@ class CheckOutVC: BaseViewController {
     var radioControllerDip : SSRadioButtonsController = SSRadioButtonsController()
     var customer : CustomerDetail!
     var selectedArray : [IndexPath] = [IndexPath]()
+    var selectedSingleRows = [String:IndexPath]()
+    var reSizeOrderTypeCell = false
+    var reSizePayementTypeCell = false
+    var specialIstruction = ""
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -51,7 +55,6 @@ class CheckOutVC: BaseViewController {
         orderTime = currentTime()
         transId  = getTransId()
         customerOrderItem = getAlreadyCartItems()
-        subTotal = getTotalPriceFromCart()
         getUser()
         
        branch = getBranchObject(key: keyForSavedBranch)
@@ -63,11 +66,10 @@ class CheckOutVC: BaseViewController {
         }
     
         
-        checkOutButton.layer.cornerRadius = 7
-        checkOutButton.layer.borderWidth = 2
+
         tblCheckOut.register(UINib(nibName: "OrderType", bundle: Bundle.main), forCellReuseIdentifier: "odercell")
         tblCheckOut.register(UINib(nibName: "DeliveryAddress", bundle: Bundle.main), forCellReuseIdentifier: "deliverycell")
-        tblCheckOut.register(UINib(nibName: "SpecialInstruction", bundle: Bundle.main), forCellReuseIdentifier: "instructioncell")
+        tblCheckOut.register(UINib(nibName: "SpecialInstruction", bundle: nil), forCellReuseIdentifier: "instructioncell")
         tblCheckOut.register(UINib(nibName: "PaymentMethodCell", bundle: Bundle.main), forCellReuseIdentifier: "paymentcell")
         tblCheckOut.register(UINib(nibName: "PromoCodeCell", bundle: Bundle.main), forCellReuseIdentifier: "promocell")
        
@@ -85,8 +87,7 @@ class CheckOutVC: BaseViewController {
     }
     
     @IBAction func goToSummary(_ sender: Any) {
-       
-        
+
         if (selectedAddress == nil )
         {
             showAlert(title: "Address is empty", message: "Select Delivery Address")
@@ -97,11 +98,9 @@ class CheckOutVC: BaseViewController {
         }
         else{
             do {
-            let indexPath = IndexPath(row: 0, section: 5)
-            let cell = tblCheckOut.cellForRow(at: indexPath) as? SpecialInstruction
-                let specialIstruction = cell?.textField.text!
+          
             
-                customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction ?? "no instruction", customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "AUTOCONFIRMED", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: subTotal, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
+                customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "AUTOCONFIRMED", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: subTotal, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
 
                performSegue(withIdentifier: "checkout2Summary", sender: self)
             }
@@ -147,11 +146,27 @@ return transId
         formatter.dateFormat = "hh:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
+    func addSelectedCellWithSection(_ indexPath:IndexPath) ->IndexPath?
+    {
+        let existingIndexPath = selectedSingleRows["\(indexPath.section)"]
+        selectedSingleRows["\(indexPath.section)"]=indexPath;
+        return existingIndexPath
+    }
+    func indexPathIsSelected(_ indexPath:IndexPath) ->Bool {
+        if let selectedIndexPathInSection = selectedSingleRows["\(indexPath.section)"] {
+            if(selectedIndexPathInSection.row == indexPath.row) { return true }
+        }
+        
+        return false
+    }
     func getUser() {
         self.startActivityIndicator()
-        if let Id = UserDefaults.standard.object(forKey: "customerId") as? Int{
-            customerId = Id
+        if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+            let decoder = JSONDecoder()
+            let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
+            customerId = customer!.id
             let path = URL(string: Path.customerUrl + "/\(customerId)")
+            print(path!)
             let session = URLSession.shared
             let task = session.dataTask(with: path!) { data, response, error in
                 print("Task completed")
@@ -198,7 +213,7 @@ return transId
 extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 6
+        return 5
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if(section == 0)
@@ -206,18 +221,6 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             return userArray.count
         }
        
-        else if (section == 2)
-        {
-            return branch.branch.services.count
-            
-        }
-       
-        else if(section == 4)
-        {
-            
-            // number of payment type 
-            return 1
-        }
         else {
             
             return 1
@@ -230,57 +233,39 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         
         if(indexPath.section == 0)
         {
-            
-            guard let  cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CheckOutTableViewCell else {
-                fatalError("Unknown cell")
-            }
+            guard let  cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CheckOutTableViewCell else {fatalError("Unknown cell")}
             
             
        
                 cell.lblUser.text = "\(userArray[indexPath.row])"
-                cell.icons.image = userLogo[indexPath.row]
+                cell.lblUserL.text = "\(userL[indexPath.row])"
             
             
             return cell
             
             
         }
-         if(indexPath.section == 1)
-        {
-            guard let  cell = tableView.dequeueReusableCell(withIdentifier: "promocell", for: indexPath) as? PromoCodeCell else {
-                fatalError("Unknown cell")
-            }
-            cell.verifyButton.layer.cornerRadius = 8
-            cell.verifyButton.layer.borderWidth = 1
-            cell.delegate = self as PromoCodeDelegate
-            return cell
-        }
-        if (indexPath.section == 2){
+        
+        if (indexPath.section == 1){
             guard let orderTypeCell = tableView.dequeueReusableCell(withIdentifier: "odercell", for: indexPath) as? OrderType
                 else {
                     fatalError("Unknown cell")
             }
             
-            orderTypeCell.orderTypelbl.text = "\(branch.branch.services[indexPath.row].orderType.name)"
+            orderTypeCell.delegate = self
+            var orderTypeArray = [String]()
             
-            
-            orderTypeCell.selectionStyle = UITableViewCell.SelectionStyle.none;
-            
-            if (orderSelectedIndex == indexPath as NSIndexPath || firstOrderTypeIndex == 0) {
-                orderTypeCell.radioButton.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-                oderType = "\(branch.branch.services[indexPath.row])"
-                oderType = oderType.uppercased()
-                firstOrderTypeIndex = 1
-            } else {
-                orderTypeCell.radioButton.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
-
+            for (_,j) in branch.branch.services.enumerated(){
+                orderTypeArray.append(j.orderType.name)
+                
             }
+            
+            orderTypeCell.orderType = orderTypeArray
+
 
             return orderTypeCell
-            
-            
         }
-         if (indexPath.section == 3){
+         if (indexPath.section == 2){
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "deliverycell", for: indexPath) as? DeliveryAddress
                 else {
                     fatalError("Unknown cell")
@@ -303,7 +288,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             cell.delegate = self
             return cell
         }
-         if(indexPath.section == 4)
+         if(indexPath.section == 3)
         {
             
             guard let paymentTypeCell = tableView.dequeueReusableCell(withIdentifier: "paymentcell", for: indexPath) as? PaymentMethodCell
@@ -311,22 +296,15 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                     fatalError("Unknown cell")
             }
             
-            
-            paymentTypeCell.selectionStyle = UITableViewCell.SelectionStyle.none;
-            //paymentCell.logo.image = paymentLogo[indexPath.row]
-            paymentTypeCell.lblPaymentMethod.text = "\(branch.branch.paymentMethods![indexPath.row].paymentType.name)"
             paymentTypeCell.delegate = self
+            var paymentTypeArray = [String]()
             
-            if (paymentSelectedIndex == indexPath as NSIndexPath || firstPaymentTypeIndex == 0) {
-                paymentTypeCell.radioButton.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-                //oderType = "\(branch.branch.services[indexPath.row].orderType.name)"
-                //oderType = oderType.uppercased()
-                firstPaymentTypeIndex = 1
-               
-            } else {
-                paymentTypeCell.radioButton.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
+            for (_,j) in branch.branch.paymentMethods!.enumerated(){
+                paymentTypeArray.append(j.paymentType.name)
+                
             }
-
+            paymentTypeCell.paymentType = paymentTypeArray
+            
             return paymentTypeCell
             
         }
@@ -335,76 +313,103 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
-            
+            cell.delegate = self
             
             return cell
         }
         
     }
-    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-     return sectionTitle[section]
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+      
+        tblCheckOut.deselectRow(at: indexPath, animated: false)
+    }
+
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        if(section == 0)
+        {
+            let headerView = Bundle.main.loadNibNamed("PromoCodeCell", owner: self, options: nil)?.first as! PromoCodeCell
+            headerView.frame = CGRect(x: 100, y: 0, width: 200, height: 200)
+            return headerView
+        }
+        else {return nil}
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        
-
-        if (indexPath.section == 5) {
+        if (indexPath.section == 1){
+            if(reSizeOrderTypeCell){
+                
+                return 160
+            }
+            else{ return UITableView.automaticDimension}
             
-            return 88
         }
-        else{
-            return 44
+        else if(indexPath.section == 2){
+            
+            return 95
+            
         }
+        else if(indexPath.section == 3){
+            
+            if(reSizePayementTypeCell){
+                
+                return 160
+            }
+            else{ return UITableView.automaticDimension}
+            
+        }
+        else if(indexPath.section == 4){
+            return 100
+            
+        }
+        else{ return UITableView.automaticDimension}
+        
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat.maximumMagnitude(50, 50)
-    }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(indexPath.section == 2 )
-        {
-            guard let cell = tableView.cellForRow(at: indexPath) as? OrderType
-                else {
-                    fatalError("Unknown cell")
-            }
-            cell.radioButton.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-            oderType = "\(branch.branch.services[indexPath.row])"
-            oderType = oderType.uppercased()
-            print(oderType)
-            orderSelectedIndex = indexPath as NSIndexPath
-            tblCheckOut.reloadData()
-            
+        if section == 0{
+            return 200
         }
-       else if(indexPath.section == 4 )
-        {
-            guard let cell = tableView.cellForRow(at: indexPath) as? PaymentMethodCell
-                else {
-                    fatalError("Unknown cell")
-            }
-            cell.radioButton.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-            
-            paymentType = "\(branch.branch.paymentMethods![indexPath.row].paymentType.name)"
-            paymentType = paymentType.uppercased()
-            print(paymentType)
-            paymentSelectedIndex = indexPath as NSIndexPath
-            firstOrderTypeIndex = 0
-            tableView.reloadData()
+        else{
+        return 0
+        }
         
-        }
-        tblCheckOut.deselectRow(at: indexPath, animated: false)
     }
+    
+    
 }
 extension CheckOutVC: radioButtonDelelgate{
-    func didCheckRadioButton(cell: PaymentMethodCell) {
-        
-       let indexPath = self.tblCheckOut.indexPath(for: cell)
-        
-        //let indexPath = self.tblCheckOut.indexPathForSelectedRow //optional, to get from any UIButton for example
-        let currentCell = tblCheckOut.cellForRow(at: indexPath!) as! PaymentMethodCell
-             currentCell.radioButton.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-             cell.radioButton.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
+    func didCheckRadioButton(cell: PaymentMethodCell?, String: String) {
+        if (!cell!.animate){
+            
+            reSizePayementTypeCell = true
+            tblCheckOut.reloadData()
+        }
+        else{
+            reSizePayementTypeCell = false
+            tblCheckOut.reloadData()
+        }
+         paymentType = String
     }
+    
+    
+    
+    
+}
+
+extension CheckOutVC: resizeOrderTypeDelegate{
+    func didToggleOrderType(cell: OrderType?, String: String) {
+        if(!cell!.animate){
+            reSizeOrderTypeCell = true
+            tblCheckOut.reloadData()
+        }
+        else{
+            reSizeOrderTypeCell = false
+            tblCheckOut.reloadData()
+        }
+        oderType = String
+    }
+    
+   
     
     
     
@@ -413,19 +418,6 @@ extension CheckOutVC: PromoCodeDelegate {
     
     func didTappedVerificationButton()
     {
-       
-//        for discountRule in branch.discountRules {
-//            if(branch.services[discountRule] = oderType
-//                && branch.paymentTypes[discountRule] = paymentType
-//                && totalprice > 0.0) {
-//                showAlert(title: "Valid PromoCode", message: "Discount is avalaible to this promocode")
-//
-//            }
-//            else{
-//
-//                showError()
-//            }
-//        }
         self.showAlert(title: "Tapped", message: "Verification button tapped")
     }
     
@@ -438,8 +430,19 @@ extension CheckOutVC: addAddressDelegate{
         self.navigationController?.pushViewController(userAddress, animated: true)
     }
     
-    
-    
+}
+extension CheckOutVC: TextFieldInSpecialInstructionDelegate{
+    func textField(editingDidBeginIn cell: SpecialInstruction) {
+        if let indexPath = tblCheckOut.indexPath(for: cell) {
+            print("textfield selected in cell at \(indexPath)")
+        }
+    }
+    func textField(editingChangedInTextField newText: String, in cell: SpecialInstruction) {
+        if let indexPath = tblCheckOut?.indexPath(for: cell) {
+            print("updated text in textfield in cell as \(indexPath), value = \"\(newText)\"")
+            specialIstruction = newText
+        }
+    }
 }
 
 

@@ -39,9 +39,6 @@ class SubSettingVC: BaseViewController {
         getUser()
        company = getCompanyObject("SavedCompany")
         
-        
-        
-        
     }
     @IBAction func updateDidPressed(_ sender: Any) {
          self.startActivityIndicator()
@@ -125,8 +122,10 @@ class SubSettingVC: BaseViewController {
     
     func getUser() {
         self.startActivityIndicator()
-        if let Id = UserDefaults.standard.object(forKey: "customerId") as? Int{
-            customerId = Id
+        if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+            let decoder = JSONDecoder()
+            let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
+            customerId = customer!.id
             let path = URL(string: Path.customerUrl + "/\(customerId)")
             let session = URLSession.shared
             let task = session.dataTask(with: path!) { data, response, error in

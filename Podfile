@@ -15,5 +15,8 @@ target 'UnMile' do
   pod 'IQKeyboardManagerSwift'
   pod 'SZTextView'
   pod 'SideMenu'
+  pod 'ScrollableSegmentedControl', '~> 1.5.0'
+  pod 'GoogleMaps'
+  pod 'GooglePlaces'
 
 end 

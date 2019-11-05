@@ -12,6 +12,7 @@ class CheckOutTableViewCell: UITableViewCell {
 
     @IBOutlet var lblUser: UILabel!
     @IBOutlet var icons: UIImageView!
+    @IBOutlet weak var lblUserL: UILabel!
     
     
     

@@ -15,15 +15,9 @@ class ContainerVC: BaseViewController {
     
     
     var sideMenuOpen = false
-    var menuItems = ["Login","Create Account", "Live Chat","Share","Feed Back" ,"Term and Condition"]
-    var menuLogOut = ["LogOut","Create Account","Live Chat","Share","Feed Back" ,"Term and Condition"]
-    var section1 = ["User Profile", "Delivery Address", "Update Password"]
+    var menuItems = ["Previous Order","My Profile", "My Address","Update Password","Share with Friends" ,"Contact Us", "More*","LogOut"]
+    var menuLogOut = ["Settings","Share with friends","Contact Us","More*","Login/Registration"]
     
-    var menuItemImg: [UIImage] = [UIImage(named: "SLOGIN")! , UIImage(named: "Screate account")!,UIImage(named: "Slocation")!,UIImage(named: "Shome")!, UIImage(named: "Schat")!, UIImage(named: "Sshare")!, UIImage(named: "Sfeedback")!, UIImage(named: "Stermsandcondition")!]
-    
-    var section1Img: [UIImage] = [UIImage(named: "Suser")!,UIImage(named: "Slocation")! ,UIImage(named: "Spassword")!]
-    
-    var menuLogOutItemImg: [UIImage] = [UIImage(named: "Slogout")! , UIImage(named: "Screate account")!,UIImage(named: "Slocation")!,UIImage(named: "Shome")!, UIImage(named: "Schat")!, UIImage(named: "Sshare")!, UIImage(named: "Sfeedback")!, UIImage(named: "Stermsandcondition")!]
     
     var registeredUser = ""
     var myCustomView: UIImageView!
@@ -37,24 +31,11 @@ class ContainerVC: BaseViewController {
     
 }
 extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
-    func numberOfSections(in tableView: UITableView) -> Int {
-        if UserDefaults.standard.object(forKey: "customerName") != nil{
-            return 2
-        }
-        else {
-            return 1
-        }
-    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if UserDefaults.standard.object(forKey: "customerName") != nil{
-            if(section == 0)
-            {
-                return 3
-            }
-            else {
-                return menuItems.count
-            }
-            
+        if UserDefaults.standard.object(forKey: "customerName") != nil
+        {
+            return menuItems.count
         }
         else{
             return menuLogOut.count
@@ -67,21 +48,16 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
             fatalError("Unknown cell")
         }
         if UserDefaults.standard.object(forKey: "customerName") != nil{
-            if(indexPath.section == 0)
-            {
-                cell.lblSideMenu.text = section1[indexPath.row]
-                cell.imgSideMenu.image = section1Img[indexPath.row]
+            
+            cell.lblSideMenu.text = menuItems[indexPath.row]
+          
             }
             else {
                 cell.lblSideMenu.text =  menuLogOut[indexPath.row]
-                cell.imgSideMenu.image = menuLogOutItemImg[indexPath.row]
-            }
-        }
-        else{
-            cell.lblSideMenu.text = menuItems[indexPath.row]
-            cell.imgSideMenu.image = menuItemImg[indexPath.row]
             
-        }
+            }
+        
+    
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -89,40 +65,43 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0 { return 70}
         
-        return 0
+        
+        return 165
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         
-        // checking if user is logIn
-        //tblSlideMenu.deleteRows(at: [indexPath], with: .none)
-        if UserDefaults.standard.object(forKey: "customerName") == nil{
-            if indexPath.row == 0 {
+        // ****************checking if user is logIn**************************
+       
+        if UserDefaults.standard.object(forKey: keyForSavedCustomer) != nil{
+            
+        // \\\\\\\\\\\\\\\\^^^^^^^^^^^^^^^^^^^^^^^^^\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            
+            if(indexPath.row == 0){
                 
-                let loginVC = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: LoginViewController.identifier)
-                loginVC.title = "Signin"
-                self.navigationController?.pushViewController(loginVC, animated: true)
+                performSegue(withIdentifier: "sideMenuToPreviousOrder", sender: self)
             }
-            else if (indexPath.row == 1)
-            {
-                let userCreateAccount = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "UserRegistrationVC")
-                userCreateAccount.title = "Create Account"
-                self.navigationController?.pushViewController(userCreateAccount, animated: true)
+            else if(indexPath.row == 1){
+                performSegue(withIdentifier: "sideMenuToUserProfile", sender: self)
             }
-            else if (indexPath.row == 2)
-            {
-                showAlert(title: "Beta Version Exception", message: "Dear customer this feature will be available in Upgrated version")
+            else if(indexPath.row == 2){
+                performSegue(withIdentifier: "sideMenuToAddress", sender: self)
             }
-        
-            else if (indexPath.row == 3)
-            {
-                let text = "Share EatCraze"
+            else if(indexPath.row == 3){
+                
+                let userUpdatePassword = Storyboard.login.instantiateViewController(withIdentifier: ForgotPasswordViewController.identifier)
+                userUpdatePassword.title = "Update Password"
+                self.navigationController?.pushViewController(userUpdatePassword, animated: true)
+            }
+            
+            else if (indexPath.row == 4){
+                
+                let text = "Share D.Watson"
                 let myWebsite : NSURL = NSURL(string: "https://apps.apple.com/us/app/eat-craze/id1444723136")!
                 // If you want to put an image
-                let image : UIImage = UIImage(named: "logo.png")!
+                let image : UIImage = UIImage(named: "login-logo.png")!
                 
                 let shareAll : [Any] = [text , image , myWebsite]
                 
@@ -130,97 +109,72 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
                 activityViewController.popoverPresentationController?.sourceView = self.view
                 
                 present(activityViewController, animated: true, completion: nil)
+            }
+            else if(indexPath.row == 5){
                 
+               self.makeAPhoneCall()
+            }
+            else if(indexPath.row == 6){
+                performSegue(withIdentifier: "sideMenuToMore" , sender: self)
+            }
+            else if(indexPath.row == 7){
+                 logOutAlert(title: "Do You Want to LogOut?", message: "You will not able to place any order",dataTable: tblSlideMenu )
+            }
+            
+        }
+            
+           // *********************if user is Not logIn **************************
+        else{
+            
+            if (indexPath.row == 0){
+                
+                performSegue(withIdentifier: "sideMenuToSettings", sender: self)
+            }
+            else if (indexPath.row == 1){
+                
+                let text = "Share D.Watson"
+                let myWebsite : NSURL = NSURL(string: "https://apps.apple.com/us/app/eat-craze/id1444723136")!
+                // If you want to put an image
+                let image : UIImage = UIImage(named: "login-logo.png")!
+                
+                let shareAll : [Any] = [text , image , myWebsite]
+                
+                let activityViewController = UIActivityViewController(activityItems: shareAll, applicationActivities: nil)
+                activityViewController.popoverPresentationController?.sourceView = self.view
+                
+                present(activityViewController, animated: true, completion: nil)
+            }
+            else if(indexPath.row == 2){
+                
+                self.makeAPhoneCall()
+            }
+            else if(indexPath.row == 3){
+                performSegue(withIdentifier: "sideMenuToMore" , sender: self)
+            }
+            else {
+                
+                let registrationVC = Storyboard.login.instantiateViewController(withIdentifier: UserRegistrationVC.identifier)
+                registrationVC.title = "Registration"
+                self.navigationController?.pushViewController(registrationVC, animated: true)
                 
             }
-            else if (indexPath.row == 4)
-            {
-                let feedBack = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FeedBackVC")
-                self.navigationController?.pushViewController(feedBack, animated: true)
-                
-            }
-        }
-            
-            
-            //if user is not login then given functionalities to sideMenu Items
-            
-            
-            
-        else if (indexPath.section == 0 && indexPath.row == 0)
-        {
-            let userProfile = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "SubSettingVC")
-            userProfile.title = "User Profile"
-            self.navigationController?.pushViewController(userProfile, animated: true)
-        }
-            
-        else if (indexPath.section == 0 && indexPath.row == 1)
-        {
-            let userAddress = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddressVC")
-            userAddress.title = "User Address"
-            self.navigationController?.pushViewController(userAddress, animated: true)
-        }
-        else if (indexPath.section == 0 && indexPath.row == 2)
-        {
-            let userUpdatePassword = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "ForgotPasswordViewController")
-            userUpdatePassword.title = "Update Password"
-            self.navigationController?.pushViewController(userUpdatePassword, animated: true)
-        }
-            
-        else if (indexPath.section == 1 && indexPath.row == 0)
-        {
-            logOutAlert(title: "Do You Want to LogOut?", message: "You will not able to place any order",dataTable: tblSlideMenu )
-        }
-        else if (indexPath.section == 1 && indexPath.row == 1)
-        {
-            let userCreateAccount = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "UserRegistrationVC")
-            userCreateAccount.title = "Create Account"
-            self.navigationController?.pushViewController(userCreateAccount, animated: true)
-        }
-        else if (indexPath.section == 1 && indexPath.row == 2)
-        {
-            showAlert(title: "Beta Version Exception", message: "Dear customer this feature will be available in Upgrated version")
-        }
-     
-        else if (indexPath.section == 1 && indexPath.row == 3)
-        {
-            let text = "Share EatCraze"
-            let myWebsite : NSURL = NSURL(string: "https://apps.apple.com/us/app/eat-craze/id1444723136")!
-            // If you want to put an image
-            let image : UIImage = UIImage(named: "logo.png")!
-            
-            let shareAll : [Any] = [text , image , myWebsite]
-            
-            let activityViewController = UIActivityViewController(activityItems: shareAll, applicationActivities: nil)
-            activityViewController.popoverPresentationController?.sourceView = self.view
-            
-            present(activityViewController, animated: true, completion: nil)
-            
             
         }
-        else if (indexPath.section == 1 && indexPath.row == 4)
-        {
-            let feedBack = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "FeedBackVC")
-            self.navigationController?.pushViewController(feedBack, animated: true)
-            
+        tblSlideMenu.deselectRow(at: indexPath, animated: true)
+        
         }
-            
-        else if (indexPath.section == 1 && indexPath.row == 5)
-        {
-            let feedBack = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "Terms_Conditions") as! Terms_Conditions
-            self.navigationController?.pushViewController(feedBack, animated: true)
-            
-        }
-    }
+    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = Bundle.main.loadNibNamed("SideMenuHeaderViewCell", owner: self, options: nil)?.first as! SideMenuHeaderViewCell
-        headerView.backgroundColor = Color.whitesmoke
+        headerView.backgroundColor = Color.blue
+        
         
         if UserDefaults.standard.object(forKey: "SavedCustomer") != nil{
             customerCheck = getCustomerObject("SavedCustomer")
         }
         if customerCheck != nil  {
-            headerView.imgHeader.image = UIImage(named: "user-1")!
+            headerView.imgHeader.image = UIImage(named: "client-img")!
             headerView.lblUserName.text = customerCheck.firstName
             headerView.lblUserEmail.text = customerCheck.email
         }
@@ -229,5 +183,23 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
             headerView.lblUserEmail.text = ""
         }
         return headerView
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let footerView = UIView()
+        footerView.frame = CGRect(x: 100, y: 100, width: 200, height: 50)
+        let label = UILabel()
+        label.frame = CGRect(x: 14  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
+        label.text = "legal"
+        footerView.addSubview(label)
+       
+        let label2 = UILabel()
+        label2.frame = CGRect(x: (tableView.bounds.size.width) - 24 , y: 0, width: tableView.bounds.size.width - 10, height: 24)
+        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
+        label2.text = appVersion
+        label2.textColor = Color.blue
+        footerView.addSubview(label2)
+        
+        return footerView
     }
 }

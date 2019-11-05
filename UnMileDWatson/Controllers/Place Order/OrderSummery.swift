@@ -10,6 +10,7 @@ import UIKit
 
 class OrderSummery: UITableViewCell {
 
+    @IBOutlet weak var productImg: UIImageView!
     @IBOutlet weak var lblItemName: UILabel!
     @IBOutlet weak var lblItemQuantity: UILabel!
     @IBOutlet weak var lblItemPrice: UILabel!

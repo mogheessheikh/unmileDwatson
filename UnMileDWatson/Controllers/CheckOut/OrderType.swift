@@ -8,19 +8,47 @@
 
 import UIKit
 
-protocol orderTypeDelegate {
-    func didToggleRadioButton(_ indexPath: IndexPath)
+protocol resizeOrderTypeDelegate {
+    func didToggleOrderType(cell: OrderType?, String:String)
+    
 }
 
-class OrderType: UITableViewCell {
+class OrderType: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return orderType.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UITableViewCell
+        cell.textLabel!.text = orderType[indexPath.row]
+        cell.textLabel?.font = UIFont(name: "Bodoni 72", size: 15)
+        return cell
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        delegate?.didToggleOrderType(cell: self, String: "\(orderType[indexPath.row])")
+        selectOrderType.setTitle("\(orderType[indexPath.row])", for: .normal)
+        animate(toogle: false)
+        animate = false
+    }
 
    
-    @IBOutlet var radioButton: UIButton!
+    @IBAction func selectOrderType(_ sender: Any) {
+    }
+    @IBOutlet weak var orderTypeTable: UITableView!
+    @IBOutlet var selectOrderType: UIButton!
+    var orderType : [String] = []
+    var animate = false
     @IBOutlet var orderTypelbl: UILabel!
-    var delegate: orderTypeDelegate?
+    var delegate: resizeOrderTypeDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
+        selectOrderType.layer.cornerRadius = 7
+        orderTypeTable.delegate = self
+        orderTypeTable.dataSource = self
+        orderTypeTable.isScrollEnabled = true
+        orderTypeTable.isHidden = true
+        orderTypeTable.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
@@ -28,38 +56,32 @@ class OrderType: UITableViewCell {
 
         // Configure the view for the selected state
     }
-    
-    func initCellItem() {
+    @IBAction func didPressOrderTypeRadioButton(_ sender: Any) {
         
-        let deselectedImage = UIImage(named: "radio-button-uncheck")?.withRenderingMode(.alwaysTemplate)
-        let selectedImage = UIImage(named: "radio-button-check")?.withRenderingMode(.alwaysTemplate)
-        radioButton.setImage(deselectedImage, for: .normal)
-        radioButton.setImage(selectedImage, for: .selected)
-        radioButton.addTarget(self, action: #selector(self.radioButtonTapped), for: .touchUpInside)
+        delegate?.didToggleOrderType(cell: self, String: "")
+        if (orderTypeTable.isHidden){
+            animate(toogle: true)
+            animate = true
+        }
+        else{
+            animate(toogle: false)
+            animate = false
+            
+         
+        }
     }
     
-    @objc func radioButtonTapped(_ radioButton: UIButton) {
-        print("radio button tapped")
-        let isSelected = !self.radioButton.isSelected
-        self.radioButton.isSelected = isSelected
-        if isSelected {
-            deselectOtherButton()
+    func animate(toogle: Bool) {
+        if (toogle){
+        UIView.animate(withDuration: 0.3) {
+            self.orderTypeTable.isHidden = false
         }
-        let tableView = self.superview as! UITableView
-        let tappedCellIndexPath = tableView.indexPath(for: self)!
-        delegate?.didToggleRadioButton(tappedCellIndexPath)
-    }
-
-    func deselectOtherButton() {
-        let tableView = self.superview?.superview as! UITableView
-        let tappedCellIndexPath = tableView.indexPath(for: self)!
-        let indexPaths = tableView.indexPathsForVisibleRows
-        for indexPath in indexPaths! {
-            if indexPath.row != tappedCellIndexPath.row && indexPath.section == tappedCellIndexPath.section {
-                let cell = tableView.cellForRow(at: IndexPath(row: indexPath.row, section: indexPath.section)) as! OrderType
-                cell.radioButton.isSelected = false
+        }
+        else{
+            UIView.animate(withDuration: 0.3) {
+                self.orderTypeTable.isHidden = true
             }
         }
     }
-
 }
+

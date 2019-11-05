@@ -8,6 +8,8 @@
 
 import UIKit
 import IQKeyboardManagerSwift
+import ScrollableSegmentedControl
+import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -35,8 +37,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         print(docsFileURL)
         
         userDefaults.synchronize()
+        
+        let segmentedControlAppearance = ScrollableSegmentedControl.appearance()
+        segmentedControlAppearance.segmentContentColor  = UIColor.white
+        segmentedControlAppearance.selectedSegmentContentColor = UIColor.yellow
+        segmentedControlAppearance.backgroundColor = UIColor.black
 
         IQKeyboardManager.shared.enable = true
+        
+        GMSServices.provideAPIKey("AIzaSyD4EQqG4GI4PHcEZTScQA0Y5j3UOQ90U18")
         return true
     }
 

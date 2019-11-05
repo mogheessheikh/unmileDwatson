@@ -43,12 +43,12 @@ class NewItemDetailVC: BaseViewController {
         let alreadyItems = getAlreadyCartItems()
         tblOptionGroup.rowHeight = 44
         // Do any additional setup after loading the view.
-        tblOptionGroup.register(UINib(nibName: "section1Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell1")
-        tblOptionGroup.register(UINib(nibName: "section2Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell2")
-        tblOptionGroup.register(UINib(nibName: "section3Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell3")
+        tblOptionGroup.register(UINib(nibName: "productImgCell", bundle: Bundle.main), forCellReuseIdentifier: "cell1")
+        tblOptionGroup.register(UINib(nibName: "productNameCategoryCell", bundle: Bundle.main), forCellReuseIdentifier: "cell2")
+        tblOptionGroup.register(UINib(nibName: "productOptionGroupCell", bundle: Bundle.main), forCellReuseIdentifier: "cell3")
         tblOptionGroup.register(UINib(nibName: "section4Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell4")
-        tblOptionGroup.register(UINib(nibName: "section5Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell5")
-        tblOptionGroup.register(UINib(nibName: "section6Cell", bundle: Bundle.main), forCellReuseIdentifier: "cell6")
+        tblOptionGroup.register(UINib(nibName: "productSpecialInstructionCell", bundle: Bundle.main), forCellReuseIdentifier: "cell5")
+        tblOptionGroup.register(UINib(nibName: "addToCartButtonCell", bundle: Bundle.main), forCellReuseIdentifier: "cell6")
         
 //        for index in product.optionGroups!.indices{
 //            optionGroup.append(product.optionGroups![index].name)
@@ -103,6 +103,7 @@ class NewItemDetailVC: BaseViewController {
         let path = URL(string: Path.optionGroupUrl + "/option/\(optionId)")
         let session = URLSession.shared
         let task = session.dataTask(with: path!) { data, response, error in
+            
             print("Task completed")
             
             guard data != nil && error == nil else {
@@ -153,38 +154,28 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if(section == 0){
-            return ""
-        }else if (section >= 2 && section<=(product.optionGroups!.count+1)){
-            return optionGroup[section-2]
-        }
-        else {
-            return ""
-            
-        }
+      return ""
     }
     
-    func numberOfSections(in tableView: UITableView) -> Int {
-        return 5 
-    }
+   
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        if section >= 2 && section<=(product.optionGroups!.count+1) {
-            return (product.optionGroups?[section-2].options?.count)!;
-            
-        }
-        else {return 1}
+   
+        return 4
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if indexPath.row == 0{
+            
+            return 300
+        }
         return UITableView.automaticDimension
         
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            if indexPath.section == 0{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! section1Cell
+            if indexPath.row == 0{
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! productImgCell
                 Alamofire.request(product.productPhotoURL ?? "").responseImage { response in
                     if let image = response.result.value {
                         cell.productImg.image = image
@@ -197,80 +188,55 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 return cell
             }
               
-            else if (indexPath.section == 1){
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! section2Cell
+            else if (indexPath.row == 1){
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! productNameCategoryCell
                 cell.subview1.layer.cornerRadius = 5
                 cell.descriptionLbl.text = product.description
-                if(product.price == 0.0){
-                    cell.price.text = "\(product.optionGroups?[0].options![0].price)"
-                }
-                else{
-                     cell.price.text = "\(product.price)"
-                }
-               
                 cell.productName.text = product.name
                 return cell
             }
                 
-            else if (indexPath.section >= 2 && indexPath.section<=(product.optionGroups!.count+1)){
+            else if (indexPath.row == 2){
                 
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell3", for: indexPath) as! section3Cell
-
-                cell.optionName.text = product.optionGroups?[indexPath.section-2].options![indexPath.row].name
-                
-                cell.optionPrice.text = "\(product.optionGroups?[indexPath.section-2].options![indexPath.row].price)"
-                if((product.optionGroups?[indexPath.section-2].maxChoice)! <= 1)
-                {
-                    if(self.indexPathIsSelected(indexPath)) {
-                        cell.radio_check_button.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
-                        
-                    } else {
-                        cell.radio_check_button.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
-                    }
+                let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! addToCartButtonCell
+                cell.addItemButton.layer.cornerRadius = 7
+                if(product.price == 0.0){
+                    cell.productPrice.text = "\(product.optionGroups?[0].options![0].price ?? 0.0)"
                 }
                 else{
-                  
-                    if(self.indexPathIsSelected(indexPath)) {
-                        
-                    cell.radio_check_button.setImage(UIImage(named: "check"),for:UIControl.State.normal)
-                    }
-                    else {
-                        cell.radio_check_button.setImage(UIImage(named: "uncheck"),for:UIControl.State.normal)
-                    }
-                    
+                    cell.productPrice.text = "\(product.price ?? 0.0)"
                 }
+                cell.delegate = self
                 return cell
+
+               
             }
                 
-            else if (indexPath.section == (product.optionGroups!.count+2)){
+            else{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell4", for: indexPath) as! section4Cell
                 cell.subview1.layer.cornerRadius = 5
                 cell.delegate = self
                 
                 return cell
             }
-            else if (indexPath.section == (product.optionGroups!.count+3))  {
-                
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell5", for: indexPath) as!section5Cell
-             
-                
-                return cell
-            }
-        
-            else{
-                let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! section6Cell
-                cell.addItemButton.layer.cornerRadius = 5
-                cell.delegate = self
-                return cell
-        }
 
+//                else{
+//
+//                let cell = tableView.dequeueReusableCell(withIdentifier: "cell5", for: indexPath) as!productSpecialInstructionCell
+//
+//
+//                return cell
+//
+//        }
+       
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+         tblOptionGroup.deselectRow(at: indexPath, animated: true)
         if (indexPath.section >= 2 && indexPath.section<=(product.optionGroups!.count+1)){
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)
             
-             let cell = self.tblOptionGroup.cellForRow(at: indexPath) as! section3Cell
+             let cell = self.tblOptionGroup.cellForRow(at: indexPath) as! productOptionGroupCell
             if((product.optionGroups?[indexPath.section-2].maxChoice)! <= 1)
                 {
                   
@@ -283,9 +249,9 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                     
                     if(previusSelectedCellIndexPath != nil)
                     {
-                let previusSelectedCell = self.tblOptionGroup.cellForRow(at: previusSelectedCellIndexPath!) as! section3Cell
+                let previusSelectedCell = self.tblOptionGroup.cellForRow(at: previusSelectedCellIndexPath!) as! productOptionGroupCell
                         previusSelectedCell.radio_check_button.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
-                        selectedIndex = indexPath as NSIndexPath
+                        
                         customerOrderItemOptionArray.append(customerOrderItemOptionObj)
                         mustArray.replaceObject(at: indexPath.section-2, with:oG)
                         tblOptionGroup.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
@@ -349,7 +315,7 @@ extension NewItemDetailVC: radio_Check_ButtonDelegate{
         
         //let indexPath = self.tblCheckOut.indexPathForSelectedRow //optional, to get from any UIButton for example
         
-        let currentCell = tblOptionGroup.cellForRow(at: indexPath!) as! section3Cell
+        let currentCell = tblOptionGroup.cellForRow(at: indexPath!) as! productOptionGroupCell
         currentCell.radio_check_button.setImage(UIImage(named: "radio-button-check"),for:UIControl.State.normal)
         cell.radio_Check_Button.setImage(UIImage(named: "radio-button-uncheck"),for:UIControl.State.normal)
     }
@@ -358,15 +324,16 @@ extension NewItemDetailVC: radio_Check_ButtonDelegate{
 }
 
 extension NewItemDetailVC: itemDelegate{
-    func didPressAddItem(cell: section6Cell) {
+    func didPressAddItem(cell: addToCartButtonCell) {
         
         if(mustArray.contains("") && optionGroup.count > 0 ){
             showAlert(title: "Selection is missing", message: "Must choose required selection")
         }
         else{
-            let indexPath = NSIndexPath(row: 0, section: product.optionGroups!.count+3)
-            let cell = tblOptionGroup.cellForRow(at: indexPath as IndexPath) as! section5Cell
-            let specialIstruction = cell.specialInstructions.text!
+         
+           
+            let specialIstruction = ""
+            
             
             if (optionGroup.count > 0){
                 customerOptionGroupArray += mustArray as! Array<CustomerOptionGroup>
@@ -387,7 +354,7 @@ extension NewItemDetailVC: itemDelegate{
                 productPrice = itemPurchaseSubTotal
             }
             
-            cProduct = CustomerProduct.init(id: product.id, code: product.code, name: product.name, description: product.description, productPhotoURL: product.productPhotoURL ?? "logo", price: Int(productPrice), position: product.position, status: product.status, archive: product.archive, optionGroups: customerOptionGroupArray)
+            cProduct = CustomerProduct.init(id: product.id, code: product.code, name: product.name, description: product.description, productPhotoURL: product.productPhotoURL ?? "logo", price: productPrice, position: product.position, status: product.status, archive: product.archive, optionGroups: customerOptionGroupArray)
           
         var alreadyItems = getAlreadyCartItems()
         // update existing item in cart
@@ -401,7 +368,7 @@ extension NewItemDetailVC: itemDelegate{
                     }
                     
                     alreadyItems[i].quantity = qNumber
-                    alreadyItems[i].purchaseSubTotal = Int(itemPurchaseSubTotal)
+                    alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
                     alreadyItems[i].instructions = specialIstruction
 //                  alreadyItems[i].product.name = product.name
                     alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
@@ -414,14 +381,14 @@ extension NewItemDetailVC: itemDelegate{
             // add new item in cart
         else{
             items?.quantity = qNumber
-            items?.purchaseSubTotal = Int(itemPurchaseSubTotal)
+            items?.purchaseSubTotal = itemPurchaseSubTotal
             items?.instructions = specialIstruction
             print(String.init(format: "count before adding item is %i", alreadyItems.count))
             
             
             //"v1px5bld"
             
-            items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: Int(itemPurchaseSubTotal), product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
+            items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
             alreadyItems.append(items!)
             
             saveItems(allItems: alreadyItems)
@@ -516,7 +483,8 @@ struct CustomerOrderItem: Codable {
     var orderItemID: String?
     var forWho: String?
     var instructions: String?
-    var quantity, purchaseSubTotal: Int?
+    var quantity: Int?
+    var purchaseSubTotal: Double
     var product: CustomerProduct
     var customerOrderItemOptions: [CustomerOrderItemOption]
     
@@ -562,7 +530,8 @@ struct CustomerProduct: Codable {
     var code, name, description: String
     let productPhotoURL: String
     //let promotionCode: JSONNull?
-    let price, position, status, archive: Int
+    let price : Double
+    let position, status, archive: Int
     let optionGroups: [CustomerOptionGroup]
     
     enum CodingKeys: String, CodingKey {
