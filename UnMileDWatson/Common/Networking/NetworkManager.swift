@@ -161,7 +161,7 @@ public class NetworkManager {
                                    "status":1]
 
         AFManager.shared.requestURL(
-            Path.customerUrl,
+            ProductionPath.customerUrl,
             httpMethod: .post,
             params: params,
             headers: headers,
@@ -1058,6 +1058,10 @@ enum Path {
     static let customerOrderUrl          = ServerURLs.stagingURL + "/customer-order"
     static let optionGroupUrl            = ServerURLs.stagingURL + "/optiongroup"
     static let productUrl                = ServerURLs.stagingURL + "/product"
+    static let pageContentUrl            = ServerURLs.stagingURL + "/pagecontent"
+    static let imageUrl                  = ServerURLs.stagingURL + "/image"
+    static let sendEmailUrl              = ServerURLs.stagingURL + "/email-sender"
+    static let companyBannerUrl          = ServerURLs.stagingURL + "/v2/companybanner"
 }
 
 enum ProductionPath {
@@ -1071,6 +1075,10 @@ enum ProductionPath {
     static let customerOrderUrl          = ServerURLs.productionURL + "/customer-order"
     static let optionGroupUrl            = ServerURLs.productionURL + "/optiongroup"
     static let productUrl                = ServerURLs.productionURL + "/product"
+    static let pageContentUrl            = ServerURLs.productionURL + "/pagecontent"
+    static let imageUrl                  = ServerURLs.productionURL + "/image"
+    static let sendEmailUrl              = ServerURLs.productionURL + "/email-sender"
+     static let companyBannerUrl         = ServerURLs.productionURL + "/v2/companybanner"
 }
 
 

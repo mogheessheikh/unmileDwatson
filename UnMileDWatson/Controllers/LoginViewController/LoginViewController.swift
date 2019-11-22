@@ -51,10 +51,46 @@ class LoginViewController: BaseViewController {
             
         }
     }
+    func loginUser(email:String,password: String){
+        NetworkManager.getDetails(path:ProductionPath.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)", params: nil, success: { (json, isError) in
+            
+            self.view.endEditing(true)
+            
+            do {
+                let jsonData =  try json.rawData()
+                print(jsonData)
+                let customer = try JSONDecoder().decode(CustomerDetail.self, from: jsonData)
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 , execute: {
+                    
+                    if(email == customer.email && password == customer.password )
+                    {
+                        self.saveCustomerObj(obj: customer, key: keyForSavedCustomer )
+                    }
+                    if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+                        let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+                        let _ = nvc.viewControllers[0] as? MainVC {
+                        
+                        UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+                    }
+                    self.stopActivityIndicator()
+                    
+                })
+            } catch let myJSONError {
+                print(myJSONError)
+                self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+            }
+            
+        }) { (error) in
+            //self.dismissHUD()
+            self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+        }
+    }
+    
     func login(_ email:String, _ psw:String){
         startActivityIndicator()
         
-        let URL_USER_LOGIN = Path.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)"
+        let URL_USER_LOGIN = ProductionPath.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)"
         
         let parameters: Parameters=[
             "userName":usernameField.text!,
@@ -116,11 +152,8 @@ class LoginViewController: BaseViewController {
     
     @IBAction func registerDidPress(_ sender: UIButton) {
        
-//        guard let registerVC =  UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: "UserRegistrationVC ") as? UserRegistrationVC  else {
-//            fatalError("Invalid Controller ")
-//        }
-//        self.navigationController?.pushViewController(registerVC, animated: true)
-//
+        performSegue(withIdentifier: "loginToRejister", sender: self)
+
   }
 }
 
@@ -129,7 +162,7 @@ struct CustomerDetail: Codable {
     let customerType, ipAddress: String
     let internalInfo, salutation: String?
     let phone: String
-    let mobile: String
+    let mobile: String?
     let firstName, lastName, email, password: String
     let salt: String
     let promotionSMS, promotionEmail: Bool?
@@ -137,7 +170,7 @@ struct CustomerDetail: Codable {
     let companyID: Int
     let branchID: Int?
     let status: Int
-    let addresses: [Address]
+    let addresses: [Address]?
     
     enum CodingKeys: String, CodingKey {
         case id, customerType, ipAddress, internalInfo, salutation, phone, mobile, firstName, lastName, email, password, salt

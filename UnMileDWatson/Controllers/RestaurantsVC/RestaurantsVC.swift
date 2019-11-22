@@ -79,7 +79,7 @@ class RestaurantsVC: BaseViewController {
                                       "name": name,
                                       "cuisine": cuisine]
 
-        NetworkManager.getDetails(path: Path.branchUrl + "/by-params-app", params: params, success: { (json, isError) in
+        NetworkManager.getDetails(path: ProductionPath.branchUrl + "/by-params-app", params: params, success: { (json, isError) in
             
             self.view.endEditing(true)
 

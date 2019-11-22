@@ -19,21 +19,23 @@
                 <rect key="frame" x="0.0" y="0.0" width="365" height="343.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" fixedFrame="YES" layoutMarginsFollowReadableWidth="YES" axis="vertical" alignment="top" spacing="11" translatesAutoresizingMaskIntoConstraints="NO" id="XZS-n9-Go0">
-                        <rect key="frame" x="15" y="9" width="408" height="311.5"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <stackView opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" axis="vertical" alignment="top" translatesAutoresizingMaskIntoConstraints="NO" id="XZS-n9-Go0">
+                        <rect key="frame" x="15" y="9" width="350" height="311.5"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="lxY-rH-cDT">
-                                <rect key="frame" x="0.0" y="0.0" width="143.5" height="81"/>
+                                <rect key="frame" x="0.0" y="0.0" width="143.5" height="92"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Order Detail" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="P1R-Q4-iXe">
-                                        <rect key="frame" x="0.0" y="0.0" width="143.5" height="33.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="143.5" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="6FH-Fn-G3i"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="28"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=". . ." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AKZ-RT-Cpv">
-                                        <rect key="frame" x="0.0" y="41.5" width="143.5" height="39.5"/>
+                                        <rect key="frame" x="0.0" y="42" width="143.5" height="50"/>
                                         <rect key="contentStretch" x="0.0" y="0.050000000000000003" width="1" height="1"/>
                                         <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="34"/>
                                         <color key="textColor" red="0.75408679249999999" green="0.1410666659" blue="0.036139352380000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -42,16 +44,19 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="ifW-cW-7qx">
-                                <rect key="frame" x="0.0" y="92" width="137" height="49"/>
+                                <rect key="frame" x="0.0" y="92" width="137" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Order From:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RLi-dd-wuX">
-                                        <rect key="frame" x="0.0" y="0.0" width="137" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="137" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="KU2-bb-mae"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="17"/>
-                                        <color key="textColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="D.Watson Islamabad " textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="BCx-4b-g7c">
-                                        <rect key="frame" x="0.0" y="28.5" width="137" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="29" width="137" height="31"/>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Book" family="Bodoni 72" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -59,16 +64,19 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="10s-hf-gmq">
-                                <rect key="frame" x="0.0" y="152" width="138.5" height="49"/>
+                                <rect key="frame" x="0.0" y="152" width="138.5" height="60"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Your Order Number" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xPO-ly-8tm">
-                                        <rect key="frame" x="0.0" y="0.0" width="138.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="138.5" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="vyk-kt-Gdp"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="17"/>
-                                        <color key="textColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="d6j-666280" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tm7-zl-52A">
-                                        <rect key="frame" x="0.0" y="28.5" width="138.5" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="29" width="138.5" height="31"/>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Book" family="Bodoni 72" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -76,32 +84,50 @@
                                 </subviews>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="8" translatesAutoresizingMaskIntoConstraints="NO" id="e7J-Zf-DRs">
-                                <rect key="frame" x="0.0" y="212" width="408" height="49"/>
+                                <rect key="frame" x="0.0" y="212" width="327" height="80.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Delivery Address" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="My6-0Y-5c5">
-                                        <rect key="frame" x="0.0" y="0.0" width="408" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="327" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="21" id="YDk-Q4-zid"/>
+                                        </constraints>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="17"/>
-                                        <color key="textColor" red="0.92538958790000003" green="0.92554813619999998" blue="0.92537957429999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="textColor" red="0.4756349325" green="0.47564673419999998" blue="0.47564041610000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="E11-1 main double Road Islamabad in the territory of islamabad " lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1jX-2a-qdS">
-                                        <rect key="frame" x="0.0" y="28.5" width="408" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="29" width="327" height="51.5"/>
                                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Book" family="Bodoni 72" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=". . ." lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNr-Bs-Ipa">
-                                <rect key="frame" x="0.0" y="272" width="49" height="39.5"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=". . ." textAlignment="natural" lineBreakMode="characterWrap" numberOfLines="0" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VNr-Bs-Ipa">
+                                <rect key="frame" x="0.0" y="292.5" width="40" height="19"/>
                                 <rect key="contentStretch" x="0.0" y="0.050000000000000003" width="1" height="1"/>
-                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="19" id="SnR-AY-mWz"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="35"/>
                                 <color key="textColor" red="0.75408679249999999" green="0.1410666659" blue="0.036139352380000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="e7J-Zf-DRs" secondAttribute="trailing" constant="23" id="4o2-hD-j70"/>
+                            <constraint firstItem="10s-hf-gmq" firstAttribute="top" secondItem="XZS-n9-Go0" secondAttribute="top" constant="152" id="XWM-PB-TjR"/>
+                            <constraint firstItem="e7J-Zf-DRs" firstAttribute="top" secondItem="XZS-n9-Go0" secondAttribute="top" constant="212" id="g9Y-lx-Xey"/>
+                            <constraint firstItem="ifW-cW-7qx" firstAttribute="top" secondItem="XZS-n9-Go0" secondAttribute="top" constant="92" id="leX-SS-6mk"/>
+                        </constraints>
                     </stackView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="XZS-n9-Go0" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="5u8-wY-yLQ"/>
+                    <constraint firstItem="XZS-n9-Go0" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="9id-c4-5po"/>
+                    <constraint firstAttribute="trailing" secondItem="XZS-n9-Go0" secondAttribute="trailing" id="i0o-6A-YPj"/>
+                    <constraint firstAttribute="bottom" secondItem="XZS-n9-Go0" secondAttribute="bottom" constant="23" id="kVG-eX-zC7"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>

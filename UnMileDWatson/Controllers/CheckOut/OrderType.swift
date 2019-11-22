@@ -19,7 +19,7 @@ class OrderType: UITableViewCell, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! UITableViewCell
+        let cell : UITableViewCell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) 
         cell.textLabel!.text = orderType[indexPath.row]
         cell.textLabel?.font = UIFont(name: "Bodoni 72", size: 15)
         return cell

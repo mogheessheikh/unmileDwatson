@@ -20,33 +20,34 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1UD-Kj-drD">
-                        <rect key="frame" x="16" y="0.0" width="199" height="35"/>
-                        <color key="backgroundColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="41"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="199" id="PP9-5i-imx"/>
-                            <constraint firstAttribute="height" constant="35" id="qpc-ei-lgF"/>
+                            <constraint firstAttribute="width" constant="375" id="PP9-5i-imx"/>
+                            <constraint firstAttribute="height" constant="41" id="qpc-ei-lgF"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                        <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="20" maxY="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <inset key="titleEdgeInsets" minX="-190" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="imageEdgeInsets" minX="318" minY="0.0" maxX="-26" maxY="0.0"/>
                         <state key="normal" title="Select Payment Type" image="down">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="titleColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="radioButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4eY-St-gVb"/>
                         </connections>
                     </button>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vd8-TL-hho">
-                        <rect key="frame" x="16" y="40" width="199" height="110"/>
+                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vd8-TL-hho">
+                        <rect key="frame" x="69" y="40" width="237" height="107"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tableView>
                 </subviews>
                 <constraints>
                     <constraint firstItem="1UD-Kj-drD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="GgT-t2-zLg"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="vd8-TL-hho" secondAttribute="leading" id="ajB-9j-ssF"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="trailing" secondItem="vd8-TL-hho" secondAttribute="trailing" id="gt3-7K-E4l"/>
-                    <constraint firstItem="vd8-TL-hho" firstAttribute="top" secondItem="1UD-Kj-drD" secondAttribute="bottom" constant="5" id="k0O-lb-y9F"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="nKs-yQ-8tB"/>
-                    <constraint firstItem="vd8-TL-hho" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="wXG-L8-JXT"/>
+                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="vd8-TL-hho" secondAttribute="leading" constant="-69" id="ajB-9j-ssF"/>
+                    <constraint firstItem="1UD-Kj-drD" firstAttribute="trailing" secondItem="vd8-TL-hho" secondAttribute="trailing" constant="69" id="gt3-7K-E4l"/>
+                    <constraint firstItem="vd8-TL-hho" firstAttribute="top" secondItem="1UD-Kj-drD" secondAttribute="bottom" constant="-1" id="k0O-lb-y9F"/>
+                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-16" id="nKs-yQ-8tB"/>
+                    <constraint firstItem="vd8-TL-hho" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" constant="-3" id="wXG-L8-JXT"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -54,7 +55,7 @@
                 <outlet property="paymentTypeTable" destination="vd8-TL-hho" id="2rW-P1-84l"/>
                 <outlet property="radioButton" destination="1UD-Kj-drD" id="5UE-02-mlG"/>
             </connections>
-            <point key="canvasLocation" x="132.80000000000001" y="195.6521739130435"/>
+            <point key="canvasLocation" x="132" y="195.6521739130435"/>
         </tableViewCell>
     </objects>
     <resources>

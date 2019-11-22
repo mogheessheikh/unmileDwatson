@@ -30,12 +30,7 @@ class SubSettingVC: BaseViewController {
     var company: CompanyDetails!
     override func viewDidLoad() {
         super.viewDidLoad()
-        subview.layer.cornerRadius = 7
-        firstnameView.layer.cornerRadius = 7
-        lastnameView.layer.cornerRadius = 7
-        emailView.layer.cornerRadius = 7
-        phoneNumberView.layer.cornerRadius = 7
-        mobilenumberView.layer.cornerRadius = 7
+       
         getUser()
        company = getCompanyObject("SavedCompany")
         
@@ -43,7 +38,7 @@ class SubSettingVC: BaseViewController {
     @IBAction func updateDidPressed(_ sender: Any) {
          self.startActivityIndicator()
         
-        let path = URL(string: Path.customerUrl + "/update")
+        let path = URL(string: ProductionPath.customerUrl + "/update")
         let firstName = tfFirstName.text
         let lastName = tfLastName.text
         let email = tfEmail.text
@@ -97,12 +92,9 @@ class SubSettingVC: BaseViewController {
                         if httpResponse.statusCode == 200{
                             restResponse = true
                             self.stopActivityIndicator()
-                            self.tfFirstName.text = ""
-                            self.tfLastName.text = ""
-                            self.tfEmail.text = ""
-                            self.tfPhone.text = ""
-                            self.tfMobile.text = ""
-                            //self.showAlert(title: "Request Completed", message: "")
+                             self.showAlert(title: "Request Completed", message: "Your Profile is updated now")
+                             self.getUser()
+                           
                         }
                         else
                         {
@@ -126,7 +118,7 @@ class SubSettingVC: BaseViewController {
             let decoder = JSONDecoder()
             let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
             customerId = customer!.id
-            let path = URL(string: Path.customerUrl + "/\(customerId)")
+            let path = URL(string: ProductionPath.customerUrl + "/\(customerId)")
             let session = URLSession.shared
             let task = session.dataTask(with: path!) { data, response, error in
                 print("Task completed")

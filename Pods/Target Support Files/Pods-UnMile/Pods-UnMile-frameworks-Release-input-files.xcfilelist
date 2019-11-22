@@ -1,0 +1,5 @@
+${PODS_ROOT}/Target Support Files/Pods-UnMile/Pods-UnMile-frameworks.sh
+${PODS_ROOT}/ZendeskSDK/ZendeskSDK/5.1/ZendeskCoreSDK.framework
+${PODS_ROOT}/ZendeskSDK/ZendeskSDK/5.1/ZendeskProviderSDK.framework
+${PODS_ROOT}/ZendeskSDK/ZendeskSDK/5.1/ZendeskSDK.framework
+${PODS_ROOT}/ZendeskSDK/ZendeskSDK/5.1/CommonUISDK.framework

@@ -31,7 +31,7 @@ class BranchCategoryProductsVC: BaseViewController {
     
     var product : Product!
     var fetchingMore = false
-    var branchDetails: BranchDetailsResponse!
+    var branchCategoryDetails: BranchDetailsResponse!
     var productWrapperlist: [ProductWrapperList]?
     var productWraper: ProductWraper!
     var catagoryId = 0
@@ -50,12 +50,8 @@ class BranchCategoryProductsVC: BaseViewController {
             
         }
         else{
-            title = branchDetails.categories[0].name
+            title = branchCategoryDetails.categories[0].name
         }
-        
-        print(branchDetails)
-        print("Number of Cat\(branchDetails.categories.count)")
-        
 
         if(catagoryId != 0){
             getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
@@ -63,7 +59,7 @@ class BranchCategoryProductsVC: BaseViewController {
         }
         else{
           //  let segment = segmentControl.selectedSegmentIndex
-              getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchDetails.categories[0].id)")
+              getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
         }
 //
     }
@@ -85,7 +81,7 @@ class BranchCategoryProductsVC: BaseViewController {
                                           "productName":productName]
         print(parameters)
 
-        NetworkManager.getDetails(path: Path.productUrl + "/get-active-bycategoryId/", params: parameters, success: { (json, isError) in
+        NetworkManager.getDetails(path: ProductionPath.productUrl + "/get-active-bycategoryId/", params: parameters, success: { (json, isError) in
             
             self.view.endEditing(true)
             
@@ -139,6 +135,11 @@ class BranchCategoryProductsVC: BaseViewController {
 
 extension BranchCategoryProductsVC:UISearchBarDelegate{
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        productSearchBar.text = ""
+        productSearchBar.endEditing(true)
+        
+    }
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         
         isSearching = text.isEmpty
@@ -153,11 +154,12 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
         }
         else{
             //  let segment = segmentControl.selectedSegmentIndex
-            getProductsBy(pageNo: "0" , pageSize: "10", productName: searchText, categoryId: "\(branchDetails.categories[0].id)")
+            getProductsBy(pageNo: "0" , pageSize: "10", productName: searchText, categoryId: "\(branchCategoryDetails.categories[0].id)")
         }
       
         
     }
+
     func didPresentSearchController(searchController: UISearchController) {
         productSearchBar.becomeFirstResponder()
     }
@@ -173,11 +175,11 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! branchCategoriesCellCollectionViewCell
         cell.layer.borderWidth = 2.0
         cell.layer.borderColor = UIColor.gray.cgColor
+        
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
             let url = URL(string: urlString) {
             cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
         }
-
         cell.productName.text = productWrapperlist?[indexPath.row].product?.name
         cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
         return cell
@@ -200,7 +202,7 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
                     }
                     else{
                         //  let segment = segmentControl.selectedSegmentIndex
-                        getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: "10", productName: "", categoryId: "\(branchDetails.categories[0].id)")
+                        getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
                     }
                 
             }
@@ -218,16 +220,16 @@ extension BranchCategoryProductsVC : addItemDelegate{
 
 struct BranchDetailsResponse: Codable {
     let id: Int
-    let name, optiongroupDescription: String
+    let name, branchDetailDescription: String
     let code: String?
-    let imageURL: String?
+    let imageURL: String
     let status, archive: Int
     let branch: Branch
     let categories: [Category]
     
     enum CodingKeys: String, CodingKey {
         case id, name
-        case optiongroupDescription = "description"
+        case branchDetailDescription = "description"
         case code
         case imageURL = "imageUrl"
         case status, archive, branch, categories
@@ -380,10 +382,21 @@ struct Tax: Codable {
 
 struct Category: Codable {
     let id: Int
-    let name: String
-    let description: String
+    let name, categoryDescription: String
+    let categoryURL: String?
+    let imageURL: String?
+    let thumbNailURL, code: String?
     let position, status, archive: Int
     let products: [Product]?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case categoryDescription = "description"
+        case categoryURL = "categoryUrl"
+        case imageURL = "imageUrl"
+        case thumbNailURL = "thumbNailUrl"
+        case code, position, status, archive, products
+    }
 }
 
 struct Product: Codable {

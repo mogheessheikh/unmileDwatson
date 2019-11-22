@@ -18,7 +18,6 @@ class AddAddressVC: BaseViewController {
     @IBOutlet var btnArea: UIButton!
     @IBOutlet var btnCity: UIButton!
     var companyDetails: CompanyDetails!
-    var cityAreaView: CityAreaView!
     var customerAddress : Address?
     var addressFeilds = [AddressField]()
     var addressFeild: AddressField!
@@ -107,7 +106,7 @@ class AddAddressVC: BaseViewController {
 //    ["id":0,"isDefault":0,"archive":0,"addressFields":[["id":0,"fieldName":"addressLine1","label":"addressline1","fieldValue":"aaaaaaaaaa"],["id":0,"fieldName":"postCode","label":"postcode","fieldValue":"L3R 9A5"]],"customer":["id":455]]
     func addAddressToServer(){
         startActivityIndicator()
-        let path = URL(string: Path.addressUrl + "/add-address")
+        let path = URL(string: ProductionPath.addressUrl + "/add-address")
         let parameters =     ["id":0,
                               "isDefault":0,
                               "archive":0,
@@ -163,7 +162,7 @@ class AddAddressVC: BaseViewController {
     }
     func updateAddressToServer(){
         startActivityIndicator()
-        let path = URL(string: Path.addressUrl + "/update-address")
+        let path = URL(string: ProductionPath.addressUrl + "/update-address")
         let parameters = ["id": addressId!,
                           "isDefault":0,
                           "archive":0,

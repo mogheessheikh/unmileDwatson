@@ -12,7 +12,7 @@ class EatCrazeSettingVC: BaseViewController {
     
     
     
-    var userSettingArray = ["User Profile", "Delivery Address", "Update Password","Contact Spport", "Term & Condition", "Logout"]
+    var userSettingArray = ["User Profile", "Delivery Address", "Update Password","Contact Support", "Term & Condition", "Logout"]
     var UserSettingLogos: [UIImage] = [UIImage(named: "user-1")!, UIImage(named: "location1")!,UIImage(named: "lock")!, UIImage(named: "chat")!,UIImage(named: "globe-search")!,UIImage(named: "logout")!]
     
     @IBOutlet var tblSettings: UITableView!

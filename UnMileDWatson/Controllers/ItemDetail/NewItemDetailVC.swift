@@ -55,8 +55,8 @@ class NewItemDetailVC: BaseViewController {
 //
 //        }
         cartBag.frame = CGRect(x: 0, y: 0, width: 25, height: 30)
-        cartBag.setImage(UIImage(named: "bag")?.withRenderingMode(.automatic), for: .normal)
-        cartBag.badgeEdgeInsets = UIEdgeInsets(top: 20, left: 0, bottom: 0, right: 15)
+        cartBag.setImage(UIImage(named: "add to cart")?.withRenderingMode(.automatic), for: .normal)
+        cartBag.badgeEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 15)
         cartBag.addTarget(self, action: #selector(cartBagTapped), for: .touchUpInside)
         bag = alreadyItems.count
         UserDefaults.standard.set(bag, forKey: "bag")
@@ -71,7 +71,7 @@ class NewItemDetailVC: BaseViewController {
 //                optionalCount += 1
 //            }
 //        }
-        print(mustCount,"Moghees",optionalCount)
+       // print(mustCount,"Moghees",optionalCount)
         
         for _ in 0..<mustCount{
             
@@ -83,6 +83,13 @@ class NewItemDetailVC: BaseViewController {
         }
         
     }
+    override func viewDidAppear(_ animated: Bool) {
+        let alreadyItems = getAlreadyCartItems()
+        bag = alreadyItems.count
+        UserDefaults.standard.set(bag, forKey: "bag")
+        cartBag.badge = String(bag)
+    }
+    
     func addSelectedCellWithSection(_ indexPath:IndexPath) ->IndexPath?
     {
         let existingIndexPath = selectedSingleRows["\(indexPath.section)"]
@@ -100,7 +107,7 @@ class NewItemDetailVC: BaseViewController {
 
     func getSubOptionGroup(optionId: Int){
         startActivityIndicator()
-        let path = URL(string: Path.optionGroupUrl + "/option/\(optionId)")
+        let path = URL(string: ProductionPath.optionGroupUrl + "/option/\(optionId)")
         let session = URLSession.shared
         let task = session.dataTask(with: path!) { data, response, error in
             
@@ -368,9 +375,8 @@ extension NewItemDetailVC: itemDelegate{
                     }
                     
                     alreadyItems[i].quantity = qNumber
-                    alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
+                    alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal * Double(qNumber)
                     alreadyItems[i].instructions = specialIstruction
-//                  alreadyItems[i].product.name = product.name
                     alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
   
                 }
@@ -381,14 +387,16 @@ extension NewItemDetailVC: itemDelegate{
             // add new item in cart
         else{
             items?.quantity = qNumber
-            items?.purchaseSubTotal = itemPurchaseSubTotal
+            items?.purchaseSubTotal = itemPurchaseSubTotal * Double(qNumber)
             items?.instructions = specialIstruction
+            items?.customerOrderItemOptions = customerOrderItemOptionArray
+            items?.product = cProduct
             print(String.init(format: "count before adding item is %i", alreadyItems.count))
             
             
             //"v1px5bld"
             
-            items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
+            items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: (itemPurchaseSubTotal * Double(qNumber)), product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
             alreadyItems.append(items!)
             
             saveItems(allItems: alreadyItems)

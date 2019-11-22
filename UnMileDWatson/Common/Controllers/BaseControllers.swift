@@ -13,13 +13,13 @@ class BaseViewController: UIViewController {
 
     var cityCheck: CityObject?
     var areaCheck: AreaObject?
-    var branchCheck: BranchDetailsResponse?
+    var branchCheck: Branch?
     var customerCheck: CustomerDetail!
     var companyCheck: CompanyDetails!
     var currentAddress : Address!
     var address: AddressField?
     var isBranchOpenClose = "true"
-    var totalPrice = 0.0
+   
     var saveCustomerAddress : [Address]!
     private var customerAddressDetails : [Address]!
     var companyObject: CompanyDetails!
@@ -237,7 +237,7 @@ class BaseViewController: UIViewController {
             let decoder = JSONDecoder()
             let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
             customerId = customer!.id
-         let path = URL(string: Path.customerUrl + "/\(customerId)")
+         let path = URL(string: ProductionPath.customerUrl + "/\(customerId)")
         let session = URLSession.shared
         let task = session.dataTask(with: path!) { data, response, error in
             print("Task completed")
@@ -500,7 +500,7 @@ class BaseViewController: UIViewController {
         }
     }
     
-    func saveBranchObject(Object : BranchDetailsResponse , key: String){
+    func saveBranchObject(Object : Branch , key: String){
         
         let encoder = JSONEncoder()
         if let encoded = try? encoder.encode(Object) {
@@ -508,7 +508,15 @@ class BaseViewController: UIViewController {
             defaults.set(encoded, forKey: key)
         }
     }
-   
+    
+    func saveBranchCategories(Object : BranchDetailsResponse , key: String){
+        
+        let encoder = JSONEncoder()
+        if let encoded = try? encoder.encode(Object) {
+            let defaults = UserDefaults.standard
+            defaults.set(encoded, forKey: key)
+        }
+    }
     func saveBranchAddress(Object : Branch , key: String){
         
         let encoder = JSONEncoder()
@@ -518,14 +526,7 @@ class BaseViewController: UIViewController {
         }
     }
     
-    func saveSelectedProduct(Object : Product , key: String){
-        
-        let encoder = JSONEncoder()
-        if let encoded = try? encoder.encode(Object) {
-            let defaults = UserDefaults.standard
-            defaults.set(encoded, forKey: key)
-        }
-    }
+   
     func saveSelectedAddress(obj: Address, key: String) {
         
         let encoder = JSONEncoder()
@@ -534,12 +535,12 @@ class BaseViewController: UIViewController {
             defaults.set(encoded, forKey: key)
         }
     }
-    func getBranchObject(key: String)-> BranchDetailsResponse?
+    func getBranchObject(key: String)-> Branch?
     {
         
         if let savedBranch = UserDefaults.standard.object(forKey: key) as? Data  {
             let decoder = JSONDecoder()
-            if let loadedBranch = try? decoder.decode(BranchDetailsResponse.self, from: savedBranch) {
+            if let loadedBranch = try? decoder.decode(Branch.self, from: savedBranch) {
                 branchCheck = loadedBranch
             }
     }

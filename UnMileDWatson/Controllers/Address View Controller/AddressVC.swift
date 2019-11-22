@@ -43,47 +43,44 @@ class AddressVC: BaseViewController {
     
     func getuserAddress() {
         self.startActivityIndicator()
-        if let Id = UserDefaults.standard.object(forKey: "customerId") as? Int{
-            customerId = Id
-            let path = URL(string: Path.customerUrl + "/\(customerId)")
-            let session = URLSession.shared
-            let task = session.dataTask(with: path!) { data, response, error in
-                print("Task completed")
+        if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+            let decoder = JSONDecoder()
+            let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
+            customerId = customer!.id
+        }
+        
+        NetworkManager.getDetails(path: ProductionPath.customerUrl + "/\(customerId)", params: nil, success: { (json, isError) in
+            
+            self.view.endEditing(true)
+            
+            do {
+                let jsonData =  try json.rawData()
+                print(jsonData)
+                let customer = try JSONDecoder().decode(CustomerDetail.self, from: jsonData)
                 
-                guard data != nil && error == nil else {
-                    print(error?.localizedDescription)
-                    return
-                }
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-                    if let parseJSON = json {
-                        
-                        let jsonData = try JSONSerialization.data(withJSONObject: parseJSON, options: .prettyPrinted)
-                        let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-                        let jsonData1 = encodedObjectJsonString.data(using: .utf8)
-                        let customer = try JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
-                       
-                        DispatchQueue.main.async {
-                            self.totalAddress = customer.addresses
-                            if self.totalAddress != nil{
-                                
-                                self.addressList = self.totalAddress.filter { $0.archive == 0 }
-                            }
-                            else{
-                                 self.addressList = []
-                            }
-                            self.tblAddress.reloadData()
-                            self.stopActivityIndicator()
-                        }
-                        
-                    }
+                self.totalAddress = customer.addresses
+                if self.totalAddress != nil{
                     
-                } catch let parseError as NSError {
-                    print("JSON Error \(parseError.localizedDescription)")
+                    self.addressList = self.totalAddress.filter { $0.archive == 0 }
                 }
+                else{
+                    self.addressList = []
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 , execute: {
+                    
+                    self.tblAddress.reloadData()
+                    self.stopActivityIndicator()
+                    
+                })
+            } catch let myJSONError {
+                print(myJSONError)
+                self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
             }
             
-            task.resume()
+        }) { (error) in
+            //self.dismissHUD()
+            self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
     }
     
@@ -106,7 +103,7 @@ class AddressVC: BaseViewController {
     }
     func deleteAddress(addressId: Int){
         
-        let path = Path.addressUrl + "/delete/" + "\(addressId)"
+        let path = ProductionPath.addressUrl + "/delete/" + "\(addressId)"
         NetworkManager.getDetails(path: path, params: nil, success: { (json, isError) in
             do{
                print("response")
@@ -168,27 +165,28 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
        self.navigationController?.popViewController(animated: true)
     
     }
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool
+    {
         return true
     }
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if(editingStyle == .delete){
-            let IndexPaths = NSArray(array:[indexPath])
-            let alreadyAddress = addressList
-            if (alreadyAddress?.count != 0){
-                
-                deleteAddress(addressId: (addressList?[indexPath.row].id)!)
-                tableView.beginUpdates()
-                totalAddress.remove(at: indexPath.row)
-                //tableView.deleteRows(at: IndexPaths as! [IndexPath] , with: .automatic)
-                tableView.endUpdates()
-                tblAddress.reloadData()
-                }
-            }
-        }
+   
+    
     }
 
-extension AddressVC : editAddressDelegate{
+extension AddressVC : editAddressDelegate {
+    func deleteButtonTapped(cell: AddressTableViewCell) {
+          let indexPath = self.tblAddress.indexPath(for: cell)
+        let alreadyAddress = NSMutableArray.init(array: addressList!)
+        if (alreadyAddress.count != 0){
+            deleteAddress(addressId: (addressList?[(indexPath?.row)!].id)!)
+            alreadyAddress.removeObject(at: indexPath!.row)
+            //self.tblAddress.deleteRows(at: [indexPath!] , with: .fade)
+            totalAddress.remove(at: indexPath!.row)
+            tblAddress.reloadData()
+            getuserAddress()
+    }
+    }
+    
     func didTappedEdit(cell: AddressTableViewCell) {
     let indexPath = self.tblAddress.indexPath(for: cell)
         currentAddress = addressList?[(indexPath?.row)!]

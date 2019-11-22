@@ -9,9 +9,12 @@
 import UIKit
 protocol editAddressDelegate {
     func didTappedEdit(cell:AddressTableViewCell)
+    func deleteButtonTapped(cell:AddressTableViewCell)
+    
 }
 class AddressTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var btnDelete: UIButton!
     @IBOutlet var lblCityArea: UILabel!
     @IBOutlet var lblFullAddress: UILabel!
     @IBOutlet var btnAddEdit: UIButton!
@@ -29,6 +32,9 @@ class AddressTableViewCell: UITableViewCell {
     }
     @IBAction func AddEditTapped(_ sender: Any) {
     delegate?.didTappedEdit(cell: self)
+    }
+    @IBAction func didTappedDelete(_ sender: Any) {
+        delegate?.deleteButtonTapped(cell: self)
     }
     
 }

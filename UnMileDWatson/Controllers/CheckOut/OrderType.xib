@@ -20,15 +20,17 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nK4-zu-jp4">
-                        <rect key="frame" x="16" y="0.0" width="199" height="35"/>
-                        <color key="backgroundColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="35"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="199" id="9O8-N2-jT6"/>
+                            <constraint firstAttribute="width" constant="375" id="9O8-N2-jT6"/>
                             <constraint firstAttribute="height" constant="35" id="AQZ-K4-i41"/>
                         </constraints>
-                        <inset key="imageEdgeInsets" minX="-1" minY="0.0" maxX="10" maxY="0.0"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                        <inset key="titleEdgeInsets" minX="-200" minY="0.0" maxX="0.0" maxY="0.0"/>
+                        <inset key="imageEdgeInsets" minX="310" minY="0.0" maxX="-5" maxY="0.0"/>
                         <state key="normal" title="Select Order Type " image="down">
-                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <color key="titleColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         </state>
                         <connections>
                             <action selector="didPressOrderTypeRadioButton:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="2fJ-7E-ofW"/>
@@ -36,7 +38,7 @@
                         </connections>
                     </button>
                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="lpp-ZP-9xB">
-                        <rect key="frame" x="16" y="40" width="199" height="110"/>
+                        <rect key="frame" x="69" y="40" width="237" height="110"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <inset key="separatorInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                     </tableView>
@@ -44,10 +46,10 @@
                 <constraints>
                     <constraint firstItem="nK4-zu-jp4" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="7Bk-iv-Ev7"/>
                     <constraint firstItem="lpp-ZP-9xB" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" id="BzK-UL-dMR"/>
-                    <constraint firstItem="nK4-zu-jp4" firstAttribute="leading" secondItem="lpp-ZP-9xB" secondAttribute="leading" id="H5V-3e-15M"/>
-                    <constraint firstItem="nK4-zu-jp4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="Pjg-2k-RAK"/>
+                    <constraint firstItem="nK4-zu-jp4" firstAttribute="leading" secondItem="lpp-ZP-9xB" secondAttribute="leading" constant="-69" id="H5V-3e-15M"/>
+                    <constraint firstItem="nK4-zu-jp4" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-16" id="Pjg-2k-RAK"/>
                     <constraint firstItem="lpp-ZP-9xB" firstAttribute="top" secondItem="nK4-zu-jp4" secondAttribute="bottom" constant="5" id="SG3-vi-jQL"/>
-                    <constraint firstItem="nK4-zu-jp4" firstAttribute="trailing" secondItem="lpp-ZP-9xB" secondAttribute="trailing" id="YKP-IT-WCs"/>
+                    <constraint firstItem="nK4-zu-jp4" firstAttribute="trailing" secondItem="lpp-ZP-9xB" secondAttribute="trailing" constant="69" id="YKP-IT-WCs"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

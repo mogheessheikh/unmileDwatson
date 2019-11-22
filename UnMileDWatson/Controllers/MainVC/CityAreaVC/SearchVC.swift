@@ -77,7 +77,7 @@ class SearchVC: BaseViewController {
         let params: [String : Any] = ["countryID":"7",
                       "companyID": self.companyId]
         
-        NetworkManager.getDetails(path: Path.companyCityUrl+"/getAll/app", params: params, success: { (json, isError) in
+        NetworkManager.getDetails(path: ProductionPath.companyCityUrl+"/getAll/app", params: params, success: { (json, isError) in
 
             do {
                 let jsonData =  try json.rawData()
@@ -104,7 +104,7 @@ class SearchVC: BaseViewController {
                       "companyID": self.companyId,
                       "cityID": self.cityId]
         
-        let areaUrl = Path.companyCityUrl + "/city/areas"
+        let areaUrl = ProductionPath.companyCityUrl + "/city/areas"
         NetworkManager.getDetails(path: areaUrl , params: params, success: { (json, isError) in
 
             do {

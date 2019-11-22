@@ -7,12 +7,12 @@
 //
 
 import UIKit
-import GoogleMaps
+
 
 class ThankYouVC: BaseViewController {
 
     
-    @IBOutlet weak var googleMap: GMSMapView!
+    
     
    
     var restuarentAddress: String!
@@ -27,20 +27,7 @@ class ThankYouVC: BaseViewController {
         
         super.viewDidLoad()
         
-        
-        let camera = GMSCameraPosition.camera(withLatitude: +31.75097946, longitude: +35.23694368, zoom: 17.0)
-        let mapView = GMSMapView.map(withFrame: CGRect.zero, camera: camera)
-        mapView.isMyLocationEnabled = true
-        mapView.mapType =  .terrain
-        
-        // CHANGE THIS
-        self.googleMap = mapView
-        
-        // Creates a marker in the center of the map.
-        let marker = GMSMarker()
-        marker.position = CLLocationCoordinate2D(latitude: +31.75097946, longitude: +35.23694368)
-        marker.title = "my location"
-        marker.map = mapView
+       
         
         
        hideNavigationBar()
@@ -63,8 +50,8 @@ class ThankYouVC: BaseViewController {
         
         if let savedBranch = UserDefaults.standard.object(forKey: keyForSavedBranch) as? Data  {
             let decoder = JSONDecoder()
-           let branch = try! decoder.decode(BranchDetailsResponse.self, from: savedBranch)
-               restuarentAddress  = branch.branch.addressLine1
+           let branch = try! decoder.decode(Branch.self, from: savedBranch)
+               restuarentAddress  = branch.addressLine1
         }
         
         
@@ -127,7 +114,7 @@ extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
                     fatalError("Unknown cell")
             }
             cell.lblOrderNumber.text = "\(orderSummery.id)"
-            cell.lblBranchAddress.text = "\(restuarentAddress ?? "")"
+            cell.lblBranchAddress.text = "Dwatson Group of Company, Islamabad Capital Territory"
             cell.lblCustomerAddress.text = "\(orderSummery.customerOrderAddress.customerOrderAddressFields[0].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[1].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[2].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[3].fieldValue)"
            
         return cell

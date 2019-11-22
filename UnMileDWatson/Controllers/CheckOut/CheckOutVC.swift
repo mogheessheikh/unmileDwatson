@@ -16,8 +16,8 @@ class CheckOutVC: BaseViewController {
     var userEmail = ""
     var userPhone = ""
     var userL: [String] = ["Name*", "Email*", "Phone*"]
-    var paymentLogo: [UIImage] = [UIImage(named: "cash-1")! , UIImage(named: "credit-card")!]
-    var branch : BranchDetailsResponse!
+  
+    var branch : Branch!
     var sectionTitle = [ "User","Order Type","Delivery Address","Payment Type","Special Instruction(optional)"]
     var oderType = ""
     var paymentType = ""
@@ -58,6 +58,7 @@ class CheckOutVC: BaseViewController {
         getUser()
         
        branch = getBranchObject(key: keyForSavedBranch)
+        
         if let savedBranch = UserDefaults.standard.object(forKey: "branchAddress") as? Data  {
             let decoder = JSONDecoder()
             if let loadedBranchAddress = try? decoder.decode(Branch.self, from: savedBranch) {
@@ -98,9 +99,7 @@ class CheckOutVC: BaseViewController {
         }
         else{
             do {
-          
-            
-                customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "AUTOCONFIRMED", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: subTotal, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
+            customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "AUTOCONFIRMED", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
 
                performSegue(withIdentifier: "checkout2Summary", sender: self)
             }
@@ -114,26 +113,22 @@ class CheckOutVC: BaseViewController {
     func getTransId() -> String
     {
         
-        let areaUrl = Path.transIdUrl + "/new"
+        let areaUrl = ProductionPath.transIdUrl + "/new"
         NetworkManager.getDetails(path: areaUrl , params: nil, success: { (json, isError) in
-            
             do {
                 self.transId = json.rawString()!
-//                self.transId =  String(data:  jsonData, encoding: String.Encoding.utf8)!
-               // let anArray = try JSONDecoder().decode(AreaResponse.self, from: jsonData)
-                
+
             } catch let myJSONError {
                 print(myJSONError)
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
             }
-            
-        }) { (error) in
+        })
+        { (error) in
            
             self.stopActivityIndicator()
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
-        
-return transId
+        return transId
     }
 
     func currentDateTime () -> String {
@@ -165,7 +160,7 @@ return transId
             let decoder = JSONDecoder()
             let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
             customerId = customer!.id
-            let path = URL(string: Path.customerUrl + "/\(customerId)")
+            let path = URL(string: ProductionPath.customerUrl + "/\(customerId)")
             print(path!)
             let session = URLSession.shared
             let task = session.dataTask(with: path!) { data, response, error in
@@ -216,7 +211,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         return 5
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if(section == 0)
+        if(section == 1)
         {
             return userArray.count
         }
@@ -230,8 +225,12 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        
-        if(indexPath.section == 0)
+        if(indexPath.section == 0){
+            guard let  cell = tableView.dequeueReusableCell(withIdentifier: "promocell", for: indexPath) as? PromoCodeCell else {fatalError("Unknown cell")}
+            
+            return cell
+        }
+      else if(indexPath.section == 1)
         {
             guard let  cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CheckOutTableViewCell else {fatalError("Unknown cell")}
             
@@ -245,27 +244,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             
             
         }
-        
-        if (indexPath.section == 1){
-            guard let orderTypeCell = tableView.dequeueReusableCell(withIdentifier: "odercell", for: indexPath) as? OrderType
-                else {
-                    fatalError("Unknown cell")
-            }
-            
-            orderTypeCell.delegate = self
-            var orderTypeArray = [String]()
-            
-            for (_,j) in branch.branch.services.enumerated(){
-                orderTypeArray.append(j.orderType.name)
-                
-            }
-            
-            orderTypeCell.orderType = orderTypeArray
-
-
-            return orderTypeCell
-        }
-         if (indexPath.section == 2){
+       else if (indexPath.section == 2){
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "deliverycell", for: indexPath) as? DeliveryAddress
                 else {
                     fatalError("Unknown cell")
@@ -275,20 +254,40 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 if let loaded = try? decoder.decode(Address.self, from: savedBranch) {
                     
                     selectedAddress  =  CustomerOrderAddress.init(id: 0, addressID: loaded.id, customerOrderAddressFields: loaded.addressFields)
-
+                    
                 }
                 // Do any additional setup after loading the view.
             }
             if(selectedAddress != nil){
                 cell.deliveryAddress.text = "\(selectedAddress.customerOrderAddressFields[1].fieldValue + " " + selectedAddress.customerOrderAddressFields[2].fieldValue + " " + selectedAddress.customerOrderAddressFields[3].fieldValue)"
             }
-            
-
-           
             cell.delegate = self
             return cell
         }
-         if(indexPath.section == 3)
+       else if (indexPath.section == 3){
+            guard let orderTypeCell = tableView.dequeueReusableCell(withIdentifier: "odercell", for: indexPath) as? OrderType
+                else {
+                    fatalError("Unknown cell")
+            }
+            
+            orderTypeCell.delegate = self
+            var orderTypeArray = [String]()
+            
+            for (_,j) in branch.services.enumerated(){
+                if(j.archive != 1){
+                     orderTypeArray.append(j.orderType.name)
+                }
+               
+                
+            }
+            
+            orderTypeCell.orderType = orderTypeArray
+
+
+            return orderTypeCell
+        }
+       
+        else if(indexPath.section == 4)
         {
             
             guard let paymentTypeCell = tableView.dequeueReusableCell(withIdentifier: "paymentcell", for: indexPath) as? PaymentMethodCell
@@ -299,8 +298,12 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             paymentTypeCell.delegate = self
             var paymentTypeArray = [String]()
             
-            for (_,j) in branch.branch.paymentMethods!.enumerated(){
-                paymentTypeArray.append(j.paymentType.name)
+            for (_,j) in branch.paymentMethods!.enumerated(){
+                
+                if(j.archive != 1){
+                      paymentTypeArray.append(j.paymentType.name)
+                }
+              
                 
             }
             paymentTypeCell.paymentType = paymentTypeArray
@@ -325,17 +328,19 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
     }
 
 
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if(section == 0)
-        {
-            let headerView = Bundle.main.loadNibNamed("PromoCodeCell", owner: self, options: nil)?.first as! PromoCodeCell
-            headerView.frame = CGRect(x: 100, y: 0, width: 200, height: 200)
-            return headerView
-        }
-        else {return nil}
-    }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if (indexPath.section == 1){
+        if (indexPath.section == 0){
+            
+            return 200
+            
+        }
+       else if(indexPath.section == 2){
+            
+            return 50
+            
+            
+        }
+        else if (indexPath.section == 3){
             if(reSizeOrderTypeCell){
                 
                 return 160
@@ -343,12 +348,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             else{ return UITableView.automaticDimension}
             
         }
-        else if(indexPath.section == 2){
-            
-            return 95
-            
-        }
-        else if(indexPath.section == 3){
+        else if(indexPath.section == 4){
             
             if(reSizePayementTypeCell){
                 
@@ -357,7 +357,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             else{ return UITableView.automaticDimension}
             
         }
-        else if(indexPath.section == 4){
+        else if(indexPath.section == 5){
             return 100
             
         }
@@ -365,16 +365,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         
     }
     
-    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        if section == 0{
-            return 200
-        }
-        else{
-        return 0
-        }
-        
-    }
-    
+
     
 }
 extension CheckOutVC: radioButtonDelelgate{
@@ -391,9 +382,6 @@ extension CheckOutVC: radioButtonDelelgate{
          paymentType = String
     }
     
-    
-    
-    
 }
 
 extension CheckOutVC: resizeOrderTypeDelegate{
@@ -409,11 +397,8 @@ extension CheckOutVC: resizeOrderTypeDelegate{
         oderType = String
     }
     
-   
-    
-    
-    
 }
+
 extension CheckOutVC: PromoCodeDelegate {
     
     func didTappedVerificationButton()

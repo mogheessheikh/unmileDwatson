@@ -16,7 +16,8 @@ target 'UnMile' do
   pod 'SZTextView'
   pod 'SideMenu'
   pod 'ScrollableSegmentedControl', '~> 1.5.0'
-  pod 'GoogleMaps'
-  pod 'GooglePlaces'
+  pod 'ZendeskSDK'
+  pod 'ZendeskSDK/Providers'	
+  
 
 end 

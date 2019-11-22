@@ -21,7 +21,7 @@ class CartVC: BaseViewController{
     var quantity = 1
     var items: Product!
     //var items : OrderItem!
-    var branch: BranchDetailsResponse!
+    var branch: Branch!
     var allItems : [CustomerOrderItem]!
     var addMoreItems : [CustomerOrderItem]!
     @IBOutlet var lblTotalPrice: UILabel!
@@ -36,10 +36,10 @@ class CartVC: BaseViewController{
         
         allItems = getAlreadyCartItems()
         for (_,j) in allItems.enumerated(){
-          subTotal  += j.purchaseSubTotal
+          self.subTotal  += j.purchaseSubTotal
         }
       
-        lblTotalPrice.text = "Grand Total : \(subTotal)"
+        lblTotalPrice.text = "Grand Total : \(self.subTotal)"
 
         branch = getBranchObject(key: keyForSavedBranch)
         
@@ -57,7 +57,7 @@ class CartVC: BaseViewController{
             allItems = getAlreadyCartItems()
         }
          //allItems = getAlreadyCartItems()
-        tblCart.reloadData()
+        
         if(allItems.count == 0){
             //            checkOut.isEnabled = false
             //            checkOut.isUserInteractionEnabled = false
@@ -66,6 +66,7 @@ class CartVC: BaseViewController{
         else{
             checkOut.isHidden =  false
         }
+        tblCart.reloadData()
     }
     func isBranchClose() -> String
     {
@@ -96,15 +97,16 @@ class CartVC: BaseViewController{
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "cart2checkout"{
- 
+            allItems = getAlreadyCartItems()
+            var total = 0.0
+            for (_,j) in allItems.enumerated(){
+                total  += j.purchaseSubTotal
+            }
             let checkOut = segue.destination as? CheckOutVC
-            checkOut?.totalprice = totalPrice
+            checkOut?.totalprice = total
         }
         else if (segue.identifier == "cartToBranchCategories"){
-            let vc = segue.destination as! BranchCategoryProductsVC
-            vc.branchDetails = self.branch
-            
-        }
+         }
         
     }
     @IBAction func addMoreItems(_ sender: Any) {
@@ -136,14 +138,8 @@ class CartVC: BaseViewController{
             }
         }
         else{
-//            showAlert(title: "Dwatson is Close Now", message: "You cant place your order when branch is close")
-            if UserDefaults.standard.object(forKey: keyForSavedCustomer) != nil{
-                let urlArray = allItems.map({ $0.id })
-                let urlSet = Set(urlArray)
-                print(urlSet)
-                performSegue(withIdentifier: "cart2checkout", sender: nil)
-                
-        }
+            showAlert(title: "Dwatson is Close Now", message: "You cant place your order when branch is close")
+   
         }
        
        
@@ -164,7 +160,6 @@ extension CartVC: CartDelegate{
             allItems.remove(at: indexPath!.row)
             self.tblCart.deleteRows(at: [indexPath!] , with: .fade)
             //tblCart.beginUpdates()
-            
             saveItems(allItems: alreadyItems as! [CustomerOrderItem])
             allItems = getAlreadyCartItems()
             for (_,j) in allItems.enumerated(){
@@ -201,36 +196,49 @@ extension CartVC: CartDelegate{
         
         itemPrice = Double(addMoreItems[(indexPath?.row)!].product.price)
         quantity = addMoreItems[(indexPath?.row)!].quantity!
-           quantity += 1
+        
+            quantity += 1
             itemTotalPrice = itemPrice * Double(quantity)
-            totalPrice = totalPrice + itemPrice
+            var subTotal = 0.0
+       
+        
+        
+        addMoreItems[(indexPath?.row)!].quantity = quantity
+        addMoreItems[(indexPath?.row)!].purchaseSubTotal = itemTotalPrice
+        saveItems(allItems: addMoreItems )
+        
+         addMoreItems = getAlreadyCartItems()
+        for (_,j) in addMoreItems.enumerated(){
+            subTotal += j.purchaseSubTotal
+        }
+        
         cell.Quantity.text = "Quantity \(quantity)"
         cell.TotalPrice.text = "Total Pkr : \(itemTotalPrice)"
-        lblTotalPrice.text = "Grand Total : \(totalPrice)"
-        addMoreItems[(indexPath?.row)!].quantity = quantity
-        addMoreItems[(indexPath?.row)!].purchaseSubTotal = totalPrice
+        lblTotalPrice.text = "Grand Total : \(subTotal)"
         
-        saveItems(allItems: addMoreItems )
     
     }
     
     func didTappedMinusButton(cell: CartTableViewCell) {
         var indexPath = self.tblCart.indexPath(for: cell)
         addMoreItems = getAlreadyCartItems()
-       
         quantity = addMoreItems[indexPath!.row].quantity!
         itemPrice = Double(addMoreItems[indexPath!.row].product.price)
-        
         if quantity  > 1 {
             quantity -= 1
           itemTotalPrice = itemPrice * Double(quantity)
-            totalPrice = totalPrice - itemPrice
+             var subTotal = 0.0
+            addMoreItems[(indexPath?.row)!].quantity = quantity
+            addMoreItems[(indexPath?.row)!].purchaseSubTotal = itemTotalPrice
+            saveItems(allItems: addMoreItems )
+            addMoreItems = getAlreadyCartItems()
+            for (_,j) in addMoreItems.enumerated(){
+                subTotal  += j.purchaseSubTotal
+            }
         cell.Quantity.text = "Quantity \(quantity)"
         cell.TotalPrice.text = "Total Pkr: \(itemTotalPrice)"
-        lblTotalPrice.text = "Grand Total : \(totalPrice)"
-            addMoreItems[(indexPath?.row)!].quantity = quantity
-            addMoreItems[(indexPath?.row)!].purchaseSubTotal = totalPrice
-            saveItems(allItems: addMoreItems )
+        lblTotalPrice.text = "Grand Total : \(subTotal)"
+            
         }
        
     }
@@ -243,7 +251,6 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         //return items.quantity ?? 1
         return allItems.count
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -264,49 +271,11 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
             }
         }
         cell.ProductName.text = items.product.name//itemName
-        cell.TotalPrice.text = "Total Pkr\(Int(items.purchaseSubTotal ) * (items.quantity!))"//String(items.subTotal)//
+        cell.TotalPrice.text = "Total Pkr\(Int(items.purchaseSubTotal ))"//String(items.subTotal)//
 //        cell.SpecialInstruction.text = "Special Instructions:\(items.instructions ?? "No Instruction")"//items.instruction//
         cell.Quantity.text = " Quantity \(items.quantity ?? 1)"
         
         return cell
     }
-    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if(editingStyle == .delete){
-            let alreadyItems = NSMutableArray.init(array: getAlreadyCartItems())
-            if (alreadyItems.count != 0){
-                alreadyItems.removeObject(at: indexPath.row)
-                allItems.remove(at: indexPath.row)
-                self.tblCart.deleteRows(at: [indexPath] , with: .fade)
-                //tblCart.beginUpdates()
-
-                saveItems(allItems: alreadyItems as! [CustomerOrderItem])
-                for (_,j) in allItems.enumerated(){
-                    subTotal  += j.purchaseSubTotal
-                }
-                
-                lblTotalPrice.text = "Grand Total : \(subTotal)"
-                tblCart.reloadData()
-                // tblCart.endUpdates()
-                if let tabItems = tabBarController?.tabBar.items {
-                    
-                    let tabItem = tabItems[1]
-                    tabItem.badgeValue = "0"
-                    
-                    UserDefaults.standard.set(allItems.count , forKey: "Bag")
-                    if let cartBag = UserDefaults.standard.object(forKey: "Bag"){
-                        
-                        tabItem.badgeValue = "\(cartBag)"
-                        print(cartBag)
-                    }
-                    else{
-                        
-                        tabItem.badgeValue = "0"
-                    }
-                }
-            }
-        }
-    }
+  
 }

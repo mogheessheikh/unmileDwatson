@@ -81,35 +81,43 @@ class SplashVC: BaseViewController {
 
 struct CompanyDetails: Codable {
     let id: Int
-    let name, description: String
-    let locationWebLogoURL: String
-    let iOSAppURL: String?
-    let androidAppURL: String
+    let name, companyDetailsDescription, locationWebLogoURL, androidAppURL: String
     let status, archive, clientSendPushNotification: Int
     let salesCompanyName, salesCompanyWebsite: String
-    let homeURL: String?
+    let homeURL: String
+    let chatScript, facebookPixel, googleAnalytics: String
+    let showGuestCheckout: Int
     let companyEmailDetails: CompanyEmailDetails
     let country: Country
     let companyType, deliveryZoneType: CompanyTypeClass
     let companyTemplate: CompanyTemplate
-    let listingRedirection: String?
+    let widgetTheme: TTheme
+    let widgetSetting: WidgetSetting
+    let listingRedirection: String
     let companyLocales: [CompanyLocale]
     let addressFieldRules: [AddressFieldRule]
-
+    let companyIntegrations: [CompanyIntegration]
+    let emailTemplates: String?
+    //let paymentGateway: [PaymentGateway]
+    let companyAlertNotification: [CompanyAlertNotification]
+    let iosappURL: String
+    
     enum CodingKeys: String, CodingKey {
-        case id, name, description
+        case id, name
+        case companyDetailsDescription = "description"
         case locationWebLogoURL = "locationWebLogoUrl"
-        case iOSAppURL, androidAppURL, status, archive, clientSendPushNotification, salesCompanyName, salesCompanyWebsite, homeURL, companyEmailDetails, country, companyType, deliveryZoneType, companyTemplate, listingRedirection, companyLocales, addressFieldRules
+        case androidAppURL, status, archive, clientSendPushNotification, salesCompanyName, salesCompanyWebsite, homeURL, chatScript, facebookPixel, googleAnalytics, showGuestCheckout, companyEmailDetails, country, companyType, deliveryZoneType, companyTemplate, widgetTheme, widgetSetting, listingRedirection, companyLocales, addressFieldRules, companyIntegrations, emailTemplates, companyAlertNotification, iosappURL
     }
 }
 
+// MARK: - AddressFieldRule
 struct AddressFieldRule: Codable {
     let id: Int
     let fieldName, label: String
     let display, addressFieldRuleRequired, minLength, maxLength: Int
     let userInterfaceClass, userInterfaceType: String
     let position, parent, status, archive: Int
-
+    
     enum CodingKeys: String, CodingKey {
         case id, fieldName, label, display
         case addressFieldRuleRequired = "required"
@@ -117,14 +125,30 @@ struct AddressFieldRule: Codable {
     }
 }
 
+// MARK: - CompanyAlertNotification
+struct CompanyAlertNotification: Codable {
+    let id, alertType: Int
+    let message: String?
+    let bannerURL: String?
+    let status: Int
+    let createdDate, createdBy, updatedDate, updatedBy: String
+    
+    enum CodingKeys: String, CodingKey {
+        case id, alertType, message
+        case bannerURL = "bannerUrl"
+        case status, createdDate, createdBy, updatedDate, updatedBy
+    }
+}
+
+// MARK: - CompanyEmailDetails
 struct CompanyEmailDetails: Codable {
     let id, defaultDetails: Int
     let emailHost, emailPort, donotReplyEmail, donotReplyUserName: String
     let donotReplyPassword, customerCareEmail, infoEmail, supportEmail: String
     let adminEmail, phone: String
-    let facebookURL, instagramURL: String
-    let twitterURL, adminCellNumber, customercarecellnumber: String
-
+    let facebookURL: String
+    let instagramURL, twitterURL, adminCellNumber, customercarecellnumber: String
+    
     enum CodingKeys: String, CodingKey {
         case id, defaultDetails, emailHost, emailPort, donotReplyEmail, donotReplyUserName, donotReplyPassword, customerCareEmail, infoEmail, supportEmail, adminEmail, phone
         case facebookURL = "facebookUrl"
@@ -134,24 +158,54 @@ struct CompanyEmailDetails: Codable {
     }
 }
 
+// MARK: - CompanyIntegration
+struct CompanyIntegration: Codable {
+    let id: Int
+    let vendorName: String
+    let status, archive: Int
+    let companyIntegrationParams: [CompanyIntegrationParam]
+}
+
+// MARK: - CompanyIntegrationParam
+struct CompanyIntegrationParam: Codable {
+    let id: Int
+    let dataType: String?
+    let key, value: String
+}
+
+// MARK: - CompanyLocale
 struct CompanyLocale: Codable {
     let id: Int
     let country, language: String
     let isdefault, status, archive: Int
 }
 
+// MARK: - CompanyTemplate
 struct CompanyTemplate: Codable {
     let id: Int
-    let name, standardFolderPath, rootStaticURL: String
+    let name, standardFolderPath: String
+    let mobileFolderPath: String?
+    let rootStaticURL: String
+    let rootStaticMobileURL: String?
     let status, archive: Int
-
+    let defaultTheme: TTheme
+    
     enum CodingKeys: String, CodingKey {
-        case id, name, standardFolderPath
+        case id, name, standardFolderPath, mobileFolderPath
         case rootStaticURL = "rootStaticUrl"
-        case status, archive
+        case rootStaticMobileURL = "rootStaticMobileUrl"
+        case status, archive, defaultTheme
     }
 }
 
+// MARK: - TTheme
+struct TTheme: Codable {
+    let id: Int
+    let headerBg, footerBg, btnBg, btnHoverBg: String
+    let btnFontColor: String
+}
+
+// MARK: - CompanyTypeClass
 struct CompanyTypeClass: Codable {
     let id: Int
     let name: String
@@ -159,8 +213,22 @@ struct CompanyTypeClass: Codable {
     let status, archive: Int
 }
 
+// MARK: - Country
 struct Country: Codable {
     let id: Int
     let country: String
     let status, archive: Int
+}
+
+// MARK: - PaymentGateway
+//struct PaymentGateway: Codable {
+//    let id: Int
+//    let name, param1, param2, param3: String
+//    let status: Int
+//}
+
+// MARK: - WidgetSetting
+struct WidgetSetting: Codable {
+    let id: Int
+    let showPoweredBy: String
 }

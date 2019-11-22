@@ -37,6 +37,7 @@ class PlaceOrderVC: BaseViewController {
     var company: CompanyDetails!
     var orderDiscount = 0.0
     var taxAmount = 0.0
+    var imagePath = ""
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -49,8 +50,8 @@ class PlaceOrderVC: BaseViewController {
         itemSummery = getAlreadyCartItems()
         if let savedBranch = UserDefaults.standard.object(forKey: keyForSavedBranch) as? Data  {
             let decoder = JSONDecoder()
-            let branchDetailResponce = try? decoder.decode(BranchDetailsResponse.self, from: savedBranch)
-            branch = branchDetailResponce?.branch
+            self.branch = try? decoder.decode(Branch.self, from: savedBranch)
+            
             restuarentAddress  = branch.addressLine1
             paymentMethod = branch.paymentMethods
             
@@ -62,11 +63,8 @@ class PlaceOrderVC: BaseViewController {
         surCharges = chargeSurcharge(customerOrder:customerOrder, paymentMethod: paymentMethod)
         orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
         finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount + orderDiscount)
-        
-    
-       
-    
-        routeArray = ["\(restuarentAddress ?? "")","\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
+ 
+        routeArray = [restuarentAddress,"\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
     
         tblOrderSummery.register(UINib(nibName: "Route", bundle: Bundle.main), forCellReuseIdentifier: "routecell")
         tblOrderSummery.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
@@ -85,6 +83,11 @@ class PlaceOrderVC: BaseViewController {
     @IBAction func tappedToPlaceOrder(_ sender: Any) {
        
         startActivityIndicator()
+        
+        if let filePath = UserDefaults.standard.string(forKey: keyForFilePath){
+            imagePath = filePath
+        }
+        
         UIApplication.shared.beginIgnoringInteractionEvents()
         
         // customerOrder.customerOrderItem conversion into json data
@@ -126,7 +129,7 @@ class PlaceOrderVC: BaseViewController {
            
         }
          print(adjustedJsontaxArray)
-        let postString = ["amount":customerOrder.amount,
+        let postString = [
                    "ipAddress": customerOrder.ipAddress,
                    "billingStatus":"\(customerOrder.billingStatus!)",
                    "branchId":"\(customerOrder.branchID)",
@@ -154,14 +157,19 @@ class PlaceOrderVC: BaseViewController {
                    "sendSms":false,
                    "specialInstructions":"\(customerOrder.specialInstructions)",
                    "subTotal": "\(finalsubTotal)",
+                   "amount": "\(customerOrder.subTotal)",
                    "transId":"\(customerOrder.transID)",
                    "surCharge": surCharges,
+                   "userAgent": "IPHONE",
+                   "attachment1":"\(imagePath)",
+                   "attachment2":"",
+                   "bankDetail":"",
                    "companyId": customerOrder.companyID
                    ] as [String : Any]
 
         print(postString )
         
-        guard let url = URL(string: Path.customerOrderUrl + "/create") else { return }
+        guard let url = URL(string: ProductionPath.customerOrderUrl + "/create") else { return }
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = postString as? [String : String]
         request.httpMethod = "POST"
@@ -202,10 +210,12 @@ class PlaceOrderVC: BaseViewController {
                     DispatchQueue.main.async {
                         self.stopActivityIndicator()
                         UIApplication.shared.endIgnoringInteractionEvents()
-                       self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
+//                       self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
                         self.saveCustomerOrder(obj: customerOrder, key: "savedCustomerOrder" )
-                       
                         
+                        let vc : UIViewController = Storyboard.main.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
+                        self.present(vc, animated: true, completion: nil)
+                       
                         print(self.customerOrder.amount)
                     }
                     
@@ -394,11 +404,11 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                     fatalError("Unknown cell")
             }
          
-            cell.lblAmountValue.text = "\(customerOrder.subTotal) PKR"
-            cell.lblOrderTime.text = "\(currentDateTime()) PKR"
-            cell.lblGST.text = "\(round(taxAmount)) PKR"
-            cell.lblSurCharge.text = "\(round(surCharges)) PKR"
-            cell.lblDiscount.text = "\(round(orderDiscount)) PKR"
+            cell.lblAmountValue.text = "\(customerOrder.subTotal)"
+            cell.lblOrderTime.text = "\(currentDateTime())"
+            cell.lblGST.text = "\(round(taxAmount))"
+            cell.lblSurCharge.text = "\(round(surCharges))"
+            cell.lblDiscount.text = "\(round(orderDiscount))"
             cell.lblSubTotal.text = "\(finalsubTotal) PKR"
             return cell
         }
@@ -497,9 +507,9 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
         return 50
         }
         else {return 0}
-        
     }
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        
         if section == 4{
             let footerView = UIView()
             footerView.frame = CGRect(x: 100, y: 100, width: 200, height: 50)

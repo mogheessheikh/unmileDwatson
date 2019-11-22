@@ -16,6 +16,8 @@ class UserRegistrationVC: BaseViewController {
     @IBOutlet weak var passwordField: UITextField!
     @IBOutlet weak var phoneNumber: UITextField!
 
+    var customerObj: CustomerDetail!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -53,14 +55,14 @@ class UserRegistrationVC: BaseViewController {
     func checkEmail(_ email:String ){
         startActivityIndicator()
         
-        let URL_USER_LOGIN = Path.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)"
-        
+        let URL_USER_LOGIN = ProductionPath.customerUrl+"/find-customer-id-companyid"
+       
         let parameters: Parameters=[
-            "userName":emailField.text!,
-            "userPassword":passwordField.text!
+            "email":emailField.text!,
+            "companyID": companyId,
+            "customerType": "Member"
         ]
-        
-        
+
         // let postString = ["userName": name, "userPassword": password] as [String: String]
         //making a post request
         Alamofire.request(URL_USER_LOGIN, method: .get, parameters: parameters).responseJSON
@@ -70,91 +72,28 @@ class UserRegistrationVC: BaseViewController {
                 print(response)
                 
                 //getting the json value from the server
-                if let result = response.result.value {
-                    let anItem = result as! NSDictionary
+                if response.result.value != nil {
+                    self.stopActivityIndicator()
                     
-                    do {
-                        let jsonData = try JSONSerialization.data(withJSONObject: anItem, options: .prettyPrinted)
-                        // here "jsonData" is the dictionary encoded in JSON data
-                        let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-                        
-                        let jsonData1 = encodedObjectJsonString.data(using: .utf8)
-                        
-                        let customer = try? JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
-                    
-                        
-                        if(email == customer!.email)
-                        {
-                            self.stopActivityIndicator()
-                            
-                            self.showAlert(title: "User Already Registered", message: "user is already registerd with this email \(email)")
-                        }
-                        
-                        
-                    } catch {
-                        self.stopActivityIndicator()
-                        print(error.localizedDescription)
-                    }
+                    self.showAlert(title: "User Already Registered", message: "user is already registerd with this email \(email)")
                 }
                     // if response.result.value found nil then registrationNewUser Called
                 else{
+                    self.stopActivityIndicator()
                     self.registerNewUser()
-                    
-                    
                 }
+                
         }
         
         
     }
-    
-//    func registerNewUser(){
-//                let registrationDate = currentDateTime()
-//                let ipAddress = getDeviceIP()
-//                let api = Path.customerUrl + "/create"
-//        let params = ["companyId":companyId,
-//                                                    "customerType":"MEMBER",
-//                                      "firstName": firstName.text!,
-//                                      "internalInfo":"",
-//                                      "ipAddress": ipAddress,
-//                                      "lastName": lastName.text!,
-//                                      "email": emailField.text!,
-//                                      "password": passwordField.text!,
-//                                      "phone": phoneNumber.text!,
-//                                      "mobile": phoneNumber.text!,
-//                                      "promotionEmail":"false",
-//                                      "promotionSms":"false",
-//                                      "registrationDate": registrationDate,
-//                                      "salt":"",
-//                                      "salutation":"",
-//                                      "status":1,
-//                                      ] as [String: Any]
-//
-//
-//        Alamofire.request(api, method: .post, parameters: params, encoding: URLEncoding.default).responseJSON {response in
-//            var err:Error?
-//            switch response.result {
-//            case .success(let json):
-//                print(json)
-//                // update UI on main thread
-//                DispatchQueue.main.async {
-//                    let alertController = UIAlertController(title: "REGISTRATION SUCCESSFUL!", message: nil, preferredStyle: .alert);
-//
-//                    alertController.addAction(UIAlertAction(title: "OK", style: .default,handler: nil));
-//
-//                    self.present(alertController, animated: true, completion: nil)
-//                }
-//            case .failure(let error):
-//                err = error
-//                print(err)
-//            }
-//        }
-//    }
+
     func registerNewUser() {
 
         let registrationDate = currentDateTime()
         let ipAddress = getDeviceIP()
 
-        let myUrl = URL(string: Path.customerUrl + "/create")
+        let myUrl = URL(string: ProductionPath.customerUrl + "/create")
         var request = URLRequest(url: myUrl!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "content-type")
@@ -197,6 +136,7 @@ class UserRegistrationVC: BaseViewController {
             // Let's convert response sent from a server side code to a NSDictionary object:
 
             do {
+                self.customerObj = try JSONDecoder().decode(CustomerDetail.self, from: data!)
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
 
                 if let parseJSON = json {
@@ -217,19 +157,16 @@ class UserRegistrationVC: BaseViewController {
                         self.emailField.text = ""
                         self.passwordField.text = ""
                         self.phoneNumber.text = ""
-                        self.showAlert(title: "SignUP Successfully", message: "Successfully Registered a New Account. Please proceed to Sign in")
                         
-
+                        //self.sendRejistrationDetailToSender(customer: self.customerObj, company: "\(companyId)", locale: "locale")
+                        
+                        self.showAlert(title: "SignUP Successfully", message: "Successfully Registered a New Account. Please proceed to Sign in")
                     }
 
                     }
 
                 }
-                else {
-                    //Display an Alert dialog with a friendly error message
-                    //                        self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
-
-                }
+              
             } catch {
 
                 // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
@@ -244,6 +181,57 @@ class UserRegistrationVC: BaseViewController {
         task.resume()
     }
     
+    
+    
+    func sendRejistrationDetailToSender(customer: CustomerDetail, company: String, locale: String){
+        
+        let myUrl = URL(string: ProductionPath.sendEmailUrl+"/send-registrationdetails")
+        var request = URLRequest(url: myUrl!)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let postString = ["customer": customer,
+                          "company":company,
+                          "locale":locale] as [String: Any]
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+            showAlert(title: "Alert", message: "Something went wrong. Try again.")
+            return
+        }
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            // Let's convert response sent from a server side code to a NSDictionary object:
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                
+              
+                        }
+           catch {
+                
+                // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
+                
+                // Display an Alert dialog with a friendly error message
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                
+                print(error)
+            }
+        }
+        
+        task.resume()
+        
+    }
     
     func currentDateTime () -> String {
         let formatter = DateFormatter()
@@ -310,4 +298,7 @@ class UserRegistrationVC: BaseViewController {
         
     }
     
+    @IBAction func signInPressed(_ sender: Any) {
+        
+    }
 }
