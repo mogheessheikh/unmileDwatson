@@ -42,7 +42,7 @@ class CartVC: BaseViewController{
         lblTotalPrice.text = "Grand Total : \(self.subTotal)"
 
         branch = getBranchObject(key: keyForSavedBranch)
-        
+    
         isBranchOpenClose = isBranchClose()
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -71,14 +71,14 @@ class CartVC: BaseViewController{
     func isBranchClose() -> String
     {
         startActivityIndicator()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         let url = ProductionPath.branchUrl + "/is-branch-close/\(branchId)"
         print(url)
         NetworkManager.getDetails(path: url , params: nil, success: { (json, isError) in
             
             do {
                 self.isBranchOpenClose = json.rawString()!
-                //                self.transId =  String(data:  jsonData, encoding: String.Encoding.utf8)!
-                // let anArray = try JSONDecoder().decode(AreaResponse.self, from: jsonData)
+                UIApplication.shared.endIgnoringInteractionEvents()
                 self.stopActivityIndicator()
                 
             }
@@ -121,8 +121,15 @@ class CartVC: BaseViewController{
         }
        else{
       
-        if isBranchOpenClose == "false"//"true" //"false"//"true"
+        if (isBranchOpenClose == "false")
         {
+           subTotal = 0.0
+            allItems = getAlreadyCartItems()
+            for (_,j) in allItems.enumerated(){
+                subTotal += j.purchaseSubTotal
+            }
+            
+           
             if UserDefaults.standard.object(forKey: keyForSavedCustomer) != nil{
                 let urlArray = allItems.map({ $0.id })
                 let urlSet = Set(urlArray)
@@ -136,6 +143,7 @@ class CartVC: BaseViewController{
                 loginVC.title = "Signin"
                 self.navigationController?.pushViewController(loginVC, animated: true)
             }
+            
         }
         else{
             showAlert(title: "Dwatson is Close Now", message: "You cant place your order when branch is close")

@@ -17,18 +17,18 @@ enum DeliveryZoneType {
 }
 
 class MainVC: BaseViewController {
-
+    
     @IBOutlet weak var cartButton: UIBarButtonItem!
     @IBOutlet weak var movingWebText: UIWebView!
     @IBOutlet weak var movingTextLable: UILabel!
     var city: CityObject?
     var area: AreaObject?
-
+    
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var sliderCollection: UICollectionView!
     @IBOutlet weak var appIcon: UIImageView!
     @IBOutlet weak var orderNow: UIButton!
-    
+    let cartBag = SSBadgeButton()
     @IBOutlet weak var categorySearchBar: UISearchBar!
     @IBOutlet weak var popularCollectionView: UICollectionView!
     var companyDetails: CompanyDetails!
@@ -41,28 +41,42 @@ class MainVC: BaseViewController {
         return btn
     }()
     var firstLabel: UILabel!
-  
+    
     var deliveryZoneType = DeliveryZoneType.cityArea
     
     var companyBanner: [BranchBanner]?
-   
-        var timer = Timer()
-        var counter = 0
     
-        var catagoryId = 0
-        var categoryLocationId = 0
-        var categoryName = ""
-        var popUpView: UploadPrescriptionView!
-        var imagePicker = UIImagePickerController()
-        var img :UIImage!
+    var timer = Timer()
+    var counter = 0
+    
+    var catagoryId = 0
+    var categoryLocationId = 0
+    var categoryName = ""
+    var popUpView: UploadPrescriptionView!
+    var imagePicker = UIImagePickerController()
+    var img :UIImage!
+    var bag = 0
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let alreadyItems = getAlreadyCartItems()
+        cartBag.frame = CGRect(x: 0, y: 0, width: 25, height: 30)
+        cartBag.setImage(UIImage(named: "add to cart")?.withRenderingMode(.automatic), for: .normal)
+        cartBag.badgeEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 15)
+        cartBag.addTarget(self, action: #selector(cartButtonTapped), for: .touchUpInside)
+        bag = alreadyItems.count
+        UserDefaults.standard.set(bag, forKey: "bag")
+        cartBag.badge = String(bag)
+        self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: cartBag)]
+        
+        
+        
         // ******************START-POPUPVIEW**********************
-         popUpView = Bundle.main.loadNibNamed("UploadPrescriptionPopUP", owner: nil, options: [:])?.first as? UploadPrescriptionView
+        popUpView = Bundle.main.loadNibNamed("UploadPrescriptionPopUP", owner: nil, options: [:])?.first as? UploadPrescriptionView
         
         
-         popUpView.btnCamera.layer.cornerRadius = 7
-         popUpView.btnGallery.layer.cornerRadius = 7
+        popUpView.btnCamera.layer.cornerRadius = 7
+        popUpView.btnGallery.layer.cornerRadius = 7
         
         imagePicker.delegate = self
         popUpView.btnCloseView.addTarget(self, action: #selector(closePopUp(with:)), for: .touchUpInside)
@@ -73,7 +87,7 @@ class MainVC: BaseViewController {
         
         
         
-         // ******************START-MARQUEE-TEXT*********************
+        // ******************START-MARQUEE-TEXT*********************
         companyDetails = getCompanyObject(keyForSavedCompany)
         let message =  companyDetails.companyAlertNotification[0].message
         
@@ -84,8 +98,8 @@ class MainVC: BaseViewController {
         movingWebText.backgroundColor = Color.blue
         movingWebText.tintColor = Color.blue
         
-        movingWebText.loadHTMLString("<html><body><font face='Bodoni 72 Bold' size='17'><b><marquee style='color:red' scrollamount= '10'>\(message!)</b></marquee></font></body></html>", baseURL: nil)
-      
+        movingWebText.loadHTMLString("<html><body><font face='Bodoni 72 Bold' size='10'><b><marquee style='color:red' scrollamount= '10'>\(message!)</b></marquee></font></body></html>", baseURL: nil)
+        
         // ******************END-MARQUEE-TEXT*********************
         
         
@@ -100,24 +114,28 @@ class MainVC: BaseViewController {
             self.timer = Timer.scheduledTimer(timeInterval: 6.0, target: self, selector: #selector(self.changeImage), userInfo: nil, repeats: true)
         }
         
-      
+        
     }
-
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        let alreadyItems = getAlreadyCartItems()
+        bag = alreadyItems.count
+        UserDefaults.standard.set(bag, forKey: "bag")
+        cartBag.badge = String(bag)
         
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "mainTOmenu"{
-             let vc = segue.destination as! BranchCategoryProductsVC
+            let vc = segue.destination as! BranchCategoryProductsVC
             if(catagoryId != 0){
-               vc.catagoryId = self.catagoryId
+                vc.catagoryId = self.catagoryId
                 vc.categoryLocationId = categoryLocationId
                 vc.categoryName = self.categoryName
                 
             }
-                vc.branchCategoryDetails = self.branchCategories
+            vc.branchCategoryDetails = self.branchCategories
         }
     }
     
@@ -125,7 +143,7 @@ class MainVC: BaseViewController {
         
         if counter < companyBanner?.count ?? 0 {
             let index = IndexPath.init(item: counter, section: 0)
-            self.sliderCollection.scrollToItem(at: index, at: .centeredHorizontally, animated: true)
+            self.sliderCollection.scrollToItem(at: index , at: .centeredHorizontally, animated: true)
             pageControl.currentPage = counter
             counter += 1
         } else {
@@ -166,6 +184,7 @@ class MainVC: BaseViewController {
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
     }
+    
     func getBranchCategories() {
         
         self.startActivityIndicator()
@@ -176,7 +195,7 @@ class MainVC: BaseViewController {
             
             do {
                 let jsonData =  try json.rawData()
-               self.branchCategories = try JSONDecoder().decode(BranchDetailsResponse.self, from: jsonData)
+                self.branchCategories = try JSONDecoder().decode(BranchDetailsResponse.self, from: jsonData)
                 self.saveBranchCategories(Object: self.branchCategories!, key: keyForSavedCategory)
                 self.popularCollectionView.reloadData()
                 self.stopActivityIndicator()
@@ -195,7 +214,7 @@ class MainVC: BaseViewController {
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
     }
-
+    
     func getBranchBanners(){
         
         self.startActivityIndicator()
@@ -207,7 +226,7 @@ class MainVC: BaseViewController {
             do {
                 let jsonData =  try json.rawData()
                 self.companyBanner = try JSONDecoder().decode([BranchBanner].self, from: jsonData)
-               
+                
                 self.sliderCollection.reloadData()
                 self.stopActivityIndicator()
             } catch let myJSONError {
@@ -227,7 +246,7 @@ class MainVC: BaseViewController {
     }
     func slideMenu(){
         // Define the menus
-     
+        
         // UISideMenuNavigationController is a subclass of UINavigationController, so do any additional configuration
         // of it here like setting its viewControllers. If you're using storyboards, you'll want to do something like:
         let menuLeftNavigationController = Storyboard.main.instantiateViewController(withIdentifier: "UISideMenuNavigationController") as! SideMenuNavigationController
@@ -245,14 +264,14 @@ class MainVC: BaseViewController {
     @IBAction func sideMenuTapped(_ sender: Any) {
         present(SideMenuManager.default.leftMenuNavigationController!, animated: true, completion: nil)
     }
-   
+    
     @IBAction func cartButtonTapped(_ sender: Any) {
-        
+        performSegue(withIdentifier: "mainTocart", sender: self)
     }
     
     @IBAction func orderNowPressed(_ sender: Any) {
         performSegue(withIdentifier: "mainTOmenu", sender: self)
-    
+        
     }
     
     @IBAction func uploadPrescriptionTapped(_ sender: Any) {
@@ -308,9 +327,9 @@ extension MainVC: UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         return true
     }
-
+    
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        
         
     }
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -328,7 +347,7 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == sliderCollection {
-       
+            
             return companyBanner?.count ?? 0
         }
         else{
@@ -339,21 +358,21 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-         if collectionView == sliderCollection {
+        if collectionView == sliderCollection {
             
-        let cellA = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as! SliderCollectionViewCell
-       
+            let cellA = collectionView.dequeueReusableCell(withReuseIdentifier: "cell1", for: indexPath) as! SliderCollectionViewCell
+            
             
             
             if let urlSliderString =  companyBanner?[indexPath.row].bannerURL,
                 let url = URL(string: urlSliderString)  {
-                 cellA.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+                cellA.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
             }
-             return cellA
+            return cellA
         }
             
         else
-         {
+        {
             let cellB = collectionView.dequeueReusableCell(withReuseIdentifier: "cell2", for: indexPath) as! PopularCollectionViewCell
             cellB.layer.borderWidth = 2.0
             cellB.layer.borderColor = UIColor.gray.cgColor
@@ -361,9 +380,9 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
             
             if let urlString = branchCategories?.categories[indexPath.row].imageURL,
                 let url = URL(string: urlString)  {
-                 cellB.popularImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+                cellB.popularImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
             }
-        
+            
             return cellB
         }
     }
@@ -376,16 +395,14 @@ extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
         }
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-//        
-//         if (collectionView == sliderCollection){
-//        return CGSize(width: 500, height: 500)//CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
-//        }
-//         else {
-//            
-//            return CGSize(width: 40, height: 40)
-//        }
-//    }
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if (collectionView == sliderCollection){
+            return CGSize(width: collectionView.bounds.width, height: collectionView.bounds.height)
+        }
+        else{
+            return CGSize(width: 40, height: 40)
+        }
+    }
 }
 
 struct ProductWraper: Codable {
@@ -407,12 +424,10 @@ struct ProductWrapperList: Codable {
     }
 }
 
-
-
-
 // MARK: - ProductDiscountRule
 struct ProductDiscountRule: Codable {
-    let id, discount, status, archive: Int
+    let id, discount, status: Int
+    let archive: Int?
     let createdDate, expiryDate: String
     let chargeMode: ChargeMode
 }

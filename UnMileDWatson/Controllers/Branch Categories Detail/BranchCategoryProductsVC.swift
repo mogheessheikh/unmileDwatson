@@ -14,19 +14,6 @@ import ScrollableSegmentedControl
 class BranchCategoryProductsVC: BaseViewController {
 
     @IBOutlet weak var collectionViewProduct: UICollectionView!
-    @IBOutlet weak var restaurantImage: UIImageView!
-    @IBOutlet weak var isOpen: UILabel!
-    @IBOutlet weak var nameLabel: UILabel!
-    @IBOutlet weak var cuisineLabel: UILabel!
-    @IBOutlet weak var minimumOrderLabel: UILabel!
-    @IBOutlet weak var discountLabel: UILabel!
-    @IBOutlet weak var serviceImage1: UIImageView!
-    @IBOutlet weak var serviceImage2: UIImageView!
-    @IBOutlet weak var serviceImage3: UIImageView!
-    
-    @IBOutlet weak var segmentscrollview: UIScrollView!
-    @IBOutlet weak var segmentControl: UISegmentedControl!
-    @IBOutlet weak var segementView: UIView!
     @IBOutlet weak var productSearchBar: UISearchBar!
     
     var product : Product!
@@ -34,11 +21,14 @@ class BranchCategoryProductsVC: BaseViewController {
     var branchCategoryDetails: BranchDetailsResponse!
     var productWrapperlist: [ProductWrapperList]?
     var productWraper: ProductWraper!
+    var branchCategory: Category?
     var catagoryId = 0
     var categoryLocationId = 0
     var categoryName = ""
     var isSearching = false
     var isSearchingMore = false
+    var discountedPrice = 0
+    var optionPrice = 0
     var categoryNameArray:[String] = []
     
     override func viewDidLoad() {
@@ -55,11 +45,13 @@ class BranchCategoryProductsVC: BaseViewController {
 
         if(catagoryId != 0){
             getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
+            getCategoryDiscount(catId: catagoryId)
 
         }
         else{
           //  let segment = segmentControl.selectedSegmentIndex
               getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
+              getCategoryDiscount(catId: branchCategoryDetails.categories[0].id)
         }
 //
     }
@@ -97,7 +89,6 @@ class BranchCategoryProductsVC: BaseViewController {
                     self.productWrapperlist =  self.productWrapperlist! + self.productWraper.productWrapperList
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
-               // self.productSearchBar.becomeFirstResponder()
                     
                 self.fetchingMore = false
                 self.collectionViewProduct.reloadData()
@@ -119,6 +110,31 @@ class BranchCategoryProductsVC: BaseViewController {
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
 }
+    
+    func getCategoryDiscount(catId: Int){
+        
+        NetworkManager.getDetails(path: ProductionPath.categoryUrl + "/get-active/\(catId)", params: nil, success: { (json, isError) in
+            
+            self.view.endEditing(true)
+            
+            do {
+                let jsonData =  try json.rawData()
+                print(jsonData)
+                self.branchCategory = try JSONDecoder().decode(Category.self, from: jsonData)
+             
+                DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
+                    self.stopActivityIndicator()
+                })
+            } catch let myJSONError {
+                print(myJSONError)
+                self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+            }
+            
+        }) { (error) in
+            //self.dismissHUD()
+            self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+        }
+    }
 
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -180,13 +196,36 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
             let url = URL(string: urlString) {
             cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
         }
-        cell.productName.text = productWrapperlist?[indexPath.row].product?.name
-        cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+         cell.productName.text = productWrapperlist?[indexPath.row].product?.name
+        
+        if(((branchCategory?.productDiscountRule) != nil)){
+            let price = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: price)
+            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
+            cell.productPrice.attributedText = attributeString
+            let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
+            discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - discount
+            cell.discountPrice.text = "\(discountedPrice)"
+            
+        }
+        else{
+             cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+             cell.discountPrice.text = ""
+        }
+       
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
-        product = productWrapperlist?[indexPath.row].product
+     
+        if(((branchCategory?.productDiscountRule) != nil)){
+            let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
+            discountedPrice = Int((productWrapperlist?[indexPath.row].product!.price)!)  - discount
+            
+            product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
+        }
+        else{
+             product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: productWrapperlist?[indexPath.row].product?.price, totalPrice: Double(optionPrice) , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
+        }
         performSegue(withIdentifier: "newItem", sender: self)
     }
    
@@ -388,6 +427,7 @@ struct Category: Codable {
     let thumbNailURL, code: String?
     let position, status, archive: Int
     let products: [Product]?
+    let productDiscountRule: ProductDiscountRule?
     
     enum CodingKeys: String, CodingKey {
         case id, name
@@ -395,7 +435,7 @@ struct Category: Codable {
         case categoryURL = "categoryUrl"
         case imageURL = "imageUrl"
         case thumbNailURL = "thumbNailUrl"
-        case code, position, status, archive, products
+        case code, position, status, archive, products,productDiscountRule
     }
 }
 
@@ -409,13 +449,14 @@ struct Product: Codable {
     var specialInstruction: String?
     var quantity: Int?
     let position, status, archive: Int
-    let optionGroups: [OptionGroup]?
+    let productDiscountRule: ProductDiscountRule?
+    let optionGroups: [OptionGroup]
 
     enum CodingKeys: String, CodingKey {
         case id, code, name, description
         case productPhotoURL = "productPhotoUrl"
         case promotionCode
-        case price, totalPrice, specialInstruction, quantity, position, status, archive, optionGroups
+        case price, totalPrice, specialInstruction, quantity, position, status, archive, optionGroups,productDiscountRule
     }
 }
 

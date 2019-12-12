@@ -38,9 +38,11 @@ class PlaceOrderVC: BaseViewController {
     var orderDiscount = 0.0
     var taxAmount = 0.0
     var imagePath = ""
+    var promoCodeMatch = false
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
         btnPlacedOrder.layer.cornerRadius = 7
         tblOrderSummery.rowHeight = UITableView.automaticDimension
         tblOrderSummery.estimatedRowHeight = UITableView.automaticDimension
@@ -59,10 +61,19 @@ class PlaceOrderVC: BaseViewController {
         
         
         selectedAddress = customerOrder.customerOrderAddress
-        customerOrderTax = calculateTaxes(restbranch: branch, customerOrder: customerOrder)
+        
+        taxAmount = calculateTaxes(restbranch: branch, customerOrder: customerOrder)
         surCharges = chargeSurcharge(customerOrder:customerOrder, paymentMethod: paymentMethod)
-        orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
-        finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount + orderDiscount)
+        
+        if !promoCodeMatch{
+              orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
+        }
+        else{
+            
+            orderDiscount = calculatePromoCodeDiscount(branch: branch, customerOrder: customerOrder)
+        }
+      
+        finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount - orderDiscount)
  
         routeArray = [restuarentAddress,"\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
     
@@ -76,7 +87,7 @@ class PlaceOrderVC: BaseViewController {
 
     func currentDateTime () -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy hh:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
     
@@ -130,42 +141,42 @@ class PlaceOrderVC: BaseViewController {
         }
          print(adjustedJsontaxArray)
         let postString = [
-                   "ipAddress": customerOrder.ipAddress,
-                   "billingStatus":"\(customerOrder.billingStatus!)",
-                   "branchId":"\(customerOrder.branchID)",
-                   "creditStatus":"\(customerOrder.creditStatus)",
-                   "customerFirstName":"\(customerOrder.customerFirstName)",
-                   "customerId": "\(customerOrder.customerID)",
-                   "customerLastName":"\(customerOrder.customerLastName)",
-                   "customerOrderAddress":["customerOrderAddressFields":[["fieldName":"addressLine1","fieldValue":"\(selectedAddress.customerOrderAddressFields[0].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[0].label)"],["fieldName":"addressLine2","fieldValue":"\(selectedAddress.customerOrderAddressFields[1].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[1].label)"],["fieldName":"city","fieldValue":"\(selectedAddress.customerOrderAddressFields[2].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[2].label)"],["fieldName":"area","fieldValue":"\(selectedAddress.customerOrderAddressFields[3].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[3].label)"]]],
-                   "customerOrderItem": adjustedCustomerOrderItemArray,
-                   "customerOrderTaxes": adjustedJsontaxArray,
-                   "customerPhone":"\(customerOrder.customerPhone)",
-                   "customerType":"\(customerOrder.customerType)",
-                   "deliveryCharge":"\(customerOrder.deliveryCharge)",
-                   "firstCustomerOrder":true,
-                   "orderConfirmationStatus":"AUTOCONFIRMED",
-                   "orderConfirmationStatusMessage":"",
-                   "orderDate": customerOrder.orderDate,
-                   "orderDiscount": orderDiscount,
-                   "orderStatus":"PROCESSED",
-                   "orderTime":"ASAP (Around 75 Minutes)",
-                   "orderType": customerOrder.orderType,
-                   "paymentType": customerOrder.paymentType,
-                   "phoneNotify":false,
-                   "sendFax":false,
-                   "sendSms":false,
-                   "specialInstructions":"\(customerOrder.specialInstructions)",
-                   "subTotal": "\(finalsubTotal)",
-                   "amount": "\(customerOrder.subTotal)",
-                   "transId":"\(customerOrder.transID)",
-                   "surCharge": surCharges,
-                   "userAgent": "IPHONE",
-                   "attachment1":"\(imagePath)",
-                   "attachment2":"",
-                   "bankDetail":"",
-                   "companyId": customerOrder.companyID
-                   ] as [String : Any]
+            "ipAddress": customerOrder.ipAddress,
+            "billingStatus":"\(customerOrder.billingStatus!)",
+            "branchId":"\(customerOrder.branchID)",
+            "creditStatus":"\(customerOrder.creditStatus)",
+            "customerFirstName":"\(customerOrder.customerFirstName)",
+            "customerId": "\(customerOrder.customerID)",
+            "customerLastName":"\(customerOrder.customerLastName)",
+        "customerOrderAddress":["customerOrderAddressFields":[["fieldName":"addressLine1","fieldValue":"\(selectedAddress.customerOrderAddressFields[0].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[0].label)"],["fieldName":"addressLine2","fieldValue":"\(selectedAddress.customerOrderAddressFields[1].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[1].label)"],["fieldName":"city","fieldValue":"\(selectedAddress.customerOrderAddressFields[2].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[2].label)"],["fieldName":"area","fieldValue":"\(selectedAddress.customerOrderAddressFields[3].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[3].label)"]]],
+            "customerOrderItem": adjustedCustomerOrderItemArray,
+            "customerOrderTaxes": adjustedJsontaxArray,
+            "customerPhone":"\(customerOrder.customerPhone)",
+            "customerType":"\(customerOrder.customerType)",
+            "deliveryCharge":"\(customerOrder.deliveryCharge)",
+            "firstCustomerOrder":true,
+            "orderConfirmationStatus":"PENDING",
+            "orderConfirmationStatusMessage":"",
+            "orderDate": customerOrder.orderDate,
+            "orderDiscount": orderDiscount,
+            "orderStatus":"PENDING",
+            "orderTime":"ASAP (Around 75 Minutes)",
+            "orderType": customerOrder.orderType,
+            "paymentType": customerOrder.paymentType,
+            "phoneNotify":false,
+            "sendFax":false,
+            "sendSms":false,
+            "specialInstructions":"\(customerOrder.specialInstructions)",
+            "subTotal": "\(finalsubTotal)",
+            "amount": "\(customerOrder.subTotal)",
+            "transId":"\(customerOrder.transID)",
+            "surCharge": surCharges,
+            "userAgent": "iPhone",
+            "attachment1":"\(imagePath)",
+            "attachment2":"",
+            "bankDetail":"",
+            "companyId": customerOrder.companyID
+            ] as [String : Any]
 
         print(postString )
         
@@ -204,9 +215,7 @@ class PlaceOrderVC: BaseViewController {
                     let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
                     let jsonData1 = encodedObjectJsonString.data(using: .utf8)
                     let customerOrder = try JSONDecoder().decode(CustomerOrder.self, from: jsonData1!)
-                    
-        
-                    
+                    self.sendOrderDetailToSender(customerOrder: customerOrder)
                     DispatchQueue.main.async {
                         self.stopActivityIndicator()
                         UIApplication.shared.endIgnoringInteractionEvents()
@@ -252,9 +261,9 @@ class PlaceOrderVC: BaseViewController {
        
                 else if (paymentmethod.chargeMode!.id == 2){
            
-                    surCharges = customerOrder.subTotal * paymentmethod.charge!
+                    surCharges = (customerOrder.subTotal * paymentmethod.charge!)
                 }
-                finalsubTotal = finalsubTotal + surCharges
+                
             }
         }
     
@@ -262,73 +271,69 @@ class PlaceOrderVC: BaseViewController {
 
     }
     
-    func calculateTaxes(restbranch: Branch, customerOrder: CustomerOrder) -> [CustomerOrderTax]{
+    func calculateTaxes(restbranch: Branch, customerOrder: CustomerOrder) -> Double{
 
     if (!branch.taxes.isEmpty) {
         var taxRule = ""
         var taxLabel = ""
         var rate = 0.0
         var ChargeMode = 0
-        var customerOrderTaxes = [CustomerOrderTax].self
        
+        
         for  tax:Tax  in restbranch.taxes {
+            
             if (tax.orderType.name == customerOrder.orderType) || (tax.orderType.name == "\(OrderType.self)") {
     
     if (tax.taxRule ==  tax.taxRule) {
     if (tax.chargeMode.id == 2 /** percentage */) {
-    taxAmount = customerOrder.amount * tax.rate
-    }
-    } else if (tax.taxRule == tax.taxRule) {
-    if (tax.chargeMode.id == 2 /** percentage */) {
-    taxAmount = customerOrder.subTotal * tax.rate
-    }
-    } else if (tax.taxRule == tax.taxRule) {
-    if (tax.chargeMode.id == 2 /** percentage */) {
-    taxAmount = customerOrder.amount + customerOrder.deliveryCharge * tax.rate
-    }
-    } else if (tax.taxRule == tax.taxRule) {
-    if (tax.chargeMode.id == 2 /** percentage */) {
-        taxAmount = customerOrder.amount + customerOrder.surCharge! * tax.rate
+    taxAmount = (customerOrder.subTotal * tax.rate)
     }
     }
 
-    if (tax.chargeMode.id == 1 /** fixed */) {
+    else if  (tax.chargeMode.id == 1 /** fixed */) {
     taxAmount = tax.rate
     }
-
-//    customerOrderTax.orderType += customerOrder.orderType
-
-     taxRule = tax.taxRule
-     taxLabel = tax.taxLabel
-     rate = tax.rate
-     taxAmount += taxAmount
-     ChargeMode = tax.chargeMode.id
-    
-       //customerOrderTaxes = customerOrderTaxes +  customerOrderTax
-                
-      finalsubTotal = customerOrder.subTotal + taxAmount
+    else {
+        
+        taxAmount = 0.0
+                }
+                taxRule = tax.taxRule
+                taxLabel = tax.taxLabel
+                rate = tax.rate
+                taxAmount += taxAmount
+                ChargeMode = tax.chargeMode.id
        }
     }
-        customerOrderTax = [CustomerOrderTax.init(id: 1, orderType: customerOrder.orderType, taxRule: taxRule , taxLabel: taxLabel, rate: rate, taxAmount: taxAmount, chargeMode: ChargeMode)]
-    
-    } else {
-   
+         customerOrderTax = [CustomerOrderTax.init(id: 1, orderType: customerOrder.orderType, taxRule: taxRule , taxLabel: taxLabel, rate: rate, taxAmount: taxAmount, chargeMode: ChargeMode)]
+    }
+    else {
+        
         customerOrderTax = [CustomerOrderTax.init(id: 0, orderType: "", taxRule: "", taxLabel: "", rate: 0.0, taxAmount: 0, chargeMode: 0)]
+        }
+
+    return taxAmount
     }
 
-    return customerOrderTax
+    func calculatePromoCodeDiscount(branch: Branch,  customerOrder: CustomerOrder)-> Double{
+         var discountAmount = 0.0
+        for promo: PromoCodeDiscountRule in branch.promoCodeDiscountRules{
+            
+            if(promo.orderType.name == customerOrder.orderType && promo.status == 1 && promo.paymentType.name == customerOrder.paymentType){
+                
+               discountAmount  = ((customerOrder.subTotal - customerOrder.deliveryCharge) * promo.discount)
+            }
+        }
+        return   discountAmount
     }
-
     
     func calculateDiscounts(branch: Branch,  customerOrder: CustomerOrder)-> Double {
 
     var discount = [Double : Double]()
         for  orderDiscountRule: OrderDiscountRule  in branch.orderDiscountRules {
             
-            var  expiryDate = orderDiscountRule.expiryDate
-            var  today = "2019-01-01T00:00:00.000+0000"
-            //customerOrder.orderType
-    if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == "DELIVERY" && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today)
+            let  expiryDate = orderDiscountRule.expiryDate
+            let  today = currentDateTime()            //customerOrder.orderType
+    if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == "DELIVERY" && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today && customerOrder.subTotal >= orderDiscountRule.subTotal )
     {
         var discountAmount = 0.0
 
@@ -338,7 +343,7 @@ class PlaceOrderVC: BaseViewController {
         }
         else if(orderDiscountRule.chargeMode.id == 2)
         {
-            discountAmount = customerOrder.subTotal - customerOrder.deliveryCharge * orderDiscountRule.discount
+            discountAmount = ((customerOrder.subTotal - customerOrder.deliveryCharge) * orderDiscountRule.discount)
         }
         discount = [orderDiscountRule.subTotal : discountAmount]
 
@@ -358,10 +363,10 @@ class PlaceOrderVC: BaseViewController {
 
     if (discount.count > 0)
     {
-    var lower = discount.values.min()
-    var discount = discount[lower ?? 0.0]
+        let lower = discount.values.min()
+        let discount = discount[lower ?? 0.0]
         
-        orderDiscount = discount ?? 0.0
+        orderDiscount = lower ?? 0.0
         finalsubTotal = finalsubTotal - orderDiscount
     }
     else {
@@ -369,6 +374,60 @@ class PlaceOrderVC: BaseViewController {
     }
 
     return orderDiscount
+    }
+    
+    func sendOrderDetailToSender(customerOrder: CustomerOrder){
+        
+        let myUrl = URL(string: ProductionPath.sendEmailUrl+"/send-order")
+        var request = URLRequest(url: myUrl!)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let obj = customerOrder
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(obj)
+        
+        let postString = String(data: data, encoding: .utf8)!
+        do {
+            request.httpBody = postString.data(using: .utf8)
+        } catch let error {
+            print(error.localizedDescription)
+            showAlert(title: "Alert", message: "Something went wrong. Try again.")
+            return
+        }
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                
+                print("error=\(String(describing: error))")
+                return
+            }
+            
+            // Let's convert response sent from a server side code to a NSDictionary object:
+            
+            do {
+                print(response)
+                
+                
+            }
+            catch {
+                
+                // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
+                
+                // Display an Alert dialog with a friendly error message
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                
+                print(error)
+            }
+        }
+        
+        task.resume()
+        
     }
 
 }

@@ -9,8 +9,7 @@
 import UIKit
 import IQKeyboardManagerSwift
 import ScrollableSegmentedControl
-
-
+//import ZDCChat
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -20,6 +19,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        //ZDCChat.initialize(withAccountKey: "49tgfmgno3GzFQZF1MukbaSySoavnglm")
         
         let docsURL = FileManager.documentsURL
         let docsFileURL = docsURL.appendingPathComponent("cart.json")
@@ -46,9 +47,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         IQKeyboardManager.shared.enable = true
         
-     
+      
         return true
     }
+    
+   
 
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

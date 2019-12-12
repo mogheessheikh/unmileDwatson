@@ -373,7 +373,7 @@
                                 </constraints>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OE8-ka-7cv">
                                 <rect key="frame" x="50" y="286" width="220" height="50"/>
@@ -411,7 +411,7 @@
                         <viewLayoutGuide key="safeArea" id="xGN-D5-4uj"/>
                     </view>
                     <connections>
-                        <outlet property="newPassword" destination="A0b-v6-5XD" id="35h-RD-04u"/>
+                        <outlet property="txtEmail" destination="A0b-v6-5XD" id="LF1-8A-z8c"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="b2D-OZ-Y02" userLabel="First Responder" sceneMemberID="firstResponder"/>

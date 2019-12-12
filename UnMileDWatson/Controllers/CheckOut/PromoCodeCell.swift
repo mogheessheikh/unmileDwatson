@@ -9,7 +9,8 @@
 import UIKit
 
 protocol PromoCodeDelegate {
-    func didTappedVerificationButton() 
+    func didTappedVerificationButton()
+    func textField(editingChangedInTextField newText: String, in cell: PromoCodeCell)
 }
 
 class PromoCodeCell: UITableViewCell {
@@ -30,8 +31,19 @@ class PromoCodeCell: UITableViewCell {
 
         // Configure the view for the selected state
     }
+    @IBAction func didtextEnter(_ sender: UITextField) {
+        if let text = sender.text { delegate?.textField(editingChangedInTextField: text, in: self) }
+    
+    }
     
     @IBAction func verifyButtonTapped(_ sender: Any) {
         delegate?.didTappedVerificationButton()
+    }
+    
+}
+extension PromoCodeCell {
+    @objc func didSelectCell() { promoTextField?.becomeFirstResponder() }
+    @objc func textFieldValueChanged(_ sender: UITextField) {
+        if let text = sender.text { delegate?.textField(editingChangedInTextField: text, in: self) }
     }
 }

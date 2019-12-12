@@ -15,7 +15,7 @@ class ContainerVC: BaseViewController {
     
     
     var sideMenuOpen = false
-    var menuItems = ["Previous Order","My Profile", "My Address","Update Password","Share with Friends" ,"Contact Us", "More*","LogOut"]
+    var menuItems = ["Previous Order","My Profile", "My Address","Update Password","Share with Friends" ,"Contact Us","Live Chat", "More*","LogOut"]
     var menuLogOut = ["Settings","Share with friends","Contact Us","More*","Login/Registration"]
     
     
@@ -115,9 +115,13 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
                self.makeAPhoneCall()
             }
             else if(indexPath.row == 6){
-                performSegue(withIdentifier: "sideMenuToMore" , sender: self)
+                
+                 performSegue(withIdentifier: "SidetoChatRoom", sender: self)
             }
             else if(indexPath.row == 7){
+                performSegue(withIdentifier: "sideMenuToMore" , sender: self)
+            }
+            else if(indexPath.row == 8){
                  logOutAlert(title: "Do You Want to LogOut?", message: "You will not able to place any order",dataTable: tblSlideMenu )
             }
             
@@ -163,13 +167,11 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         tblSlideMenu.deselectRow(at: indexPath, animated: true)
         
         }
-    
-    
+
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = Bundle.main.loadNibNamed("SideMenuHeaderViewCell", owner: self, options: nil)?.first as! SideMenuHeaderViewCell
         headerView.backgroundColor = Color.blue
-        
-        
+
         if UserDefaults.standard.object(forKey: "SavedCustomer") != nil{
             customerCheck = getCustomerObject("SavedCustomer")
         }

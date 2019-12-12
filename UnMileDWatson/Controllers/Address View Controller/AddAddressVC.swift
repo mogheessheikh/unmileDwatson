@@ -57,7 +57,7 @@ class AddAddressVC: BaseViewController {
     override func viewDidAppear(_ animated: Bool) {
         /// Getting Saved City and Area Values
         
-        if let savedCity = UserDefaults.standard.object(forKey: "cityAddress") as? Data  {
+        if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
             let decoder = JSONDecoder()
             if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
                city = loadedCity
@@ -67,7 +67,7 @@ class AddAddressVC: BaseViewController {
         }
         
         
-        if let savedArea = UserDefaults.standard.object(forKey: "cityAreaAddress") as? Data  {
+        if let savedArea = UserDefaults.standard.object(forKey: keyForSavedArea) as? Data  {
             let decoder = JSONDecoder()
             if let loadedArea = try? decoder.decode(AreaObject.self, from: savedArea) {
                 area = loadedArea
@@ -230,7 +230,8 @@ class AddAddressVC: BaseViewController {
             //searchVC.cityDelegate = self as! SearchVCCityDelegate
             vc.companyId = companyId
             vc.addressSelection = true
-            UserDefaults.standard.removeObject(forKey: "SavedArea")
+            
+            UserDefaults.standard.removeObject(forKey: keyForSavedArea)
             btnArea.setTitle("Area", for: .normal)
             self.present(vc, animated: true, completion: nil)
             //self.navigationController?.pushViewController(vc, animated: true)
@@ -238,7 +239,7 @@ class AddAddressVC: BaseViewController {
             
         } else {
             
-            if let savedCity = UserDefaults.standard.object(forKey: "cityAddress") as? Data  {
+            if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
                 let decoder = JSONDecoder()
                 if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
                     

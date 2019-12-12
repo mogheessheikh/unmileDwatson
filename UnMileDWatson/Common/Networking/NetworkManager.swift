@@ -22,7 +22,7 @@ public class NetworkManager {
 
             success: { (json, isError) in
                 success(json, isError)
-
+                print(path)
         }) { (error) in
             failure(error)
         }
@@ -1052,6 +1052,7 @@ enum Path {
     static let companyCityUrl            = ServerURLs.stagingURL + "/companycity"
     static let branchUrl                 = ServerURLs.stagingURL + "/branch"
     static let menuUrl                   = ServerURLs.stagingURL + "/menu"
+    static let categoryUrl               = ServerURLs.stagingURL + "/category"
     static let customerUrl               = ServerURLs.stagingURL + "/customer"
     static let addressUrl                = ServerURLs.stagingURL + "/address"
     static let transIdUrl                = ServerURLs.stagingURL + "/transid"
@@ -1069,6 +1070,7 @@ enum ProductionPath {
     static let companyCityUrl            = ServerURLs.productionURL + "/companycity"
     static let branchUrl                 = ServerURLs.productionURL + "/branch"
     static let menuUrl                   = ServerURLs.productionURL + "/menu"
+    static let categoryUrl               = ServerURLs.productionURL + "/category"
     static let customerUrl               = ServerURLs.productionURL + "/customer"
     static let addressUrl                = ServerURLs.productionURL + "/address"
     static let transIdUrl                = ServerURLs.productionURL + "/transid"
@@ -1078,7 +1080,7 @@ enum ProductionPath {
     static let pageContentUrl            = ServerURLs.productionURL + "/pagecontent"
     static let imageUrl                  = ServerURLs.productionURL + "/image"
     static let sendEmailUrl              = ServerURLs.productionURL + "/email-sender"
-     static let companyBannerUrl         = ServerURLs.productionURL + "/v2/companybanner"
+    static let companyBannerUrl          = ServerURLs.productionURL + "/v2/companybanner"
 }
 
 

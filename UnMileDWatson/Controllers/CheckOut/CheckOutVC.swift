@@ -46,7 +46,10 @@ class CheckOutVC: BaseViewController {
     var selectedSingleRows = [String:IndexPath]()
     var reSizeOrderTypeCell = false
     var reSizePayementTypeCell = false
+    var promoCodeText = ""
+    var promoCodeMatch = false
     var specialIstruction = ""
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -84,11 +87,14 @@ class CheckOutVC: BaseViewController {
     {
         let vc = segue.destination as? PlaceOrderVC
         vc?.customerOrder = customerOrder
+        vc?.promoCodeMatch = self.promoCodeMatch
         }
     }
     
     @IBAction func goToSummary(_ sender: Any) {
-
+        
+       let area = getSavedAreaObject(key: keyForSavedArea)
+        
         if (selectedAddress == nil )
         {
             showAlert(title: "Address is empty", message: "Select Delivery Address")
@@ -98,15 +104,18 @@ class CheckOutVC: BaseViewController {
             showAlert(title: "Selection Missing", message: "Must select all selection")
         }
         else{
-            do {
-            customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "AUTOCONFIRMED", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
-
-               performSegue(withIdentifier: "checkout2Summary", sender: self)
-            }
-            catch{
-                showAlert(title: "Can't Perform Action", message: "Can't perform Action")
-            }
-            
+            //for i in branch.deliveryZones{
+               // if i.area.area == area?.area{
+                 //   if(Int(totalprice) < i.minimumDelivery){
+                       // showAlert(title: "AddItem in Cart", message: "")
+                  //  }
+                  //  else{
+                        customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
+                        performSegue(withIdentifier: "checkout2Summary", sender: self)
+                    //}
+                //}
+                
+            //}
         }
         
     }
@@ -133,12 +142,12 @@ class CheckOutVC: BaseViewController {
 
     func currentDateTime () -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
     func currentTime () -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "hh:mm:ss"
+        formatter.dateFormat = "HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
     func addSelectedCellWithSection(_ indexPath:IndexPath) ->IndexPath?
@@ -227,7 +236,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         
         if(indexPath.section == 0){
             guard let  cell = tableView.dequeueReusableCell(withIdentifier: "promocell", for: indexPath) as? PromoCodeCell else {fatalError("Unknown cell")}
-            
+            cell.delegate = self
             return cell
         }
       else if(indexPath.section == 1)
@@ -249,9 +258,9 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
-            if let savedBranch = UserDefaults.standard.object(forKey: "selectedAddress") as? Data  {
+            if let savedAddress = UserDefaults.standard.object(forKey: keyForSavedCustomerAddress) as? Data  {
                 let decoder = JSONDecoder()
-                if let loaded = try? decoder.decode(Address.self, from: savedBranch) {
+                if let loaded = try? decoder.decode(Address.self, from: savedAddress) {
                     
                     selectedAddress  =  CustomerOrderAddress.init(id: 0, addressID: loaded.id, customerOrderAddressFields: loaded.addressFields)
                     
@@ -400,10 +409,36 @@ extension CheckOutVC: resizeOrderTypeDelegate{
 }
 
 extension CheckOutVC: PromoCodeDelegate {
+    func textField(editingChangedInTextField newText: String, in cell: PromoCodeCell) {
+        promoCodeText = newText
+        
+    }
+    
     
     func didTappedVerificationButton()
     {
-        self.showAlert(title: "Tapped", message: "Verification button tapped")
+        for promoCode: PromoCodeDiscountRule in branch.promoCodeDiscountRules{
+            
+            if promoCode.promoCode == promoCodeText{
+                if(Int(totalprice) < promoCode.subTotal){
+                    
+                showAlert(title: "", message: "Add more items in your cart to avail discount on this promo Code")
+                promoCodeMatch = false
+                }
+                else{
+                    showAlert(title: "Promocode Matched", message: "")
+                    promoCodeMatch = true
+                }
+            }
+            else{
+                
+                  showAlert(title: "'Promocode DoesNot Exist'", message: "")
+            }
+            
+            
+        }
+        
+       
     }
     
     

@@ -7,11 +7,11 @@
 //
 
 import UIKit
-
+import Alamofire
 class ForgotPasswordViewController: BaseViewController {
 
-    @IBOutlet weak var retypePassword: UITextField!
-    @IBOutlet weak var newPassword: UITextField!
+   
+    @IBOutlet weak var txtEmail: UITextField!
     var userData: CustomerDetail!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,115 +21,101 @@ class ForgotPasswordViewController: BaseViewController {
     }
     
     @IBAction func resetDidPress(_ sender: UIButton) {
-//        if (newPassword.text!.isEmpty || retypePassword.text!.isEmpty){
-//                    showAlert(title: Strings.error, message: "Enter New Password to update")
-//                } else if (newPassword.text != retypePassword.text) {
-//                    showAlert(title: Strings.error, message: "Retyped password is not equal to new password")
-//                }
-//                else {
-//                    let password = newPassword.text
-//            let path = URL(string: ProductionPath.sendEmailUrl + "/send-password")!
-//            let parameters =   ["id":userData!.id,
-//                                "customerType": "\(userData!.customerType)",
-//                "ipAddress": "\(userData!.ipAddress)",
-//                "internalInfo": "",
-//                "salutation": "",
-//                "phone": "\(userData.phone)",
-//                "mobile": "\(userData.mobile)",
-//                "firstName": "\(userData.firstName)",
-//                "lastName": "\(userData.lastName)",
-//                "email": "\(userData.email)",
-//                "salt": "",
-//                "promotionSMS": false,
-//                "promotionEmail":  false,
-//                "registrationDate": "\(userData!.registrationDate)",
-//                "status": userData!.status,
-//                "password": password!,
-//                "branchId": userData?.branchID,
-//                "addresses": [],
-//                "companyId": userData!.companyID
-//                ] as [String:Any]
-//
-//            var request = URLRequest(url: path)
-//            request.httpMethod = "PUT"
-//            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-//            request.addValue("application/json", forHTTPHeaderField: "Accept")
-//            guard let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: []) else { return }
-//            request.httpBody = httpBody
-//            let session = URLSession.shared
-//            session.dataTask(with: request) { (data, response, error) in
-//                if let response = response {
-//                    print(response)
-//                }
-//                if let httpResponse = response as? HTTPURLResponse {
-//                    print("error \(httpResponse.statusCode)")
-//                    if httpResponse.statusCode == 200{
-//                if let data = data {
-//                    do {
-//
-//                        DispatchQueue.main.async {
-//
-//                                restResponse = true
-//                                self.stopActivityIndicator()
-//                                self.newPassword.text = ""
-//                                self.retypePassword.text = ""
-//                                self.showAlert(title: "Request Completed", message: "")
-//                            }
-//
-//                        }
-//                    catch {
-//                        print(error)
-//                    }
-//                        }
-//                    } else
-//                    {
-//                        self.stopActivityIndicator()
-//                        self.showAlert(title: "Request Decline", message: "Something goes worng")
-//                    }
-//                }
-//
-//                }.resume()
-//
-//    }
+        
+                if (txtEmail.text!.isEmpty ){
+                    showAlert(title: Strings.error, message: "Enter Your Email first")
+                }
+                    else {
+                    let email = txtEmail.text
+            let path =  ProductionPath.customerUrl + "/find-customer-id-companyid"
+            
+            let parameters =   ["email": "\(email!)" ,
+                                "companyID": companyId] as [String:Any]
+
+                    NetworkManager.getDetails(path: path, params: parameters, success: { (json, isError) in
+                        
+                        do {
+                            let jsonData =  try json.rawData()
+                            let customer = try JSONDecoder().decode(CustomerDetail.self, from: jsonData)
+                            sendPasswordDetailToSender(customerDetail: customer)
+                            self.stopActivityIndicator()
+                        } catch let myJSONError {
+                            
+                            #if DEBUG
+                            self.showAlert(title: "Error", message: myJSONError.localizedDescription)
+                            #endif
+                            
+                            print(myJSONError)
+                            self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+                        }
+                        
+                    }) { (error) in
+                        //self.dismissHUD()
+                        self.showAlert(title: Strings.error, message: Strings.emailError)
+                    }
         
     }
     
     
-    func getUser() {
-        self.startActivityIndicator()
-        if let Id = UserDefaults.standard.object(forKey: "customerId") as? Int{
-            customerId = Id
-            let path = URL(string: ProductionPath.customerUrl + "/\(customerId)")
-            let session = URLSession.shared
-            let task = session.dataTask(with: path!) { data, response, error in
-                print("Task completed")
+    func sendPasswordDetailToSender(customerDetail: CustomerDetail){
+        
+        let myUrl = URL(string: ProductionPath.sendEmailUrl+"/send-password")
+        var request = URLRequest(url: myUrl!)
+        request.httpMethod = "PUT"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+        
+        let obj = customerDetail
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(obj)
+        
+        let postString = String(data: data, encoding: .utf8)!
+        do {
+            request.httpBody = postString.data(using: .utf8)
+         
+        } catch let error {
+            print(error.localizedDescription)
+            showAlert(title: "Alert", message: "Something went wrong. Try again.")
+            return
+        }
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+            
+            if error != nil
+            {
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
                 
-                guard data != nil && error == nil else {
-                    print(error?.localizedDescription)
-                    return
-                }
-                do {
-                    let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
-                    if let parseJSON = json {
-                        
-                        let jsonData = try JSONSerialization.data(withJSONObject: parseJSON, options: .prettyPrinted)
-                        let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-                        let jsonData1 = encodedObjectJsonString.data(using: .utf8)
-                        self.userData = try JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
-                        DispatchQueue.main.async {
-                           
-                            self.stopActivityIndicator()
-                        }
-                        
-                    }
-                    
-                } catch let parseError as NSError {
-                    print("JSON Error \(parseError.localizedDescription)")
-                }
+                print("error=\(String(describing: error))")
+                return
             }
             
-            task.resume()
+            // Let's convert response sent from a server side code to a NSDictionary object:
+            
+            do {
+                DispatchQueue.main.async {
+                self.showAlert(title: "Check Your MailBox", message: "Recovery Email is send to Your Email Address")
+                    self.txtEmail.text = ""
+            
+                print(response)
+                
+                }
+            }
+            catch {
+                
+                // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
+                
+                // Display an Alert dialog with a friendly error message
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                
+                print(error)
+            }
         }
+        
+        task.resume()
+        
     }
     
+}
+
 }

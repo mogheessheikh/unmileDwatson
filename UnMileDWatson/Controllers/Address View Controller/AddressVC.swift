@@ -160,7 +160,7 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       
         currentAddress = addressList![indexPath.row]
-        saveSelectedAddress(obj: currentAddress, key: "selectedAddress")
+        saveSelectedAddress(obj: currentAddress, key: keyForSavedCustomerAddress)
         dismiss(animated: true, completion: nil)
        self.navigationController?.popViewController(animated: true)
     

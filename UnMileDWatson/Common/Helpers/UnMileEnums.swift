@@ -12,6 +12,7 @@ struct Strings {
     static let error                = "Error"
     static let success              = "Success"
     static let somethingWentWrong   = "Something went wrong"
+    static let emailError           = "Email Not Found"
 }
 
 struct Storyboard {

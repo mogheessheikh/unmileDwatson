@@ -9,7 +9,7 @@
 import UIKit
 
 class PreviousOrderDetailVC: BaseViewController {
-
+    
     @IBOutlet weak var tblpreviousOrder: UITableView!
     var fetchingMore = false
     var customerObj: CustomerDetail!
@@ -21,13 +21,17 @@ class PreviousOrderDetailVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         if let _ = getCustomerObject(keyForSavedCustomer){
-             customerObj = getCustomerObject(keyForSavedCustomer)
+            customerObj = getCustomerObject(keyForSavedCustomer)
         }
         else{
             showAlert(title: "Error", message: "You are not login")
         }
-       
-        getCustomerPreviousOrder(pageNo: "0", pageSize: "5", customerId: "\(3194)") //customerObj.id
+        if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+            let decoder = JSONDecoder()
+            let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
+            customerId = customer!.id
+        }
+        getCustomerPreviousOrder(pageNo: "0", pageSize: "5", customerId: "\(customerId)") //customerObj.id
         
         // Do any additional setup after loading the view.
     }
@@ -43,7 +47,7 @@ class PreviousOrderDetailVC: BaseViewController {
     
     func getCustomerPreviousOrder(pageNo: String, pageSize: String , productName: String = "", customerId: String) {
         self.startActivityIndicator()
-         UIApplication.shared.beginIgnoringInteractionEvents()
+        UIApplication.shared.beginIgnoringInteractionEvents()
         let parameters: [String : Any] = ["pageNo":pageNo,
                                           "pageSize": pageSize,
                                           "customerId": customerId,
@@ -57,8 +61,8 @@ class PreviousOrderDetailVC: BaseViewController {
             do {
                 let jsonData =  try json.rawData()
                 print(jsonData)
-                 self.preOrder = try JSONDecoder().decode(CustomerPreviousOrder.self, from: jsonData)
-             
+                self.preOrder = try JSONDecoder().decode(CustomerPreviousOrder.self, from: jsonData)
+                
                 
                 if self.preOrder?.number == 0 {
                     self.customerOrders = self.preOrder.customerOrders
@@ -69,7 +73,7 @@ class PreviousOrderDetailVC: BaseViewController {
                     self.tblpreviousOrder.reloadData()
                     
                     self.stopActivityIndicator()
-                     UIApplication.shared.beginReceivingRemoteControlEvents()
+                    UIApplication.shared.beginReceivingRemoteControlEvents()
                 })
             } catch let myJSONError {
                 print(myJSONError)
@@ -104,7 +108,7 @@ extension PreviousOrderDetailVC : UITableViewDelegate, UITableViewDataSource{
         if offsetY > contentHeight - scrollView.frame.height {
             if !fetchingMore{
                 if self.preOrder.hasNext {
-                    getCustomerPreviousOrder(pageNo:"\((preOrder?.number)! + 1)", pageSize: "10", productName: "", customerId: "\(3194)")
+                    getCustomerPreviousOrder(pageNo:"\((preOrder?.number)! + 1)", pageSize: "10", productName: "", customerId: "\(customerId)")
                     
                 }
                 fetchingMore = true
@@ -122,14 +126,15 @@ extension PreviousOrderDetailVC: orderDetailDelegate{
     }
     
     func repeatOrderPressed(cell: preOrderDetailCell) {
-         let indexPath = self.tblpreviousOrder.indexPath(for: cell)
+        
+        let indexPath = self.tblpreviousOrder.indexPath(for: cell)
         var alreadyItems = getAlreadyCartItems()
-       customerOrderItems = preOrder.customerOrders[(indexPath?.row)!].customerOrderItem
+        customerOrderItems = preOrder.customerOrders[(indexPath?.row)!].customerOrderItem
         for (_,j) in (customerOrderItems?.enumerated())!{
             
-          items = CustomerOrderItem.init(id: 0, orderItemID: "" , forWho: "", instructions: j.instructions, quantity: j.quantity, purchaseSubTotal: j.purchaseSubTotal, product: j.product, customerOrderItemOptions: j.customerOrderItemOptions )
-              alreadyItems.append(items!)
-              saveItems(allItems: alreadyItems)
+            items = CustomerOrderItem.init(id: 0, orderItemID: "" , forWho: "", instructions: j.instructions, quantity: j.quantity, purchaseSubTotal: j.purchaseSubTotal, product: j.product, customerOrderItemOptions: j.customerOrderItemOptions )
+            alreadyItems.append(items!)
+            saveItems(allItems: alreadyItems)
         }
     }
     

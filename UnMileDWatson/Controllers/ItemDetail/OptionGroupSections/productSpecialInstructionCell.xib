@@ -19,7 +19,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="59.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Instructions: eg-- no mayo" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z9U-DM-9Ad">
+                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="Instructions ---" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z9U-DM-9Ad">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="60"/>
                         <constraints>
                             <constraint firstAttribute="width" secondItem="z9U-DM-9Ad" secondAttribute="height" multiplier="96:13" constant="-123.07692307692309" id="Sac-PL-VJB"/>

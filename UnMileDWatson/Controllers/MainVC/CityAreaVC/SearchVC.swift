@@ -30,7 +30,7 @@ class SearchVC: BaseViewController {
     var filteredCities = [CityObject]()
 
     var areas = [AreaObject]()
-    var filteredAreas = [AreaObject]()
+    var filteredAreas = [AreaObject?]()
 
     var searchBarIsActive = false
     var cityDelegate: SearchVCCityDelegate?
@@ -72,6 +72,7 @@ class SearchVC: BaseViewController {
     }
 
     // MARK: - API Calls
+    
     func getCities() {
 
         let params: [String : Any] = ["countryID":"7",
@@ -165,7 +166,7 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
             }
         case .area:
             if searchBarIsActive {
-                cell.titleLabel?.text = filteredAreas[indexPath.row].area
+                cell.titleLabel?.text = filteredAreas[indexPath.row]?.area
             } else {
                 cell.titleLabel?.text = areas[indexPath.row].area
             }
@@ -184,11 +185,11 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
                 if(addressSelection == true)
                 {
                      // Saving address selection
-                    saveCityObject(Object: city, key: "cityAddress")
+                    saveCityObject(Object: city, key: keyForSavedCity )
                 }
                 else{
                     //Saving User City Selection
-                    saveCityObject(Object: city, key: "SavedCity")
+                    saveCityObject(Object: city, key: keyForSavedArea)
                 }
                 dismiss(animated: true, completion: nil)
                 self.navigationController?.popViewController(animated: true)
@@ -199,11 +200,11 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
                 if(addressSelection == true)
                 {
                      // Saving address selection
-                    saveCityObject(Object: city, key: "cityAddress")
+                    saveCityObject(Object: city, key: keyForSavedCity)
                 }
                 else{
                     //Saving User City Selection
-                    saveCityObject(Object: city, key: "SavedCity")
+                    saveCityObject(Object: city, key: keyForSavedCity)
                 }
                 dismiss(animated: true, completion: nil)
                 self.navigationController?.popViewController(animated: true)
@@ -212,15 +213,15 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
         case .area:
             if searchBarIsActive {
                 let area = filteredAreas[indexPath.row]
-                areaDelegate?.setArea(with: area)
+                areaDelegate?.setArea(with: area!)
                 if(addressSelection == true)
                 {
                     // Saving address selection
-                    saveAreaObject(Object: area, key: "cityAreaAddress")
+                    saveAreaObject(Object: area!, key: keyForSavedArea)
                 }
                 else{
                     //Saving User Area Selection
-                    saveAreaObject(Object: area, key: "SavedArea")
+                    saveAreaObject(Object: area!, key: keyForSavedArea)
                 }
                 
                 dismiss(animated: true, completion: nil)
@@ -232,11 +233,11 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
                 if(addressSelection == true)
                 {
                      // Saving address selection
-                    saveAreaObject(Object: area, key: "cityAreaAddress")
+                    saveAreaObject(Object: area, key: keyForSavedArea)
                 }
                 else{
                     //Saving User Area Selection
-                    saveAreaObject(Object: area, key: "SavedArea")
+                    saveAreaObject(Object: area, key: keyForSavedArea)
                 }
                  dismiss(animated: true, completion: nil)
                 self.navigationController?.popViewController(animated: true)
@@ -246,9 +247,7 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
 }
 
 extension SearchVC: UISearchBarDelegate {
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBarIsActive = true
-    }
+    
 
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         searchBarIsActive = false
@@ -266,7 +265,8 @@ extension SearchVC: UISearchBarDelegate {
     }
 
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-
+        
+        searchBarIsActive = true
         if self.isFor == .city {
             filteredCities = cities.filter({
                 $0.name.localizedCaseInsensitiveContains(searchText)

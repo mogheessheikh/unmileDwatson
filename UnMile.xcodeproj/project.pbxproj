@@ -90,6 +90,7 @@
 		CE23FB58237D1E37006E33F8 /* UploadPrescriptionPopUP.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE23FB57237D1E37006E33F8 /* UploadPrescriptionPopUP.xib */; };
 		CE23FB5A237D274C006E33F8 /* UploadPrescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE23FB59237D274C006E33F8 /* UploadPrescriptionView.swift */; };
 		CE23FB5C237D487A006E33F8 /* PrescriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE23FB5B237D487A006E33F8 /* PrescriptionVC.swift */; };
+		CE4367DA238FAE710002FCCC /* ChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */; };
 		CE4A4DAB236F555E0077D481 /* thankYouCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A4DA9236F555E0077D481 /* thankYouCell.swift */; };
 		CE4A4DAC236F555E0077D481 /* thankYouCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4A4DAA236F555E0077D481 /* thankYouCell.xib */; };
 		CE4A4DAF236F565D0077D481 /* orderDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A4DAD236F565D0077D481 /* orderDetailCell.swift */; };
@@ -211,6 +212,7 @@
 		CE23FB57237D1E37006E33F8 /* UploadPrescriptionPopUP.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPrescriptionPopUP.xib; sourceTree = "<group>"; };
 		CE23FB59237D274C006E33F8 /* UploadPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPrescriptionView.swift; sourceTree = "<group>"; };
 		CE23FB5B237D487A006E33F8 /* PrescriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrescriptionVC.swift; sourceTree = "<group>"; };
+		CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVC.swift; sourceTree = "<group>"; };
 		CE4A4DA9236F555E0077D481 /* thankYouCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thankYouCell.swift; sourceTree = "<group>"; };
 		CE4A4DAA236F555E0077D481 /* thankYouCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = thankYouCell.xib; sourceTree = "<group>"; };
 		CE4A4DAD236F565D0077D481 /* orderDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = orderDetailCell.swift; sourceTree = "<group>"; };
@@ -437,6 +439,7 @@
 		73C9E14721E0BFC200AB8BB4 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				CE4367D8238FADF70002FCCC /* ChatRoom */,
 				CE0D6C8E235B3C9A006C64E7 /* CommonCells */,
 				CEB34B802359D6B800470378 /* Previous Order Detail */,
 				390945B322C353F900F475FD /* Thank You */,
@@ -656,6 +659,14 @@
 			path = CommonCells;
 			sourceTree = "<group>";
 		};
+		CE4367D8238FADF70002FCCC /* ChatRoom */ = {
+			isa = PBXGroup;
+			children = (
+				CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */,
+			);
+			path = ChatRoom;
+			sourceTree = "<group>";
+		};
 		CE85FD6B231E6FBD008099CA /* OptionGroupSections */ = {
 			isa = PBXGroup;
 			children = (
@@ -707,7 +718,6 @@
 				73C9E12C21E0824300AB8BB4 /* Frameworks */,
 				73C9E12D21E0824300AB8BB4 /* Resources */,
 				FDA330D7D87F687DDF276C01 /* [CP] Copy Pods Resources */,
-				422AA9354CB58407B6FFC8B6 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -791,23 +801,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		422AA9354CB58407B6FFC8B6 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-UnMile/Pods-UnMile-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-UnMile/Pods-UnMile-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-UnMile/Pods-UnMile-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		7421C15E6DF512E22C83631E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -895,6 +888,7 @@
 				39D4819F22D61C1B000BEDE3 /* SSRadioButtonsController.swift in Sources */,
 				39F7236022B8F46500FCEF14 /* ContainerVC.swift in Sources */,
 				881F48D222521CB90047F9BD /* OrderType.swift in Sources */,
+				CE4367DA238FAE710002FCCC /* ChatRoomVC.swift in Sources */,
 				882DE685224A1344007B48F4 /* CheckOutTableViewCell.swift in Sources */,
 				881659C0222D25DD002D8803 /* CartVC.swift in Sources */,
 				CE85FD59231E5BA3008099CA /* productNameCategoryCell.swift in Sources */,
@@ -1078,6 +1072,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = NO;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
@@ -1093,6 +1088,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/ZDCChat",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/UnMileDWatson/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1102,7 +1101,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -1115,6 +1114,10 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pods/ZDCChat",
+				);
 				INFOPLIST_FILE = "$(SRCROOT)/UnMileDWatson/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1124,7 +1127,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				SWIFT_VERSION = 5.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

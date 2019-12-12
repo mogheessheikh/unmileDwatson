@@ -20,7 +20,7 @@ class UserRegistrationVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         // Do any additional setup after loading the view.
     }
 
@@ -74,7 +74,7 @@ class UserRegistrationVC: BaseViewController {
                 //getting the json value from the server
                 if response.result.value != nil {
                     self.stopActivityIndicator()
-                    
+                
                     self.showAlert(title: "User Already Registered", message: "user is already registerd with this email \(email)")
                 }
                     // if response.result.value found nil then registrationNewUser Called
@@ -137,6 +137,7 @@ class UserRegistrationVC: BaseViewController {
 
             do {
                 self.customerObj = try JSONDecoder().decode(CustomerDetail.self, from: data!)
+                self.sendRejistrationDetailToSender(customerObj: self.customerObj)
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
 
                 if let parseJSON = json {
@@ -158,7 +159,7 @@ class UserRegistrationVC: BaseViewController {
                         self.passwordField.text = ""
                         self.phoneNumber.text = ""
                         
-                        //self.sendRejistrationDetailToSender(customer: self.customerObj, company: "\(companyId)", locale: "locale")
+                        //self.sendRejistrationDetailToSender(customer: self.customerObj)
                         
                         self.showAlert(title: "SignUP Successfully", message: "Successfully Registered a New Account. Please proceed to Sign in")
                     }
@@ -183,7 +184,7 @@ class UserRegistrationVC: BaseViewController {
     
     
     
-    func sendRejistrationDetailToSender(customer: CustomerDetail, company: String, locale: String){
+    func sendRejistrationDetailToSender(customerObj: CustomerDetail){
         
         let myUrl = URL(string: ProductionPath.sendEmailUrl+"/send-registrationdetails")
         var request = URLRequest(url: myUrl!)
@@ -191,11 +192,15 @@ class UserRegistrationVC: BaseViewController {
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         
-        let postString = ["customer": customer,
-                          "company":company,
-                          "locale":locale] as [String: Any]
+        let obj = customerObj
+        
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = .prettyPrinted
+        let data = try! encoder.encode(obj)
+        
+        let postString = String(data: data, encoding: .utf8)!
         do {
-            request.httpBody = try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
+             request.httpBody = postString.data(using: .utf8)
         } catch let error {
             print(error.localizedDescription)
             showAlert(title: "Alert", message: "Something went wrong. Try again.")
@@ -214,7 +219,7 @@ class UserRegistrationVC: BaseViewController {
             // Let's convert response sent from a server side code to a NSDictionary object:
             
             do {
-                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+                print(response)
                 
               
                         }

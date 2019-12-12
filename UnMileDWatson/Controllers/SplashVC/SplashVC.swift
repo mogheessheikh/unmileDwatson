@@ -62,7 +62,6 @@ class SplashVC: BaseViewController {
                 
                     }
                 }
-
             } catch let myJSONError {
                 print(myJSONError)
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)

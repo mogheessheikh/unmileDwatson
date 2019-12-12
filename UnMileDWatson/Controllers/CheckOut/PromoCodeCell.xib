@@ -47,6 +47,9 @@
                                         <color key="textColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="go" textContentType="name"/>
+                                        <connections>
+                                            <action selector="didtextEnter:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="nET-4X-0kk"/>
+                                        </connections>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wNi-zw-4Cv">
                                         <rect key="frame" x="239" y="0.0" width="139" height="30"/>
