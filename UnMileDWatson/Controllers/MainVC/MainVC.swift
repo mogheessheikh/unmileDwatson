@@ -20,7 +20,7 @@ class MainVC: BaseViewController {
     
     @IBOutlet weak var cartButton: UIBarButtonItem!
     @IBOutlet weak var movingWebText: UIWebView!
-    @IBOutlet weak var movingTextLable: UILabel!
+   
     var city: CityObject?
     var area: AreaObject?
     
@@ -84,8 +84,7 @@ class MainVC: BaseViewController {
         popUpView.btnGallery.addTarget(self, action: #selector(openGallery(with:)), for: .touchUpInside)
         
         // ******************END-POPUPVIEW***************************
-        
-        
+
         
         // ******************START-MARQUEE-TEXT*********************
         companyDetails = getCompanyObject(keyForSavedCompany)
@@ -101,9 +100,6 @@ class MainVC: BaseViewController {
         movingWebText.loadHTMLString("<html><body><font face='Bodoni 72 Bold' size='10'><b><marquee style='color:red' scrollamount= '10'>\(message!)</b></marquee></font></body></html>", baseURL: nil)
         
         // ******************END-MARQUEE-TEXT*********************
-        
-        
-        
         slideMenu()
         getBranchCategories()
         getbranchDetail()
@@ -188,7 +184,7 @@ class MainVC: BaseViewController {
     func getBranchCategories() {
         
         self.startActivityIndicator()
-        let path = ProductionPath.menuUrl + "/active-category?branchId=\(branchId)&productName="
+        let path = ProductionPath.menuUrlV2 + "/?branchId=\(branchId)&productName="
         print(path)
         
         NetworkManager.getDetails(path: path, params: nil, success: { (json, isError) in
@@ -281,8 +277,7 @@ class MainVC: BaseViewController {
         
         view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
         view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,multiplier: 1, constant: 667))
-        
-        
+
     }
     @objc func closePopUp(with sender: UIButton){
         
@@ -324,30 +319,14 @@ extension MainVC : UIImagePickerControllerDelegate, UINavigationControllerDelega
 
 extension MainVC: UISearchBarDelegate{
     
-    func searchBar(_ searchBar: UISearchBar, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-        return true
-    }
-    
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        
-        
-    }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        categorySearchBar.text = ""
-        categorySearchBar.endEditing(true)
-        
-    }
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        let searchBar = Storyboard.main.instantiateViewController(withIdentifier: GernalSearchVC.identifier)
-        categorySearchBar.endEditing(true)
-        self.navigationController?.pushViewController(searchBar, animated: true)
+       performSegue(withIdentifier: "menuToSearch", sender: self)
     }
 }
 extension MainVC: UICollectionViewDelegate, UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == sliderCollection {
-            
             return companyBanner?.count ?? 0
         }
         else{

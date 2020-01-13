@@ -73,7 +73,7 @@ class ThankYouVC: BaseViewController {
         }
         if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
             let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-            let _ = nvc.viewControllers[0] as? MainVC {
+            let _ = nvc.viewControllers[0] as? Main{
             
             UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
     }

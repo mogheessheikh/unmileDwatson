@@ -31,7 +31,7 @@ class PreviousOrderDetailVC: BaseViewController {
             let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
             customerId = customer!.id
         }
-        getCustomerPreviousOrder(pageNo: "0", pageSize: "5", customerId: "\(customerId)") //customerObj.id
+        getCustomerPreviousOrder(pageNo: "0", pageSize: "50", customerId: "\(customerId)")
         
         // Do any additional setup after loading the view.
     }
@@ -46,6 +46,7 @@ class PreviousOrderDetailVC: BaseViewController {
     }
     
     func getCustomerPreviousOrder(pageNo: String, pageSize: String , productName: String = "", customerId: String) {
+        
         self.startActivityIndicator()
         UIApplication.shared.beginIgnoringInteractionEvents()
         let parameters: [String : Any] = ["pageNo":pageNo,
@@ -97,24 +98,24 @@ extension PreviousOrderDetailVC : UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! preOrderDetailCell
         cell.lblOrderDate.text = customerOrders?[indexPath.row].orderDate
         cell.lblOrderPrice.text = "RS: \(customerOrders?[indexPath.row].amount ?? 0.0)"
-        cell.detailDelegate = self as? orderDetailDelegate
+        cell.detailDelegate = self
         
         return cell
     }
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let offsetY = scrollView.contentOffset.y
-        let contentHeight = scrollView.contentSize.height
-        if offsetY > contentHeight - scrollView.frame.height {
-            if !fetchingMore{
-                if self.preOrder.hasNext {
-                    getCustomerPreviousOrder(pageNo:"\((preOrder?.number)! + 1)", pageSize: "10", productName: "", customerId: "\(customerId)")
-                    
-                }
-                fetchingMore = true
-            }
-        }
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        let offsetY = scrollView.contentOffset.y
+//        let contentHeight = scrollView.contentSize.height
+//        if offsetY > contentHeight - scrollView.frame.height {
+//            if !fetchingMore{
+//                if self.preOrder.hasNext {
+//                    getCustomerPreviousOrder(pageNo:"\((preOrder?.number)! + 1)", pageSize: "10", productName: "", customerId: "\(customerId)")
+//
+//                }
+//                fetchingMore = true
+//            }
+//        }
+//    }
 }
 
 

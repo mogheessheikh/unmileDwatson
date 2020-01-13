@@ -238,70 +238,7 @@ class UserRegistrationVC: BaseViewController {
         
     }
     
-    func currentDateTime () -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        return (formatter.string(from: Date()) as NSString) as String
-    }
     
-    func getDeviceIP() -> String{
-        
-        var temp = [CChar](repeating: 0, count: 255)
-        enum SocketType: Int32 {
-            case  SOCK_STREAM = 0, SOCK_DGRAM, SOCK_RAW
-        }
-        gethostname(&temp, temp.count)
-        
-        var port: UInt16 = 0;let hosts = ["localhost", String(cString: temp)]
-        var hints = addrinfo();hints.ai_flags = 0;hints.ai_family = PF_UNSPEC
-        
-        for host in hosts {
-            print("\n\(host)")
-            print()
-            var info: UnsafeMutablePointer<addrinfo>?
-            defer {
-                if info != nil
-                {
-                    freeaddrinfo(info)
-                }
-            }
-            let status: Int32 = getaddrinfo(host, String(port), nil, &info)
-            guard status == 0 else {
-                print(errno, String(cString: gai_strerror(errno)))
-                continue
-            }
-            var p = info;var i = 0;var ipFamily = "";_ = ""
-            
-            while p != nil {
-                i += 1
-                let _info = p!.pointee
-                p = _info.ai_next
-                
-                switch _info.ai_family {
-                case PF_INET:
-                    _info.ai_addr.withMemoryRebound(to: sockaddr_in.self, capacity: 1, { p in
-                        inet_ntop(AF_INET, &p.pointee.sin_addr, &temp, socklen_t(temp.count))
-                        ipFamily = "IPv4"
-                    })
-                case PF_INET6:
-                    _info.ai_addr.withMemoryRebound(to: sockaddr_in6.self, capacity: 1, { p in
-                        inet_ntop(AF_INET6, &p.pointee.sin6_addr, &temp, socklen_t(temp.count))
-                        ipFamily = "IPv6"
-                    })
-                default:
-                    continue
-                }
-                
-                print(i,"\(ipFamily)\t\(String(cString: temp))", SocketType(rawValue: _info.ai_socktype)!)
-                
-            }
-            
-            
-        }
-        
-        return String(cString: temp)
-        
-    }
     
     @IBAction func signInPressed(_ sender: Any) {
         

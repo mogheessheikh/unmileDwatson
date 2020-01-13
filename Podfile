@@ -16,7 +16,11 @@ target 'UnMile' do
   pod 'SZTextView'
   pod 'SideMenu'
   pod 'ScrollableSegmentedControl', '~> 1.5.0'
-  
-  
+  pod 'ZDCChat'
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
+  pod 'FacebookCore'
+  pod 'FacebookLogin'
+ 
 
 end 

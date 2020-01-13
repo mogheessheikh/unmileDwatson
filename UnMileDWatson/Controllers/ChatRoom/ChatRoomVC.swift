@@ -7,7 +7,7 @@
 //
 
 import UIKit
-//import ZDCChat
+import ZDCChat
 
 class ChatRoomVC: UIViewController {
 
@@ -19,7 +19,7 @@ class ChatRoomVC: UIViewController {
     
     @IBAction func enterInChatRoom(_ sender: Any) {
         
-       //  ZDCChat.start(in: self.navigationController, withConfig: nil)
+    ZDCChat.start(in: self.navigationController, withConfig: nil)
     }
     
     

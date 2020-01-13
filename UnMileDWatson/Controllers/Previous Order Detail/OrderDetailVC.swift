@@ -8,7 +8,6 @@
 
 import UIKit
 
-
 class OrderDetailVC: BaseViewController {
 
     @IBOutlet weak var tblOrderDetail: UITableView!
@@ -28,17 +27,10 @@ class OrderDetailVC: BaseViewController {
         tblOrderDetail.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblOrderDetail.register(UINib(nibName: "OrderDetail", bundle: Bundle.main), forCellReuseIdentifier: "detailcell")
         tblOrderDetail.register(UINib(nibName: "ContactSupport", bundle: Bundle.main), forCellReuseIdentifier: "contactcell")
-        
-//         ["10", "10", "10","10","10","10"]
-        
-        sectionOneArrayValue = ["\(preOrder.subTotal)","\(round(preOrder.surCharge!))","\(round(0.0))","\(round(preOrder.orderDiscount! ))","\(preOrder.id)","\(preOrder.orderDate)"]
+        sectionOneArrayValue = ["\(preOrder.subTotal)","\(round(preOrder.surCharge!))","\(round(preOrder.customerOrderTaxes[0].taxAmount ))","\(round(preOrder.orderDiscount ?? 0 ))","\(preOrder.id)","\(preOrder.orderDate)"]
         route = "\(preOrder.customerOrderAddress.customerOrderAddressFields[0].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[1].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[2].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[3].fieldValue)"
-    
-        itemSummery = preOrder.customerOrderItem
+            itemSummery = preOrder.customerOrderItem
     }
-    
-
-
 }
 extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,6 +70,7 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
             }
             cell.lblName.text = sectionOneArrayTitle[indexPath.row]
             cell.lblAmount.text = sectionOneArrayValue[indexPath.row]
+            
             return cell
         }
             

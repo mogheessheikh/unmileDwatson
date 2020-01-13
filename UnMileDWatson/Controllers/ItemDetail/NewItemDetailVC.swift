@@ -12,9 +12,6 @@ import AlamofireImage
 
 class NewItemDetailVC: BaseViewController {
     
-    
-    
-    
     @IBOutlet weak var tblOptionGroup: UITableView!
     var product: Product!
     var optionGroup : [String] = []
@@ -51,10 +48,12 @@ class NewItemDetailVC: BaseViewController {
         tblOptionGroup.register(UINib(nibName: "productSpecialInstructionCell", bundle: Bundle.main), forCellReuseIdentifier: "cell5")
         tblOptionGroup.register(UINib(nibName: "addToCartButtonCell", bundle: Bundle.main), forCellReuseIdentifier: "cell6")
         
+        if  !(product.optionGroups.isEmpty){
         for index in product.optionGroups.indices{
             optionGroup.append(product.optionGroups[index].name)
-            
         }
+  }
+        
         cartBag.frame = CGRect(x: 0, y: 0, width: 25, height: 30)
         cartBag.setImage(UIImage(named: "add to cart")?.withRenderingMode(.automatic), for: .normal)
         cartBag.badgeEdgeInsets = UIEdgeInsets(top: 10, left: 0, bottom: 0, right: 15)
@@ -72,7 +71,7 @@ class NewItemDetailVC: BaseViewController {
                 optionalCount += 1
             }
         }
-        print(mustCount,"Moghees",optionalCount)
+        
         
         for _ in 0..<mustCount{
             
@@ -422,13 +421,10 @@ extension NewItemDetailVC: itemDelegate{
                         alreadyItems[i].quantity = qNumber
                         alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
                         alreadyItems[i].instructions = specialIstruction
-                        //                  alreadyItems[i].product.name = product.name
                         alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
-                        
                     }
                 }
                 saveItems(allItems: alreadyItems)
-                
             }
                 // add new item in cart
             else{

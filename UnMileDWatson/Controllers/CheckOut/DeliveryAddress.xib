@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -16,38 +14,37 @@
             <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="55.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkC-ah-VkY">
-                        <rect key="frame" x="279" y="6" width="41" height="41"/>
-                        <constraints>
-                            <constraint firstAttribute="width" constant="41" id="ZJm-bW-2ii"/>
-                        </constraints>
-                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="24"/>
-                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <state key="normal" title="+">
-                            <color key="titleColor" red="0.58081901069999997" green="0.0" blue="0.021739499589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </state>
-                        <connections>
-                            <action selector="AddDeliveryAddress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zS6-tG-Xnu"/>
-                        </connections>
-                    </button>
-                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="line" placeholder="&quot;Click + To Add Address&quot;" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCl-1s-kRp">
-                        <rect key="frame" x="7" y="17" width="270" height="20"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
+                    <stackView opaque="NO" contentMode="scaleToFill" spacing="103" translatesAutoresizingMaskIntoConstraints="NO" id="SI4-GN-g3f">
+                        <rect key="frame" x="8" y="8" width="304" height="40"/>
+                        <subviews>
+                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="&quot;Click + To Add Address&quot;" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCl-1s-kRp">
+                                <rect key="frame" x="0.0" y="0.0" width="171" height="40"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkC-ah-VkY">
+                                <rect key="frame" x="274" y="0.0" width="30" height="40"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" image="plus-1">
+                                    <color key="titleColor" red="0.58081901069999997" green="0.0" blue="0.021739499589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="AddDeliveryAddress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zS6-tG-Xnu"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                    </stackView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="FkC-ah-VkY" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" constant="-1.25" id="Cmk-Ar-BnL"/>
-                    <constraint firstItem="YCl-1s-kRp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="topMargin" constant="6" id="EvD-al-QDF"/>
-                    <constraint firstItem="FkC-ah-VkY" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" constant="16" id="L0L-n2-w4B"/>
-                    <constraint firstItem="FkC-ah-VkY" firstAttribute="leading" secondItem="YCl-1s-kRp" secondAttribute="trailing" constant="2" id="Qmn-Ow-mPX"/>
-                    <constraint firstItem="YCl-1s-kRp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="7" id="j6e-Og-xdW"/>
-                    <constraint firstItem="YCl-1s-kRp" firstAttribute="centerY" secondItem="FkC-ah-VkY" secondAttribute="centerY" constant="0.5" id="pxT-0A-bhp"/>
+                    <constraint firstItem="SI4-GN-g3f" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="2pD-AP-0yd"/>
+                    <constraint firstItem="SI4-GN-g3f" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="IcK-xY-KEo"/>
+                    <constraint firstAttribute="bottom" secondItem="SI4-GN-g3f" secondAttribute="bottom" constant="8" id="Kjx-6j-Dzs"/>
+                    <constraint firstAttribute="trailing" secondItem="SI4-GN-g3f" secondAttribute="trailing" constant="8" id="edW-NN-Ovb"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
@@ -57,4 +54,7 @@
             <point key="canvasLocation" x="132.80000000000001" y="149.32533733133434"/>
         </tableViewCell>
     </objects>
+    <resources>
+        <image name="plus-1" width="30" height="30"/>
+    </resources>
 </document>

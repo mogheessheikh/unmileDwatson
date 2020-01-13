@@ -1063,6 +1063,7 @@ enum Path {
     static let imageUrl                  = ServerURLs.stagingURL + "/image"
     static let sendEmailUrl              = ServerURLs.stagingURL + "/email-sender"
     static let companyBannerUrl          = ServerURLs.stagingURL + "/v2/companybanner"
+    static let menuUrlV2                 = ServerURLs.stagingURL + "/v2/menu"
 }
 
 enum ProductionPath {
@@ -1081,6 +1082,7 @@ enum ProductionPath {
     static let imageUrl                  = ServerURLs.productionURL + "/image"
     static let sendEmailUrl              = ServerURLs.productionURL + "/email-sender"
     static let companyBannerUrl          = ServerURLs.productionURL + "/v2/companybanner"
+    static let menuUrlV2                 = ServerURLs.productionURL  + "/v2/menu"
 }
 
 

@@ -36,8 +36,7 @@ class AddAddressVC: BaseViewController {
         addressView1.layer.cornerRadius = 7
         btnArea.layer.cornerRadius = 7
         btnCity.layer.cornerRadius = 7
-        
-        
+
         let user = getUserDetail()
        customerCheck = user.1
         
@@ -53,9 +52,7 @@ class AddAddressVC: BaseViewController {
         self.navigationController?.isNavigationBarHidden = false
         //self.showNavigationBar()
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        /// Getting Saved City and Area Values
+    override func viewWillAppear(_ animated: Bool) {
         
         if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
             let decoder = JSONDecoder()
@@ -67,6 +64,26 @@ class AddAddressVC: BaseViewController {
         }
         
         
+        if let savedArea = UserDefaults.standard.object(forKey: keyForSavedArea) as? Data  {
+            let decoder = JSONDecoder()
+            if let loadedArea = try? decoder.decode(AreaObject.self, from: savedArea) {
+                area = loadedArea
+                btnArea.setTitle(loadedArea.area, for: .normal)
+            }
+        }
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        /// Getting Saved City and Area Values
+        super.viewDidAppear(animated)
+        if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
+            let decoder = JSONDecoder()
+            if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
+               city = loadedCity
+               btnCity.setTitle(loadedCity.name, for: .normal)
+            }
+           //self.showNavigationBar()
+        }
+
         if let savedArea = UserDefaults.standard.object(forKey: keyForSavedArea) as? Data  {
             let decoder = JSONDecoder()
             if let loadedArea = try? decoder.decode(AreaObject.self, from: savedArea) {
@@ -98,12 +115,9 @@ class AddAddressVC: BaseViewController {
            else {
               addAddressToServer()
             }
-          
-           
-           
         }
     }
-//    ["id":0,"isDefault":0,"archive":0,"addressFields":[["id":0,"fieldName":"addressLine1","label":"addressline1","fieldValue":"aaaaaaaaaa"],["id":0,"fieldName":"postCode","label":"postcode","fieldValue":"L3R 9A5"]],"customer":["id":455]]
+
     func addAddressToServer(){
         startActivityIndicator()
         let path = URL(string: ProductionPath.addressUrl + "/add-address")
@@ -219,12 +233,6 @@ class AddAddressVC: BaseViewController {
         
         let storyboard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         let vc : SearchVC = storyboard.instantiateViewController(withIdentifier: SearchVC.identifier) as! SearchVC
-        //self.present(vc, animated: true, completion: nil)
-        
-//        guard let searchVC = Storyboard.main.instantiateViewController(withIdentifier: SearchVC.identifier) as? SearchVC else {
-//            fatalError("\(SearchVC.identifier) not found")
-//        }
-        
         vc.isFor = SearchFor(rawValue: sender.tag)!
         if sender.tag == 0 {
             //searchVC.cityDelegate = self as! SearchVCCityDelegate
@@ -233,7 +241,8 @@ class AddAddressVC: BaseViewController {
             
             UserDefaults.standard.removeObject(forKey: keyForSavedArea)
             btnArea.setTitle("Area", for: .normal)
-            self.present(vc, animated: true, completion: nil)
+              self.navigationController?.pushViewController(vc, animated: true)
+           // self.present(vc, animated: true, completion: nil)
             //self.navigationController?.pushViewController(vc, animated: true)
             
             
@@ -247,7 +256,8 @@ class AddAddressVC: BaseViewController {
                     vc.cityId = loadedCity.id
                     vc.companyId = companyId
                      vc.addressSelection = true
-                    self.present(vc, animated: true, completion: nil)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    //self.present(vc, animated: true, completion: nil)
                    // self.navigationController?.pushViewController(vc, animated: true)
                 }
             }
@@ -259,7 +269,8 @@ class AddAddressVC: BaseViewController {
                     vc.areaDelegate = self as! SearchVCAreaDelegate
                     vc.cityId = aCity.id
                     vc.companyId = self.companyDetails.id
-                    self.present(vc, animated: true, completion: nil)
+                    self.navigationController?.pushViewController(vc, animated: true)
+                    //self.present(vc, animated: true, completion: nil)
                    // self.navigationController?.pushViewController(vc, animated: true)
                 } else {
                     self.showAlert(title: "Select city!", message: "Please select city to continue")

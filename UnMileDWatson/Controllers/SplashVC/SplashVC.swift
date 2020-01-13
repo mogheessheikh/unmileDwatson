@@ -46,14 +46,12 @@ class SplashVC: BaseViewController {
                 if let _ = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
                     if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                         let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                        let mainVC = nvc.viewControllers[0] as? MainVC {
-                        mainVC.companyDetails = companyDetails
-                        mainVC.deliveryZoneType = companyDetails.deliveryZoneType.name //"POSTALCODE"
+                        let mainVC = nvc.viewControllers[0] as? Main {
+                       // mainVC.companyDetails = companyDetails
+                       // mainVC.deliveryZoneType = companyDetails.deliveryZoneType.name //"POSTALCODE"
                         
                         UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
                     }
-                    
-                    
                 }
                 else{
                     if let loginVC = Storyboard.login.instantiateViewController(withIdentifier: LoginViewController.identifier) as? UIViewController{

@@ -30,15 +30,13 @@ class AddressVC: BaseViewController {
         fieldId.reserveCapacity(4)
       
        getuserAddress()
-        
-     
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         getuserAddress()
-       
-        
+
     }
     
     func getuserAddress() {

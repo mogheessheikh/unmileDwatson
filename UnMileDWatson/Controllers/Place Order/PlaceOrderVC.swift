@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 class PlaceOrderVC: BaseViewController {
-
+    
     @IBOutlet weak var tblOrderSummery: UITableView!
     @IBOutlet weak var btnPlacedOrder: UIButton!
     
@@ -27,7 +27,7 @@ class PlaceOrderVC: BaseViewController {
     var surCharges = 0.0
     var sectionTitle = ["","Route","Order Summery","Detail","Contact Support"]
     
-   
+    
     var routeLogo: [UIImage] = [UIImage(named: "restaurant")! , UIImage(named: "location1")!]
     var routeArray:[String]!
     var restuarentAddress: String!
@@ -39,6 +39,7 @@ class PlaceOrderVC: BaseViewController {
     var taxAmount = 0.0
     var imagePath = ""
     var promoCodeMatch = false
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -66,33 +67,29 @@ class PlaceOrderVC: BaseViewController {
         surCharges = chargeSurcharge(customerOrder:customerOrder, paymentMethod: paymentMethod)
         
         if !promoCodeMatch{
-              orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
+            orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
         }
         else{
             
             orderDiscount = calculatePromoCodeDiscount(branch: branch, customerOrder: customerOrder)
         }
-      
+        
         finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount - orderDiscount)
- 
+        
         routeArray = [restuarentAddress,"\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
-    
+        
         tblOrderSummery.register(UINib(nibName: "Route", bundle: Bundle.main), forCellReuseIdentifier: "routecell")
         tblOrderSummery.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblOrderSummery.register(UINib(nibName: "OrderDetail", bundle: Bundle.main), forCellReuseIdentifier: "detailcell")
         tblOrderSummery.register(UINib(nibName: "ContactSupport", bundle: Bundle.main), forCellReuseIdentifier: "contactcell")
-
+        
     }
     
-
-    func currentDateTime () -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        return (formatter.string(from: Date()) as NSString) as String
-    }
+    
+    
     
     @IBAction func tappedToPlaceOrder(_ sender: Any) {
-       
+        
         startActivityIndicator()
         
         if let filePath = UserDefaults.standard.string(forKey: keyForFilePath){
@@ -135,11 +132,11 @@ class PlaceOrderVC: BaseViewController {
             newObj["rate"] = aDict["rate"]
             newObj["taxAmount"] = aDict["taxAmount"]
             newObj["chargeMode"] = aDict["chargeMode"]
-
+            
             adjustedJsontaxArray.add(newObj)
-           
+            
         }
-         print(adjustedJsontaxArray)
+        print(adjustedJsontaxArray)
         let postString = [
             "ipAddress": customerOrder.ipAddress,
             "billingStatus":"\(customerOrder.billingStatus!)",
@@ -148,7 +145,7 @@ class PlaceOrderVC: BaseViewController {
             "customerFirstName":"\(customerOrder.customerFirstName)",
             "customerId": "\(customerOrder.customerID)",
             "customerLastName":"\(customerOrder.customerLastName)",
-        "customerOrderAddress":["customerOrderAddressFields":[["fieldName":"addressLine1","fieldValue":"\(selectedAddress.customerOrderAddressFields[0].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[0].label)"],["fieldName":"addressLine2","fieldValue":"\(selectedAddress.customerOrderAddressFields[1].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[1].label)"],["fieldName":"city","fieldValue":"\(selectedAddress.customerOrderAddressFields[2].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[2].label)"],["fieldName":"area","fieldValue":"\(selectedAddress.customerOrderAddressFields[3].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[3].label)"]]],
+            "customerOrderAddress":["customerOrderAddressFields":[["fieldName":"addressLine1","fieldValue":"\(selectedAddress.customerOrderAddressFields[0].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[0].label)"],["fieldName":"addressLine2","fieldValue":"\(selectedAddress.customerOrderAddressFields[1].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[1].label)"],["fieldName":"city","fieldValue":"\(selectedAddress.customerOrderAddressFields[2].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[2].label)"],["fieldName":"area","fieldValue":"\(selectedAddress.customerOrderAddressFields[3].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[3].label)"]]],
             "customerOrderItem": adjustedCustomerOrderItemArray,
             "customerOrderTaxes": adjustedJsontaxArray,
             "customerPhone":"\(customerOrder.customerPhone)",
@@ -177,18 +174,19 @@ class PlaceOrderVC: BaseViewController {
             "bankDetail":"",
             "companyId": customerOrder.companyID
             ] as [String : Any]
-
+        
         print(postString )
         
         guard let url = URL(string: ProductionPath.customerOrderUrl + "/create") else { return }
+        
         var request = URLRequest(url: url)
         request.allHTTPHeaderFields = postString as? [String : String]
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         do {
-            let jsoncheck =  try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
             
+            let jsoncheck =  try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
             request.httpBody = try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
         } catch let error {
             print(error.localizedDescription)
@@ -219,12 +217,12 @@ class PlaceOrderVC: BaseViewController {
                     DispatchQueue.main.async {
                         self.stopActivityIndicator()
                         UIApplication.shared.endIgnoringInteractionEvents()
-//                       self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
+                        //                       self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
                         self.saveCustomerOrder(obj: customerOrder, key: "savedCustomerOrder" )
                         
                         let vc : UIViewController = Storyboard.main.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
                         self.present(vc, animated: true, completion: nil)
-                       
+                        
                         print(self.customerOrder.amount)
                     }
                     
@@ -232,7 +230,7 @@ class PlaceOrderVC: BaseViewController {
                 else {
                     
                     //Display an Alert dialog with a friendly error message
-             self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                    self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
                     
                 }
             } catch {
@@ -248,132 +246,132 @@ class PlaceOrderVC: BaseViewController {
         
         task.resume()
     }
-
+    
     func  chargeSurcharge(customerOrder: CustomerOrder,  paymentMethod: [PaymentMethod])-> Double {
         
         for paymentmethod:PaymentMethod in paymentMethod{
             
             if(customerOrder.paymentType ==  paymentmethod.paymentType.name) {
-        
+                
                 if(paymentmethod.chargeMode!.id == 1) {
                     surCharges = paymentmethod.charge!
                 }
-       
+                    
                 else if (paymentmethod.chargeMode!.id == 2){
-           
+                    
                     surCharges = (customerOrder.subTotal * paymentmethod.charge!)
                 }
                 
             }
         }
-    
+        
         return surCharges
-
+        
     }
     
     func calculateTaxes(restbranch: Branch, customerOrder: CustomerOrder) -> Double{
-
-    if (!branch.taxes.isEmpty) {
-        var taxRule = ""
-        var taxLabel = ""
-        var rate = 0.0
-        var ChargeMode = 0
-       
         
-        for  tax:Tax  in restbranch.taxes {
+        if (!branch.taxes.isEmpty) {
+            var taxRule = ""
+            var taxLabel = ""
+            var rate = 0.0
+            var ChargeMode = 0
             
-            if (tax.orderType.name == customerOrder.orderType) || (tax.orderType.name == "\(OrderType.self)") {
-    
-    if (tax.taxRule ==  tax.taxRule) {
-    if (tax.chargeMode.id == 2 /** percentage */) {
-    taxAmount = (customerOrder.subTotal * tax.rate)
-    }
-    }
-
-    else if  (tax.chargeMode.id == 1 /** fixed */) {
-    taxAmount = tax.rate
-    }
-    else {
-        
-        taxAmount = 0.0
+            
+            for  tax:Tax  in restbranch.taxes {
+                
+                if (tax.orderType.name == customerOrder.orderType) || (tax.orderType.name == "\(OrderType.self)") {
+                    
+                    if (tax.taxRule ==  tax.taxRule) {
+                        if (tax.chargeMode.id == 2 /** percentage */) {
+                            taxAmount = (customerOrder.subTotal * tax.rate)
+                        }
+                    }
+                        
+                    else if  (tax.chargeMode.id == 1 /** fixed */) {
+                        taxAmount = tax.rate
+                    }
+                    else {
+                        
+                        taxAmount = 0.0
+                    }
+                    taxRule = tax.taxRule
+                    taxLabel = tax.taxLabel
+                    rate = tax.rate
+                    taxAmount += taxAmount
+                    ChargeMode = tax.chargeMode.id
                 }
-                taxRule = tax.taxRule
-                taxLabel = tax.taxLabel
-                rate = tax.rate
-                taxAmount += taxAmount
-                ChargeMode = tax.chargeMode.id
-       }
-    }
-         customerOrderTax = [CustomerOrderTax.init(id: 1, orderType: customerOrder.orderType, taxRule: taxRule , taxLabel: taxLabel, rate: rate, taxAmount: taxAmount, chargeMode: ChargeMode)]
-    }
-    else {
-        
-        customerOrderTax = [CustomerOrderTax.init(id: 0, orderType: "", taxRule: "", taxLabel: "", rate: 0.0, taxAmount: 0, chargeMode: 0)]
+            }
+            customerOrderTax = [CustomerOrderTax.init(id: 1, orderType: customerOrder.orderType, taxRule: taxRule , taxLabel: taxLabel, rate: rate, taxAmount: taxAmount, chargeMode: ChargeMode)]
         }
-
-    return taxAmount
+        else {
+            
+            customerOrderTax = [CustomerOrderTax.init(id: 0, orderType: "", taxRule: "", taxLabel: "", rate: 0.0, taxAmount: 0, chargeMode: 0)]
+        }
+        
+        return taxAmount
     }
-
+    
     func calculatePromoCodeDiscount(branch: Branch,  customerOrder: CustomerOrder)-> Double{
-         var discountAmount = 0.0
+        var discountAmount = 0.0
         for promo: PromoCodeDiscountRule in branch.promoCodeDiscountRules{
             
             if(promo.orderType.name == customerOrder.orderType && promo.status == 1 && promo.paymentType.name == customerOrder.paymentType){
                 
-               discountAmount  = ((customerOrder.subTotal - customerOrder.deliveryCharge) * promo.discount)
+                discountAmount  = ((customerOrder.subTotal - customerOrder.deliveryCharge) * promo.discount)
             }
         }
         return   discountAmount
     }
     
     func calculateDiscounts(branch: Branch,  customerOrder: CustomerOrder)-> Double {
-
-    var discount = [Double : Double]()
+        
+        var discount = [Double : Double]()
         for  orderDiscountRule: OrderDiscountRule  in branch.orderDiscountRules {
             
             let  expiryDate = orderDiscountRule.expiryDate
             let  today = currentDateTime()            //customerOrder.orderType
-    if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == "DELIVERY" && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today && customerOrder.subTotal >= orderDiscountRule.subTotal )
-    {
-        var discountAmount = 0.0
-
-        if(orderDiscountRule.chargeMode.id == 1)
-        {
-        discountAmount = orderDiscountRule.discount
+            if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == "DELIVERY" && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today)
+            {
+                var discountAmount = 0.0
+                
+                if(orderDiscountRule.chargeMode.id == 1)
+                {
+                    discountAmount = orderDiscountRule.discount
+                }
+                else if(orderDiscountRule.chargeMode.id == 2)
+                {
+                    discountAmount = ((customerOrder.subTotal - customerOrder.deliveryCharge) * orderDiscountRule.discount)
+                }
+                discount = [orderDiscountRule.subTotal : discountAmount]
+                
+            }
+            else
+            {
+                discount = [0.0 : 0.0]
+                //customerOrder.setOrderDiscount(BigDecimal.ZERO)
+            }
+            
         }
-        else if(orderDiscountRule.chargeMode.id == 2)
-        {
-            discountAmount = ((customerOrder.subTotal - customerOrder.deliveryCharge) * orderDiscountRule.discount)
-        }
-        discount = [orderDiscountRule.subTotal : discountAmount]
-
-    }
-    else
-    {
-        discount = [0.0 : 0.0]
-    //customerOrder.setOrderDiscount(BigDecimal.ZERO)
-        }
-
-        }
-
+        
         if ((discount[0.0] != nil) )
         {
             discount.removeValue(forKey: 0.0)
         }
-
-    if (discount.count > 0)
-    {
-        let lower = discount.values.min()
-        let discount = discount[lower ?? 0.0]
         
-        orderDiscount = lower ?? 0.0
-        finalsubTotal = finalsubTotal - orderDiscount
-    }
-    else {
-    orderDiscount = 0.0
-    }
-
-    return orderDiscount
+        if (discount.count > 0)
+        {
+            let lower = discount.values.min()
+            let discount = discount[lower ?? 0.0]
+            
+            orderDiscount = lower ?? 0.0
+            finalsubTotal = finalsubTotal - orderDiscount
+        }
+        else {
+            orderDiscount = 0.0
+        }
+        
+        return orderDiscount
     }
     
     func sendOrderDetailToSender(customerOrder: CustomerOrder){
@@ -409,27 +407,12 @@ class PlaceOrderVC: BaseViewController {
             }
             
             // Let's convert response sent from a server side code to a NSDictionary object:
-            
-            do {
-                print(response)
-                
-                
-            }
-            catch {
-                
-                // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
-                
-                // Display an Alert dialog with a friendly error message
-                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
-                
-                print(error)
-            }
         }
         
         task.resume()
         
     }
-
+    
 }
 
 extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
@@ -462,7 +445,6 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 else {
                     fatalError("Unknown cell")
             }
-         
             cell.lblAmountValue.text = "\(customerOrder.subTotal)"
             cell.lblOrderTime.text = "\(currentDateTime())"
             cell.lblGST.text = "\(round(taxAmount))"
@@ -485,7 +467,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 else {
                     fatalError("Unknown cell")
             }
-           cell.customerOrderItems = itemSummery
+            cell.customerOrderItems = itemSummery
             return cell
         }
         else if (indexPath.section == 1) {
@@ -513,7 +495,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.section == 4) {
             
-        makeAPhoneCall()
+            makeAPhoneCall()
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -540,7 +522,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
         if section == 0{
             label.font = UIFont.boldSystemFont(ofSize: 12.0)
             let imageView = UIImageView(frame: CGRect(x: 5, y: 8, width: 30, height: 30))
-           
+            
             if let savedBranch = UserDefaults.standard.object(forKey: keyForSavedBranch) as? Data  {
                 let decoder = JSONDecoder()
                 if let loadedBranch = try? decoder.decode(BranchDetailsResponse.self, from: savedBranch) {
@@ -556,14 +538,12 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 }
             }
         }
-       
-        
         return headerView
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if(section == 0){
-        return 50
+            return 50
         }
         else {return 0}
     }
@@ -595,11 +575,10 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
     
 }
 extension PlaceOrderVC : contactStaffDelegate{
+    
     func didpressContactStaff(cell: ContactSupport) {
         makeAPhoneCall()
     }
-    
-    
 }
 
 
@@ -640,11 +619,3 @@ struct CustomerType: Codable {
         case customerOrderAddress, customerOrderTaxes, customerOrderItem, invoiceOrderDetailID, cardOption
     }
 }
-
-
-//struct CustomerOrderTax: Codable {
-//    let id: Int
-//    let orderType, taxRule, taxLabel: String
-//    let rate, taxAmount: Double
-//    let chargeMode: Int
-//}

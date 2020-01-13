@@ -7,6 +7,10 @@
 
 import UIKit
 import Alamofire
+import Firebase
+import GoogleSignIn
+
+
 
 protocol LoginDelegate {
     func userDidLogin()
@@ -16,15 +20,27 @@ class LoginViewController: BaseViewController {
 
     var loginDelegate: LoginDelegate?
 
+
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     var userDataArray = [String]()
-    
+     var customerObj: CustomerDetail!
    
 //    var isFrom = LoginIsFrom.Intro
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+       
+        
+      let googleButton = GIDSignInButton()
+        googleButton.frame = CGRect(x: 16, y: 450, width: view.frame.width - 45, height: 50)
+        view.addSubview(googleButton)
+        
+     GIDSignIn.sharedInstance()?.delegate = self
+     GIDSignIn.sharedInstance()?.presentingViewController = self
+     GIDSignIn.sharedInstance().signIn()
+        
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -33,6 +49,7 @@ class LoginViewController: BaseViewController {
         UIApplication.shared.statusBarStyle = .default
     }
 
+    
     @IBAction func loginDidPress(_ sender: UIButton) {
         
         // Read values from text fields
@@ -69,7 +86,7 @@ class LoginViewController: BaseViewController {
                     }
                     if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                         let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                        let _ = nvc.viewControllers[0] as? MainVC {
+                        let _ = nvc.viewControllers[0] as? Main {
                         
                         UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
                     }
@@ -121,12 +138,12 @@ class LoginViewController: BaseViewController {
                                 UserDefaults.standard.setValue(customer.firstName, forKey: "customerName")
                                 UserDefaults.standard.set(customer.id, forKey: "customerId")
                                
-                                self.saveCustomerObj(obj: customer, key: keyForSavedCustomer )
+                                self.saveCustomerObj(obj: customer, key: keyForSavedCustomer)
                                 self.getUserDetail()
                                 //switching the screen
                                 if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                                     let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                                    let _ = nvc.viewControllers[0] as? MainVC {
+                                    let _ = nvc.viewControllers[0] as? Main {
   
                                     UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
                                 }
@@ -155,6 +172,177 @@ class LoginViewController: BaseViewController {
         performSegue(withIdentifier: "loginToRejister", sender: self)
 
   }
+    
+    
+    func registerNewUser(userName: String,userEmail: String, userPhone: String, userPassword: String) {
+
+        let registrationDate = self.currentDateTime()
+        let ipAddress = self.getDeviceIP()
+
+        let myUrl = URL(string: ProductionPath.customerUrl + "/create")
+        var request = URLRequest(url: myUrl!)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "content-type")
+        request.addValue("application/json", forHTTPHeaderField: "Accept")
+
+        let postString = ["companyId":companyId,
+                          "customerType":"Google",
+                          "firstName": userName,
+                          "internalInfo":"",
+                          "ipAddress": ipAddress,
+                          "lastName": "",
+                          "email": userEmail,
+                          "password": userPassword,
+                          "phone": userPhone,
+                          "mobile": userPhone,
+                          "promotionEmail":"true",
+                          "promotionSms":"true",
+                          "registrationDate": registrationDate,
+                          "salt":"",
+                          "salutation":"",
+                          "status":1,
+                          ] as [String: Any]
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: postString , options: .prettyPrinted)
+        } catch let error {
+            print(error.localizedDescription)
+            showAlert(title: "Alert", message: "Something went wrong. Try again.")
+            return
+        }
+        let task = URLSession.shared.dataTask(with: request) { (data: Data?, response: URLResponse?, error: Error?) in
+
+            if error != nil
+            {
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+
+                print("error=\(String(describing: error))")
+                return
+            }
+
+            // Let's convert response sent from a server side code to a NSDictionary object:
+
+            do {
+                self.customerObj = try JSONDecoder().decode(CustomerDetail.self, from: data!)
+                let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
+
+                if let parseJSON = json {
+
+                    DispatchQueue.main.async {
+                    let userId = parseJSON["firstName"] as? String
+                    print("User id: \(String(describing: userId!))")
+
+                    if (userId?.isEmpty)!
+                    {
+                        // Display an Alert dialog with a friendly error message
+                        self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+                        return
+                    } else {
+                        let id = parseJSON["id"]!
+                        self.loginwithGoogle(userId: "\(id)")
+                        
+                        }
+
+                    }
+
+                }
+              
+            } catch {
+
+                // self.removeActivityIndicator(activityIndicator: myActivityIndicator)
+
+                // Display an Alert dialog with a friendly error message
+                self.showAlert(title: "Request Error", message: "Could not successfully perform this request. Please try again later")
+
+                print(error)
+            }
+        }
+
+        task.resume()
+    }
+    
+    
+    func loginwithGoogle(userId: String){
+        
+        startActivityIndicator()
+              
+              let URL_USER_LOGIN = ProductionPath.customerUrl+"/\(userId)"
+              
+             
+              
+              //making a post request
+              Alamofire.request(URL_USER_LOGIN, method: .get, parameters: nil).responseJSON
+                  {
+                      response in
+                      //printing response
+                      print(response)
+                      
+                      //getting the json value from the server
+                      if let result = response.result.value {
+                          let anItem = result as! NSDictionary
+                          
+                              do {
+                                  let jsonData = try JSONSerialization.data(withJSONObject: anItem, options: .prettyPrinted)
+                                  // here "jsonData" is the dictionary encoded in JSON data
+                                  let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
+                                  let jsonData1 = encodedObjectJsonString.data(using: .utf8)
+                                  
+                                  let customer = try! JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
+                               
+                                      self.stopActivityIndicator()
+                                      UserDefaults.standard.setValue(customer.firstName, forKey: "customerName")
+                                      UserDefaults.standard.set(customer.id, forKey: "customerId")
+                                     
+                                      self.saveCustomerObj(obj: customer, key: keyForSavedCustomer)
+                                      
+                                      //switching the screen
+                                      if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+                                          let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+                                          let _ = nvc.viewControllers[0] as? Main {
+        
+                                          UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+                                      }
+                                      
+                                      
+                                      self.dismiss(animated: false, completion: nil)
+                                      
+                                  
+                              } catch {
+                                  self.stopActivityIndicator()
+                                  print(error.localizedDescription)
+                              }
+                      }
+              }
+              
+    }
+}
+
+extension LoginViewController: GIDSignInDelegate{
+    func sign(_ signIn: GIDSignIn!, didSignInFor user: GIDGoogleUser!, withError error: Error!) {
+          startActivityIndicator()
+             if let err = error{
+                 print("Failed To Log in to google", err)
+              stopActivityIndicator()
+              return
+             }
+             print("Sucessfully Login", user)
+             
+             guard let idToken = user.authentication.idToken else {return}
+             guard let accessToken = user.authentication.accessToken  else {return}
+             
+             let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
+             Auth.auth().signIn(with: credentials) { (user, error) in
+                 if let err = error{
+                     print ("Failed to create a firbase user with google account",err)
+                     return
+                 }
+              guard let  uid = user?.user.uid else{return}
+                
+                self.registerNewUser(userName: (user?.user.displayName)!, userEmail: (user?.user.email)!, userPhone: (user?.user.phoneNumber ?? ""), userPassword: (user?.user.uid)!)
+              self.stopActivityIndicator()
+            
+              print("Successfully logged into firebase with google", uid)
+             }
+         }
 }
 
 struct CustomerDetail: Codable {

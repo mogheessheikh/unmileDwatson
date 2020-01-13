@@ -78,9 +78,6 @@ class SubSettingVC: BaseViewController {
             if let response = response {
                 print(response)
             }
-            
-            
-            
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])as? NSDictionary
@@ -92,7 +89,7 @@ class SubSettingVC: BaseViewController {
                         if httpResponse.statusCode == 200{
                             restResponse = true
                             self.stopActivityIndicator()
-                             self.showAlert(title: "Request Completed", message: "Your Profile is updated now")
+                             //self.showAlert(title: "Request Completed", message: "Your Profile is updated now")
                              self.getUser()
                            
                         }

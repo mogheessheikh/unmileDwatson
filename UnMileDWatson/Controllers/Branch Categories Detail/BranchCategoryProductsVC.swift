@@ -39,9 +39,7 @@ class BranchCategoryProductsVC: BaseViewController {
            title = categoryName
             
         }
-        else{
-            title = branchCategoryDetails.categories[0].name
-        }
+        
 
         if(catagoryId != 0){
             getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
@@ -63,10 +61,13 @@ class BranchCategoryProductsVC: BaseViewController {
     }
     
    
+    
     func getProductsBy(pageNo: String, pageSize: String , productName: String = "", categoryId: String) {
          UIApplication.shared.beginIgnoringInteractionEvents()
         self.startActivityIndicator()
-         
+        
+        
+        
         let parameters: [String : Any] = ["pageNo":pageNo,
                                           "pageSize": pageSize,
                                           "categoryId": categoryId,
@@ -183,14 +184,19 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
 
 extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return category[section].products?.count ?? 0
         return productWrapperlist?.count ?? 10
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! branchCategoriesCellCollectionViewCell
         cell.layer.borderWidth = 2.0
         cell.layer.borderColor = UIColor.gray.cgColor
+        
+        let price = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: price)
+        attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
         
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
             let url = URL(string: urlString) {
@@ -199,15 +205,52 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
          cell.productName.text = productWrapperlist?[indexPath.row].product?.name
         
         if(((branchCategory?.productDiscountRule) != nil)){
-            let price = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
-            let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: price)
-            attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
-            cell.productPrice.attributedText = attributeString
+           
+            let today = currentDateTime()
+            if((branchCategory?.productDiscountRule!.expiryDate)! >= today){
+        
+            if((branchCategory?.productDiscountRule!.chargeMode.name)! == "fixed"){
+                discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - (branchCategory?.productDiscountRule!.discount)!
+                cell.discountPrice.text = "\(discountedPrice)"
+            }
+            else{
+
             let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
             discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - discount
             cell.discountPrice.text = "\(discountedPrice)"
-            
+            }
+            }
+            else
+            {
+                
+                cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+                cell.discountPrice.text = ""
+            }
         }
+           // else if for product level discount is not null
+        else if(productWrapperlist?[indexPath.row].product?.productDiscountRule != nil){
+            let today = currentDateTime()
+            if((productWrapperlist?[indexPath.row].product?.productDiscountRule?.expiryDate)! >= today){
+           cell.productPrice.attributedText = attributeString
+            if((productWrapperlist?[indexPath.row].product?.productDiscountRule!.chargeMode.name)! == "fixed"){
+                discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - (productWrapperlist?[indexPath.row].product!.productDiscountRule?.discount)!
+                cell.discountPrice.text = "\(discountedPrice)"
+                
+            }
+            else{
+            let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((productWrapperlist?[indexPath.row].product!.productDiscountRule?.discount)!)/100)
+            discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - discount
+            cell.discountPrice.text = "\(discountedPrice)"
+            }
+            }
+            else
+            {
+                
+                cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+                cell.discountPrice.text = ""
+            }
+        }
+            
         else{
              cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
              cell.discountPrice.text = ""
@@ -218,10 +261,26 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
      
         if(((branchCategory?.productDiscountRule) != nil)){
+            
             let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
             discountedPrice = Int((productWrapperlist?[indexPath.row].product!.price)!)  - discount
             
             product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
+        }
+        else if (productWrapperlist?[indexPath.row].product?.productDiscountRule != nil){
+            let today = currentDateTime()
+          if((productWrapperlist?[indexPath.row].product?.productDiscountRule!.chargeMode.name)! == "fixed"){
+                discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - (productWrapperlist?[indexPath.row].product!.productDiscountRule?.discount)!
+                 product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
+                
+            }
+            else{
+                let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((productWrapperlist?[indexPath.row].product!.productDiscountRule?.discount)!)/100)
+                discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - discount
+                
+                 product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
+            }
+            
         }
         else{
              product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: productWrapperlist?[indexPath.row].product?.price, totalPrice: Double(optionPrice) , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])

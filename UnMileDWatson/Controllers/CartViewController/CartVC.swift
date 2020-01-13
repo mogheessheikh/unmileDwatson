@@ -43,7 +43,7 @@ class CartVC: BaseViewController{
 
         branch = getBranchObject(key: keyForSavedBranch)
     
-        isBranchOpenClose = isBranchClose()
+        isBranchClose = isBranchClose()
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -77,7 +77,7 @@ class CartVC: BaseViewController{
         NetworkManager.getDetails(path: url , params: nil, success: { (json, isError) in
             
             do {
-                self.isBranchOpenClose = json.rawString()!
+                self.isBranchClose = json.rawString()!
                 UIApplication.shared.endIgnoringInteractionEvents()
                 self.stopActivityIndicator()
                 
@@ -93,7 +93,7 @@ class CartVC: BaseViewController{
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
         
-        return isBranchOpenClose
+        return isBranchClose
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "cart2checkout"{
@@ -115,21 +115,27 @@ class CartVC: BaseViewController{
     }
     
     @IBAction func checkOut(_ sender: Any) {
-       
+        allItems = getAlreadyCartItems()
+        var total = 0.0
+        for (_,j) in allItems.enumerated(){
+            total  += j.purchaseSubTotal
+        }
        if tblCart.visibleCells.isEmpty {
         showAlert(title: "Cart is empty", message: "Add Items in card to continue")
         }
+       else if(total < 500){
+        
+         showAlert(title: "Add More Items", message: "Your amount is less then the minimum order amount")
+       }
        else{
       
-        if (isBranchOpenClose == "false")
+        if (isBranchClose == "false")
         {
            subTotal = 0.0
             allItems = getAlreadyCartItems()
             for (_,j) in allItems.enumerated(){
                 subTotal += j.purchaseSubTotal
             }
-            
-           
             if UserDefaults.standard.object(forKey: keyForSavedCustomer) != nil{
                 let urlArray = allItems.map({ $0.id })
                 let urlSet = Set(urlArray)
@@ -147,12 +153,7 @@ class CartVC: BaseViewController{
         }
         else{
             showAlert(title: "Dwatson is Close Now", message: "You cant place your order when branch is close")
-   
         }
-       
-       
-        
-     
     }
 }
 }
@@ -196,8 +197,7 @@ extension CartVC: CartDelegate{
             }
         }
     }
-    
-    
+
     func didTappedAddButton(cell: CartTableViewCell) {
         addMoreItems = getAlreadyCartItems()
         var indexPath = self.tblCart.indexPath(for: cell)

@@ -90,6 +90,22 @@
 		CE23FB58237D1E37006E33F8 /* UploadPrescriptionPopUP.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE23FB57237D1E37006E33F8 /* UploadPrescriptionPopUP.xib */; };
 		CE23FB5A237D274C006E33F8 /* UploadPrescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE23FB59237D274C006E33F8 /* UploadPrescriptionView.swift */; };
 		CE23FB5C237D487A006E33F8 /* PrescriptionVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE23FB5B237D487A006E33F8 /* PrescriptionVC.swift */; };
+		CE24C69F23BE6ED9007EFEDF /* Main.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C69E23BE6ED9007EFEDF /* Main.swift */; };
+		CE24C6B123BE7B25007EFEDF /* MainSliderCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6B023BE7B25007EFEDF /* MainSliderCollectionCell.swift */; };
+		CE24C6B323BF2727007EFEDF /* MainSliderTableviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6B223BF2727007EFEDF /* MainSliderTableviewCell.swift */; };
+		CE24C6B623BF27CA007EFEDF /* WebViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6B423BF27CA007EFEDF /* WebViewCell.swift */; };
+		CE24C6B723BF27CA007EFEDF /* WebViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE24C6B523BF27CA007EFEDF /* WebViewCell.xib */; };
+		CE24C6BA23BF2852007EFEDF /* UploadPrescriptionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6B823BF2852007EFEDF /* UploadPrescriptionCell.swift */; };
+		CE24C6BB23BF2852007EFEDF /* UploadPrescriptionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE24C6B923BF2852007EFEDF /* UploadPrescriptionCell.xib */; };
+		CE24C6BE23BF42C5007EFEDF /* OrderNowTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6BC23BF42C5007EFEDF /* OrderNowTableViewCell.swift */; };
+		CE24C6BF23BF42C5007EFEDF /* OrderNowTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE24C6BD23BF42C5007EFEDF /* OrderNowTableViewCell.xib */; };
+		CE24C6C223BF4316007EFEDF /* CategoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6C023BF4316007EFEDF /* CategoryTableViewCell.swift */; };
+		CE24C6C523BF4E0B007EFEDF /* MainSliderCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6C423BF4E0B007EFEDF /* MainSliderCollectionView.swift */; };
+		CE24C6C723BF58E6007EFEDF /* CategoryCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6C623BF58E6007EFEDF /* CategoryCollection.swift */; };
+		CE24C6C923BF5979007EFEDF /* CategoryCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6C823BF5979007EFEDF /* CategoryCollectionCell.swift */; };
+		CE24C6CC23BF69B4007EFEDF /* SearchBarCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6CA23BF69B4007EFEDF /* SearchBarCell.swift */; };
+		CE24C6CD23BF69B4007EFEDF /* SearchBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE24C6CB23BF69B4007EFEDF /* SearchBarCell.xib */; };
+		CE24C6CF23BFD301007EFEDF /* StartMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6CE23BFD301007EFEDF /* StartMenu.swift */; };
 		CE4367DA238FAE710002FCCC /* ChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */; };
 		CE4A4DAB236F555E0077D481 /* thankYouCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A4DA9236F555E0077D481 /* thankYouCell.swift */; };
 		CE4A4DAC236F555E0077D481 /* thankYouCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4A4DAA236F555E0077D481 /* thankYouCell.xib */; };
@@ -99,6 +115,7 @@
 		CE4A4DB4236F59FA0077D481 /* needHelpCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4A4DB2236F59FA0077D481 /* needHelpCell.xib */; };
 		CE4E182423716E2500BA12CD /* SpecialInstruction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8843C165225B178500292EB0 /* SpecialInstruction.swift */; };
 		CE4E182523716E3200BA12CD /* SpecialInstruction.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8843C166225B178500292EB0 /* SpecialInstruction.xib */; };
+		CE85E5DE23AC9990007052E9 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = CE85E5DD23AC9990007052E9 /* GoogleService-Info.plist */; };
 		CE85FD55231E57D2008099CA /* productImgCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE85FD53231E57D2008099CA /* productImgCell.swift */; };
 		CE85FD56231E57D2008099CA /* productImgCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE85FD54231E57D2008099CA /* productImgCell.xib */; };
 		CE85FD59231E5BA3008099CA /* productNameCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE85FD57231E5BA3008099CA /* productNameCategoryCell.swift */; };
@@ -212,6 +229,22 @@
 		CE23FB57237D1E37006E33F8 /* UploadPrescriptionPopUP.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPrescriptionPopUP.xib; sourceTree = "<group>"; };
 		CE23FB59237D274C006E33F8 /* UploadPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPrescriptionView.swift; sourceTree = "<group>"; };
 		CE23FB5B237D487A006E33F8 /* PrescriptionVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PrescriptionVC.swift; sourceTree = "<group>"; };
+		CE24C69E23BE6ED9007EFEDF /* Main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Main.swift; sourceTree = "<group>"; };
+		CE24C6B023BE7B25007EFEDF /* MainSliderCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSliderCollectionCell.swift; sourceTree = "<group>"; };
+		CE24C6B223BF2727007EFEDF /* MainSliderTableviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSliderTableviewCell.swift; sourceTree = "<group>"; };
+		CE24C6B423BF27CA007EFEDF /* WebViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebViewCell.swift; sourceTree = "<group>"; };
+		CE24C6B523BF27CA007EFEDF /* WebViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = WebViewCell.xib; sourceTree = "<group>"; };
+		CE24C6B823BF2852007EFEDF /* UploadPrescriptionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPrescriptionCell.swift; sourceTree = "<group>"; };
+		CE24C6B923BF2852007EFEDF /* UploadPrescriptionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPrescriptionCell.xib; sourceTree = "<group>"; };
+		CE24C6BC23BF42C5007EFEDF /* OrderNowTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderNowTableViewCell.swift; sourceTree = "<group>"; };
+		CE24C6BD23BF42C5007EFEDF /* OrderNowTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OrderNowTableViewCell.xib; sourceTree = "<group>"; };
+		CE24C6C023BF4316007EFEDF /* CategoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryTableViewCell.swift; sourceTree = "<group>"; };
+		CE24C6C423BF4E0B007EFEDF /* MainSliderCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainSliderCollectionView.swift; sourceTree = "<group>"; };
+		CE24C6C623BF58E6007EFEDF /* CategoryCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollection.swift; sourceTree = "<group>"; };
+		CE24C6C823BF5979007EFEDF /* CategoryCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionCell.swift; sourceTree = "<group>"; };
+		CE24C6CA23BF69B4007EFEDF /* SearchBarCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchBarCell.swift; sourceTree = "<group>"; };
+		CE24C6CB23BF69B4007EFEDF /* SearchBarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchBarCell.xib; sourceTree = "<group>"; };
+		CE24C6CE23BFD301007EFEDF /* StartMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenu.swift; sourceTree = "<group>"; };
 		CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVC.swift; sourceTree = "<group>"; };
 		CE4A4DA9236F555E0077D481 /* thankYouCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thankYouCell.swift; sourceTree = "<group>"; };
 		CE4A4DAA236F555E0077D481 /* thankYouCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = thankYouCell.xib; sourceTree = "<group>"; };
@@ -219,6 +252,7 @@
 		CE4A4DAE236F565D0077D481 /* orderDetailCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = orderDetailCell.xib; sourceTree = "<group>"; };
 		CE4A4DB1236F59FA0077D481 /* needHelpCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = needHelpCell.swift; sourceTree = "<group>"; };
 		CE4A4DB2236F59FA0077D481 /* needHelpCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = needHelpCell.xib; sourceTree = "<group>"; };
+		CE85E5DD23AC9990007052E9 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		CE85FD53231E57D2008099CA /* productImgCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = productImgCell.swift; sourceTree = "<group>"; };
 		CE85FD54231E57D2008099CA /* productImgCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = productImgCell.xib; sourceTree = "<group>"; };
 		CE85FD57231E5BA3008099CA /* productNameCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = productNameCategoryCell.swift; sourceTree = "<group>"; };
@@ -430,6 +464,7 @@
 				73C9E13221E0824300AB8BB4 /* AppDelegate.swift */,
 				73C9E13D21E0824600AB8BB4 /* LaunchScreen.storyboard */,
 				73C9E14021E0824600AB8BB4 /* Info.plist */,
+				CE85E5DD23AC9990007052E9 /* GoogleService-Info.plist */,
 				8829A5762286EB7100D5BD9C /* Address.json */,
 				CEC28A7D23219B190029E127 /* optiongroup.json */,
 			);
@@ -528,6 +563,7 @@
 		73E1943621EC9AC30045BB84 /* MainVC */ = {
 			isa = PBXGroup;
 			children = (
+				CE24C69D23BE6EB0007EFEDF /* SampleDesign */,
 				73B3D2A721F0A58300F18055 /* CityAreaVC */,
 				73E194A721F054C10045BB84 /* Xibs */,
 				73E1943721EC9AD60045BB84 /* MainVC.swift */,
@@ -659,6 +695,29 @@
 			path = CommonCells;
 			sourceTree = "<group>";
 		};
+		CE24C69D23BE6EB0007EFEDF /* SampleDesign */ = {
+			isa = PBXGroup;
+			children = (
+				CE24C69E23BE6ED9007EFEDF /* Main.swift */,
+				CE24C6B023BE7B25007EFEDF /* MainSliderCollectionCell.swift */,
+				CE24C6B223BF2727007EFEDF /* MainSliderTableviewCell.swift */,
+				CE24C6C423BF4E0B007EFEDF /* MainSliderCollectionView.swift */,
+				CE24C6B423BF27CA007EFEDF /* WebViewCell.swift */,
+				CE24C6B523BF27CA007EFEDF /* WebViewCell.xib */,
+				CE24C6B823BF2852007EFEDF /* UploadPrescriptionCell.swift */,
+				CE24C6B923BF2852007EFEDF /* UploadPrescriptionCell.xib */,
+				CE24C6BC23BF42C5007EFEDF /* OrderNowTableViewCell.swift */,
+				CE24C6BD23BF42C5007EFEDF /* OrderNowTableViewCell.xib */,
+				CE24C6C023BF4316007EFEDF /* CategoryTableViewCell.swift */,
+				CE24C6C623BF58E6007EFEDF /* CategoryCollection.swift */,
+				CE24C6C823BF5979007EFEDF /* CategoryCollectionCell.swift */,
+				CE24C6CA23BF69B4007EFEDF /* SearchBarCell.swift */,
+				CE24C6CB23BF69B4007EFEDF /* SearchBarCell.xib */,
+				CE24C6CE23BFD301007EFEDF /* StartMenu.swift */,
+			);
+			path = SampleDesign;
+			sourceTree = "<group>";
+		};
 		CE4367D8238FADF70002FCCC /* ChatRoom */ = {
 			isa = PBXGroup;
 			children = (
@@ -772,7 +831,9 @@
 				73C9E13F21E0824600AB8BB4 /* LaunchScreen.storyboard in Resources */,
 				39231B6A22D0C1EB00FDA3D2 /* OrderRoute.xib in Resources */,
 				8829A5772286EB7200D5BD9C /* Address.json in Resources */,
+				CE24C6B723BF27CA007EFEDF /* WebViewCell.xib in Resources */,
 				88520350225DDDFD0015B8EB /* PromoCodeCell.xib in Resources */,
+				CE85E5DE23AC9990007052E9 /* GoogleService-Info.plist in Resources */,
 				73C9E13C21E0824600AB8BB4 /* Assets.xcassets in Resources */,
 				734121C1220C06F70003C19F /* Login.storyboard in Resources */,
 				39086EEA22CB8ABC0077B6D4 /* ContactSupport.xib in Resources */,
@@ -782,6 +843,9 @@
 				881F48D322521CB90047F9BD /* OrderType.xib in Resources */,
 				CE85FD6A231E6F76008099CA /* addToCartButtonCell.xib in Resources */,
 				CE23FB58237D1E37006E33F8 /* UploadPrescriptionPopUP.xib in Resources */,
+				CE24C6BF23BF42C5007EFEDF /* OrderNowTableViewCell.xib in Resources */,
+				CE24C6CD23BF69B4007EFEDF /* SearchBarCell.xib in Resources */,
+				CE24C6BB23BF2852007EFEDF /* UploadPrescriptionCell.xib in Resources */,
 				39086EDE22CB71F50077B6D4 /* Route.xib in Resources */,
 				CE85FD5A231E5BA3008099CA /* productNameCategoryCell.xib in Resources */,
 				73C9E13A21E0824300AB8BB4 /* Main.storyboard in Resources */,
@@ -861,24 +925,30 @@
 				881659C2222D458D002D8803 /* CartTableViewCell.swift in Sources */,
 				39CE843D22BA2E3D00B6C2FC /* SideMenuCell.swift in Sources */,
 				88E0FC772268686300A7CF82 /* OrderCompleteTVC.swift in Sources */,
+				CE24C6BA23BF2852007EFEDF /* UploadPrescriptionCell.swift in Sources */,
 				CE4A4DB3236F59FA0077D481 /* needHelpCell.swift in Sources */,
 				881659BD222D1551002D8803 /* SSBadgeButton.swift in Sources */,
 				CE0D6C90235B4FE3006C64E7 /* detailOrderCell.swift in Sources */,
 				88B64C11225CA57B005BF0A1 /* PaymentMethodCell.swift in Sources */,
 				7300B5BD220AF2AD005EEB4E /* RestaurantDeliveryZonesCell.swift in Sources */,
+				CE24C6BE23BF42C5007EFEDF /* OrderNowTableViewCell.swift in Sources */,
+				CE24C6CF23BFD301007EFEDF /* StartMenu.swift in Sources */,
 				73C9E14E21E0C0F600AB8BB4 /* NetworkManager.swift in Sources */,
 				CEA38169236C62070045BE37 /* MoreVC.swift in Sources */,
 				738A426B21F5E28600577271 /* RestaurantsVC.swift in Sources */,
 				39CBCD6922BE227200DA0DC2 /* Terms&Conditions.swift in Sources */,
+				CE24C6B323BF2727007EFEDF /* MainSliderTableviewCell.swift in Sources */,
 				730F470F2202E0670016B5C5 /* BranchCategoryProductsVC.swift in Sources */,
 				39086EE522CB859C0077B6D4 /* OrderDetail.swift in Sources */,
 				73C9E13321E0824300AB8BB4 /* AppDelegate.swift in Sources */,
 				39231B6D22D0C42000FDA3D2 /* OrderSummery.swift in Sources */,
+				CE24C6C923BF5979007EFEDF /* CategoryCollectionCell.swift in Sources */,
 				88283E322282C28F00CEC1CA /* AddAddressVC.swift in Sources */,
 				39D4819D22D61BBB000BEDE3 /* SSRadioButton.swift in Sources */,
 				88079AE8226B105E00746F2B /* PlaceOrderVC.swift in Sources */,
 				882F680322609F860055E219 /* EatCrazeSettingCell.swift in Sources */,
 				39A5683822C4B721000162C0 /* orderCompleteStaticCell.swift in Sources */,
+				CE24C6C223BF4316007EFEDF /* CategoryTableViewCell.swift in Sources */,
 				88E4CDB622704718004CCE11 /* StaticCell.swift in Sources */,
 				CEBA7EA7231CFD80006CD2E0 /* NewItemDetailVC.swift in Sources */,
 				883C75D12285914C00218A12 /* AddressTableViewCell.swift in Sources */,
@@ -901,11 +971,14 @@
 				39BA08DF22C4DAD400DE2677 /* ThankYouVC.swift in Sources */,
 				88EEE1922238D68E007C41BC /* UserRegistrationVC.swift in Sources */,
 				CE85FD61231E61A7008099CA /* section4Cell.swift in Sources */,
+				CE24C69F23BE6ED9007EFEDF /* Main.swift in Sources */,
+				CE24C6B123BE7B25007EFEDF /* MainSliderCollectionCell.swift in Sources */,
 				2417BC61222FE34000FC10D5 /* FileManager+Extension.swift in Sources */,
 				CE85FD5D231E5D8C008099CA /* productOptionGroupCell.swift in Sources */,
 				88045B3D226F156E009A3AD0 /* DynamicCell.swift in Sources */,
 				734121CC220C16090003C19F /* UnmileExtensions.swift in Sources */,
 				39CE844022BA5C8D00B6C2FC /* SideMenuHeaderViewCell.swift in Sources */,
+				CE24C6C723BF58E6007EFEDF /* CategoryCollection.swift in Sources */,
 				8837602722422C1C0060625C /* CheckOutVC.swift in Sources */,
 				73C9E14F21E0C0F600AB8BB4 /* AFManager.swift in Sources */,
 				CE23FB5A237D274C006E33F8 /* UploadPrescriptionView.swift in Sources */,
@@ -913,6 +986,7 @@
 				7300B5BB2205A367005EEB4E /* RestaurantDayOpeningCell.swift in Sources */,
 				73E1943821EC9AD60045BB84 /* MainVC.swift in Sources */,
 				73C9E15C21E0CCDE00AB8BB4 /* UnMileEnums.swift in Sources */,
+				CE24C6C523BF4E0B007EFEDF /* MainSliderCollectionView.swift in Sources */,
 				CE0D6C8D235B3C44006C64E7 /* OrderDetailVC.swift in Sources */,
 				CECB523423618ED600745A04 /* HBSegmentedControl.swift in Sources */,
 				CE1E99162351179D003AD7EC /* PopularCollectionViewCell.swift in Sources */,
@@ -923,9 +997,11 @@
 				CE23FB5C237D487A006E33F8 /* PrescriptionVC.swift in Sources */,
 				881F48D622522C2C0047F9BD /* DeliveryAddress.swift in Sources */,
 				CE4A4DAB236F555E0077D481 /* thankYouCell.swift in Sources */,
+				CE24C6CC23BF69B4007EFEDF /* SearchBarCell.swift in Sources */,
 				882F680122609EF60055E219 /* EatCrazeSettingVC.swift in Sources */,
 				738A426D21F5E2E500577271 /* RestaurantsCell.swift in Sources */,
 				CEB34B842359D74300470378 /* PreviousOrderDetailVC.swift in Sources */,
+				CE24C6B623BF27CA007EFEDF /* WebViewCell.swift in Sources */,
 				73C9E15621E0CAAF00AB8BB4 /* SplashVC.swift in Sources */,
 				739D263B2203132200662166 /* RestaurantDetailCell.swift in Sources */,
 				39231B6922D0C1EB00FDA3D2 /* OrderRoute.swift in Sources */,
@@ -1085,12 +1161,15 @@
 			baseConfigurationReference = 73DA128B253A88BC72011696 /* Pods-UnMile.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/ZDCChat",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UnMileDWatson/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1098,6 +1177,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1111,12 +1191,15 @@
 			baseConfigurationReference = 617E22A6B11A7D9F84528E61 /* Pods-UnMile.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(PROJECT_DIR)/Pods/ZDCChat",
+					"$(PROJECT_DIR)",
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/UnMileDWatson/Support Files/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -1124,6 +1207,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 1.3.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

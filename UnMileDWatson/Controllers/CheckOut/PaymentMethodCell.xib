@@ -1,64 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="15702" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15704"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="paymentcell" rowHeight="161" id="KGk-i7-Jjw" customClass="PaymentMethodCell" customModule="UnMile" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="375" height="161"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="paymentcell" rowHeight="53" id="KGk-i7-Jjw" customClass="PaymentMethodCell" customModule="UnMile" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="53"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="160.5"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="53"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button opaque="NO" contentMode="scaleAspectFit" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1UD-Kj-drD">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="41"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Cash" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Taf-Kv-37y">
+                        <rect key="frame" x="94" y="11" width="161" height="25"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="375" id="PP9-5i-imx"/>
-                            <constraint firstAttribute="height" constant="41" id="qpc-ei-lgF"/>
+                            <constraint firstAttribute="width" secondItem="Taf-Kv-37y" secondAttribute="height" multiplier="125:42" constant="86.595238095238088" id="jSl-va-jy3"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
-                        <inset key="titleEdgeInsets" minX="-190" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        <inset key="imageEdgeInsets" minX="318" minY="0.0" maxX="-26" maxY="0.0"/>
-                        <state key="normal" title="Select Payment Type" image="down">
-                            <color key="titleColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        </state>
-                        <connections>
-                            <action selector="radioButtonPressed:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="4eY-St-gVb"/>
-                        </connections>
+                        <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Book" family="Bodoni 72" pointSize="17"/>
+                        <nil key="textColor"/>
+                        <nil key="highlightedColor"/>
+                    </label>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dt7-eS-tyr">
+                        <rect key="frame" x="15" y="11" width="31" height="31"/>
+                        <constraints>
+                            <constraint firstAttribute="width" secondItem="dt7-eS-tyr" secondAttribute="height" multiplier="1:1" id="CeX-ie-6uD"/>
+                        </constraints>
+                        <state key="normal" image="radiobutton"/>
                     </button>
-                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="vd8-TL-hho">
-                        <rect key="frame" x="69" y="40" width="237" height="107"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tableView>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="GgT-t2-zLg"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="vd8-TL-hho" secondAttribute="leading" constant="-69" id="ajB-9j-ssF"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="trailing" secondItem="vd8-TL-hho" secondAttribute="trailing" constant="69" id="gt3-7K-E4l"/>
-                    <constraint firstItem="vd8-TL-hho" firstAttribute="top" secondItem="1UD-Kj-drD" secondAttribute="bottom" constant="-1" id="k0O-lb-y9F"/>
-                    <constraint firstItem="1UD-Kj-drD" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" constant="-16" id="nKs-yQ-8tB"/>
-                    <constraint firstItem="vd8-TL-hho" firstAttribute="bottom" secondItem="H2p-sc-9uM" secondAttribute="bottomMargin" constant="-3" id="wXG-L8-JXT"/>
+                    <constraint firstAttribute="trailing" secondItem="Taf-Kv-37y" secondAttribute="trailing" constant="120" id="Ail-fp-rX0"/>
+                    <constraint firstItem="dt7-eS-tyr" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="Jgj-2r-v3o"/>
+                    <constraint firstItem="Taf-Kv-37y" firstAttribute="leading" secondItem="dt7-eS-tyr" secondAttribute="trailing" constant="48" id="RVB-It-h1X"/>
+                    <constraint firstItem="dt7-eS-tyr" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leadingMargin" id="VNX-wS-cTe"/>
+                    <constraint firstAttribute="bottom" secondItem="Taf-Kv-37y" secondAttribute="bottom" constant="17" id="dez-kj-6A3"/>
+                    <constraint firstItem="Taf-Kv-37y" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="11" id="rT2-Cy-69G"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="paymentTypeTable" destination="vd8-TL-hho" id="2rW-P1-84l"/>
-                <outlet property="radioButton" destination="1UD-Kj-drD" id="5UE-02-mlG"/>
+                <outlet property="lblPaymentMethod" destination="Taf-Kv-37y" id="tZP-V9-ajW"/>
+                <outlet property="radioButton" destination="dt7-eS-tyr" id="5rc-6S-LfM"/>
             </connections>
-            <point key="canvasLocation" x="132" y="195.6521739130435"/>
+            <point key="canvasLocation" x="132" y="235.23238380809596"/>
         </tableViewCell>
     </objects>
     <resources>
-        <image name="down" width="30" height="17"/>
+        <image name="radiobutton" width="30" height="30"/>
     </resources>
 </document>
