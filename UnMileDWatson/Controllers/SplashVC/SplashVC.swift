@@ -20,7 +20,7 @@ class SplashVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.getUserDetail()
+        //self.getUserDetail()
         getCompanyDetails()
     }
 
@@ -43,7 +43,7 @@ class SplashVC: BaseViewController {
                     self.view.layoutIfNeeded()
                     self.activityIndicatorView.isHidden = true
                 }, completion: nil)
-                if let _ = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
+                
                     if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                         let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
                         let mainVC = nvc.viewControllers[0] as? Main {
@@ -52,14 +52,8 @@ class SplashVC: BaseViewController {
                         
                         UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
                     }
-                }
-                else{
-                    if let loginVC = Storyboard.login.instantiateViewController(withIdentifier: LoginViewController.identifier) as? UIViewController{
-                    loginVC.title = "Signin"
-                    UIApplication.shared.keyWindow!.replaceRootViewControllerWith(loginVC, animated: true, completion: nil)
                 
-                    }
-                }
+                
             } catch let myJSONError {
                 print(myJSONError)
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
@@ -86,7 +80,7 @@ struct CompanyDetails: Codable {
     let showGuestCheckout: Int
     let companyEmailDetails: CompanyEmailDetails
     let country: Country
-    let companyType, deliveryZoneType: CompanyTypeClass
+    var companyType, deliveryZoneType: CompanyTypeClass
     let companyTemplate: CompanyTemplate
     let widgetTheme: TTheme
     let widgetSetting: WidgetSetting
@@ -205,7 +199,7 @@ struct TTheme: Codable {
 // MARK: - CompanyTypeClass
 struct CompanyTypeClass: Codable {
     let id: Int
-    let name: String
+    var name: String
     let createdate: String?
     let status, archive: Int
 }

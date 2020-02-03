@@ -38,6 +38,7 @@ class NewItemDetailVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationController?.navigationBar.isHidden = false
         let alreadyItems = getAlreadyCartItems()
         tblOptionGroup.rowHeight = 44
         // Do any additional setup after loading the view.
@@ -415,6 +416,7 @@ extension NewItemDetailVC: itemDelegate{
                     if(alreadyItems[i].product.name == product.name){
                         if(alreadyItems[i].quantity == qNumber || alreadyItems[i].quantity! > qNumber ){
                             qNumber = alreadyItems[i].quantity! + 1
+                            itemPurchaseSubTotal = itemPurchaseSubTotal * Double(qNumber)
                             // alreadyItems[i].quantity = qNumber
                         }
                         
@@ -432,9 +434,6 @@ extension NewItemDetailVC: itemDelegate{
                 items?.purchaseSubTotal = itemPurchaseSubTotal
                 items?.instructions = specialIstruction
                 print(String.init(format: "count before adding item is %i", alreadyItems.count))
-                
-                
-                //"v1px5bld"
                 
                 items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
                 alreadyItems.append(items!)

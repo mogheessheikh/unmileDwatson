@@ -469,64 +469,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1198FD0B-9EBF-42D7-80FF-7A177B3DB143"
+            uuid = "5AE85E9B-D5D0-42CE-B28D-2597E16426D4"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UnMileDWatson/Controllers/LoginViewController/LoginViewController.swift"
+            filePath = "UnMileDWatson/Controllers/Place Order/PlaceOrderVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "340"
-            endingLineNumber = "340"
-            landmarkName = "sign(_:didSignInFor:withError:)"
+            startingLineNumber = "153"
+            endingLineNumber = "153"
+            landmarkName = "tappedToPlaceOrder(_:)"
             landmarkType = "7">
-            <Locations>
-               <Location
-                  uuid = "1198FD0B-9EBF-42D7-80FF-7A177B3DB143 - 71c45cec83c6f91f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in UnMile.LoginViewController.sign(_: Swift.Optional&lt;__C.GIDSignIn&gt;, didSignInFor: Swift.Optional&lt;__C.GIDGoogleUser&gt;, withError: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
-                  moduleName = "UnMile"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/user/Downloads/Office%20Data/unMile%20Dwatson/UnMileDWatson/Controllers/LoginViewController/LoginViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "340"
-                  endingLineNumber = "340"
-                  offsetFromSymbolStart = "764">
-               </Location>
-               <Location
-                  uuid = "1198FD0B-9EBF-42D7-80FF-7A177B3DB143 - 71c45cec83c6f91f"
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "closure #1 (Swift.Optional&lt;__C.FIRAuthDataResult&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in UnMile.LoginViewController.sign(_: Swift.Optional&lt;__C.GIDSignIn&gt;, didSignInFor: Swift.Optional&lt;__C.GIDGoogleUser&gt;, withError: Swift.Optional&lt;Swift.Error&gt;) -&gt; ()"
-                  moduleName = "UnMile"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/user/Downloads/Office%20Data/unMile%20Dwatson/UnMileDWatson/Controllers/LoginViewController/LoginViewController.swift"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "340"
-                  endingLineNumber = "340"
-                  offsetFromSymbolStart = "804">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "1CD1001D-6EA8-4C5D-84BE-E710873F641A"
+            uuid = "F553F9F2-0E3E-4A8F-83D5-F6D4D697BEE0"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UnMileDWatson/Controllers/LoginViewController/LoginViewController.swift"
+            filePath = "UnMileDWatson/Controllers/CheckOut/CheckOutVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "277"
-            endingLineNumber = "277"
-            landmarkName = "loginwithGoogle(userId:)"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
+            landmarkName = "deliverCharges()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

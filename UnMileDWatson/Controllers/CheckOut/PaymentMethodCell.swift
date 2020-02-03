@@ -13,10 +13,6 @@ protocol radioButtonDelelgate {
    
 }
 class PaymentMethodCell: UITableViewCell {
-    
-    
-    
-
 
     @IBOutlet var lblPaymentMethod: UILabel!
     @IBOutlet var radioButton: UIButton!

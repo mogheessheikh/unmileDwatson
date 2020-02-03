@@ -96,6 +96,7 @@ class CheckOutVC: BaseViewController {
     @IBAction func goToSummary(_ sender: Any) {
         
        let area = getSavedAreaObject(key: keyForSavedArea)
+        let deliveryCharges = deliverCharges()
         
         if (selectedAddress == nil )
         {
@@ -112,7 +113,7 @@ class CheckOutVC: BaseViewController {
                        // showAlert(title: "AddItem in Cart", message: "")
                   //  }
                   //  else{
-                        customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: 0, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
+                        customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: deliveryCharges, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
                         performSegue(withIdentifier: "checkout2Summary", sender: self)
                     //}
                 //}
@@ -208,6 +209,33 @@ class CheckOutVC: BaseViewController {
     }
     
     
+    func deliverCharges()-> Double{
+        
+        let company = getCompanyObject(keyForSavedCompany)
+        let city = getSavedCityObject(key: keyForSavedCity)
+        let branch = getBranchObject(key: keyForSavedBranch)
+        var deliverCharge = 0.0
+        
+            if(company.deliveryZoneType.name == "CITY"){
+            
+                for (i,j) in (branch?.deliveryZones.enumerated())!{
+                
+                    if(j.city.city == city.name){
+                    
+                    deliverCharge = branch?.deliveryZones[i].deliveryFee ?? 0.0
+                }
+            }
+        }
+        
+            else if(company.deliveryZoneType.name == "CITYAREA"){
+                
+                deliverCharge = 0.0
+        }
+       return deliverCharge
+            
+    }
+    
+    
 }
 
 
@@ -285,7 +313,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
-                orderTypeCell.orderTypelbl.text =  services[indexPath.row]
+            orderTypeCell.orderTypelbl.text =  branch.paymentMethods?[indexPath.row].branchDetailService.orderType.name
                 if(self.indexPathIsSelected(indexPath)) {
                                      orderTypeCell.orderTypeRadioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
                                   } else {
@@ -300,6 +328,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
+            
             
             paymentTypeCell.lblPaymentMethod.text = branch.paymentMethods![indexPath.row].paymentType.name
             if(self.indexPathIsSelected(indexPath)) {
@@ -382,28 +411,20 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             return 81
         }
         else if (indexPath.section == 3){
-            if(reSizeOrderTypeCell){
-                
-                return 160
-            }
-            else{ return UITableView.automaticDimension}
-            
+          return 54
         }
         else if(indexPath.section == 4){
             
-            if(reSizePayementTypeCell){
-                
-                return 160
-            }
-            else{ return UITableView.automaticDimension}
-            
+           return 54
+		  
         }
         else if(indexPath.section == 5){
             return 100
             
         }
-        else{ return UITableView.automaticDimension}
-        
+        else{ return UITableView.automaticDimension
+            
+        }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let headerView = UIView(frame: CGRect(x: 0, y: 5, width: 200, height: 90))//set these values as necessary

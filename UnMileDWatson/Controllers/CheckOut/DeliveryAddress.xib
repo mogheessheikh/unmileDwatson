@@ -17,34 +17,37 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <stackView opaque="NO" contentMode="scaleToFill" spacing="103" translatesAutoresizingMaskIntoConstraints="NO" id="SI4-GN-g3f">
-                        <rect key="frame" x="8" y="8" width="304" height="40"/>
-                        <subviews>
-                            <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="&quot;Click + To Add Address&quot;" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCl-1s-kRp">
-                                <rect key="frame" x="0.0" y="0.0" width="171" height="40"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkC-ah-VkY">
-                                <rect key="frame" x="274" y="0.0" width="30" height="40"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal" image="plus-1">
-                                    <color key="titleColor" red="0.58081901069999997" green="0.0" blue="0.021739499589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="AddDeliveryAddress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zS6-tG-Xnu"/>
-                                </connections>
-                            </button>
-                        </subviews>
-                    </stackView>
+                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="&quot;Click + To Add Address&quot;" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCl-1s-kRp">
+                        <rect key="frame" x="8" y="8" width="254" height="40"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                        <textInputTraits key="textInputTraits"/>
+                    </textField>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkC-ah-VkY">
+                        <rect key="frame" x="252" y="8" width="60" height="40"/>
+                        <constraints>
+                            <constraint firstAttribute="height" constant="40" id="5Wi-XD-dvj"/>
+                            <constraint firstAttribute="width" constant="60" id="pSt-fo-S83"/>
+                        </constraints>
+                        <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <state key="normal" image="plus-1">
+                            <color key="titleColor" red="0.58081901069999997" green="0.0" blue="0.021739499589999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        </state>
+                        <connections>
+                            <action selector="AddDeliveryAddress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zS6-tG-Xnu"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="SI4-GN-g3f" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="2pD-AP-0yd"/>
-                    <constraint firstItem="SI4-GN-g3f" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="IcK-xY-KEo"/>
-                    <constraint firstAttribute="bottom" secondItem="SI4-GN-g3f" secondAttribute="bottom" constant="8" id="Kjx-6j-Dzs"/>
-                    <constraint firstAttribute="trailing" secondItem="SI4-GN-g3f" secondAttribute="trailing" constant="8" id="edW-NN-Ovb"/>
+                    <constraint firstAttribute="bottom" secondItem="FkC-ah-VkY" secondAttribute="bottom" constant="8" id="64Y-sZ-F3X"/>
+                    <constraint firstAttribute="trailing" secondItem="FkC-ah-VkY" secondAttribute="trailing" constant="8" id="Of0-at-jZL"/>
+                    <constraint firstItem="FkC-ah-VkY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="252" id="U9C-f5-TpY"/>
+                    <constraint firstItem="FkC-ah-VkY" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Y8S-QQ-Ngn"/>
+                    <constraint firstAttribute="bottom" secondItem="YCl-1s-kRp" secondAttribute="bottom" constant="8" id="YuY-Ot-gsB"/>
+                    <constraint firstItem="YCl-1s-kRp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="e9F-92-uPm"/>
+                    <constraint firstItem="YCl-1s-kRp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="pjH-oQ-91f"/>
+                    <constraint firstAttribute="trailing" secondItem="YCl-1s-kRp" secondAttribute="trailing" constant="58" id="y86-w3-9gZ"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

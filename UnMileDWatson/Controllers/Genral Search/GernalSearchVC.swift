@@ -2,8 +2,8 @@
 //  GernalSearchVC.swift
 //  UnMile
 //
-//  Created by user on 11/13/19.
-//  Copyright © 2019 Moghees Sheikh. All rights reserved.
+//  Created by user on 1/18/20.
+//  Copyright © 2020 Moghees Sheikh. All rights reserved.
 //
 
 import UIKit
@@ -11,7 +11,7 @@ import UIKit
 class GernalSearchVC: BaseViewController {
 
     @IBOutlet weak var searchbar: UISearchBar!
-    @IBOutlet weak var tbl: UITableView!
+    @IBOutlet weak var searchBarTable: UITableView!
     var isSearching = false
     var productWraper:ProductWraper!
     var productWrapperlist: [ProductWrapperList]?
@@ -20,9 +20,10 @@ class GernalSearchVC: BaseViewController {
         super.viewDidLoad()
       
         searchbar.becomeFirstResponder()
+        navigationController?.navigationBar.isHidden = true
         // Do any additional setup after loading the view.
     }
-    func getCategoryByProduct(productName: String = "") {
+    func getCategoryByProduct(productName: String) {
         self.startActivityIndicator()
         let path =  ProductionPath.menuUrl+"/active-category/?branchId=\(branchId)" + "&productName=\(productName)"
       
@@ -83,15 +84,12 @@ class GernalSearchVC: BaseViewController {
                 }
                 DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
                     // self.productSearchBar.becomeFirstResponder()
-                    
-                   self.searchbar.becomeFirstResponder()
-                    self.tbl.reloadData()
+                    self.searchbar.becomeFirstResponder()
+                    self.searchBarTable.reloadData()
                     UIApplication.shared.endIgnoringInteractionEvents()
                     self.stopActivityIndicator()
-                    
-                   
-                    
                 })
+                
             } catch let myJSONError {
                 print(myJSONError)
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
@@ -106,19 +104,27 @@ class GernalSearchVC: BaseViewController {
 
 extension GernalSearchVC : UISearchBarDelegate{
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-      
-        self.dismiss(animated: true, completion: {
-            self.presentingViewController?.dismiss(animated: true, completion: nil)
-        })
-        
-    }
-    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        if(searchText != ""){getCategoryByProduct(productName: searchText)}
-        
-        
-    }
     
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if(searchText != ""){
+            getCategoryByProduct(productName: searchText)
+            self.searchBarTable.reloadData()
+        }
+        else{
+            return
+        }
+        searchBar.showsCancelButton = true
+    }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.text = ""
+        searchBar.showsCancelButton = false
+        if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+        let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+            let _ = nvc.viewControllers[0] as? Main {
+                UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+                       }
+    }
+   
 }
 
 extension GernalSearchVC: UITableViewDelegate,UITableViewDataSource{
@@ -128,15 +134,24 @@ extension GernalSearchVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell  = tableView.dequeueReusableCell(withIdentifier: "cells", for: indexPath) as! GernalSearchCellTableViewCell
-        cell.lblProduct.text = productWrapperlist?[indexPath.row].product?.name
+        if indexPath.row >= 0 && indexPath.row < productWrapperlist?.count ??  0 {
+            cell.lblProduct.text = productWrapperlist?[indexPath.row].product?.name
+        }
+        
         
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+         if indexPath.row >= 0 {
         product = productWrapperlist?[indexPath.row].product
         let item = Storyboard.main.instantiateViewController(withIdentifier: NewItemDetailVC.identifier) as! NewItemDetailVC
         item.product = product
+        searchBarTable.deselectRow(at: indexPath, animated: false)
         self.navigationController?.pushViewController(item, animated: true)
+        }
     }
 
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 50
+    }
 }

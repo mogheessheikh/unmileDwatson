@@ -14,7 +14,7 @@ class AddAddressVC: BaseViewController {
     @IBOutlet var addressView2: UIView!
     @IBOutlet var addressView1: UIView!
     @IBOutlet var txtAddress1: UITextField!
-    @IBOutlet var txtAddress2: UITextField!
+   
     @IBOutlet var btnArea: UIButton!
     @IBOutlet var btnCity: UIButton!
     var companyDetails: CompanyDetails!
@@ -32,14 +32,28 @@ class AddAddressVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         showNavigationBar()
-        addressView2.layer.cornerRadius = 7
-        addressView1.layer.cornerRadius = 7
-        btnArea.layer.cornerRadius = 7
-        btnCity.layer.cornerRadius = 7
-
-        let user = getUserDetail()
-       customerCheck = user.1
+       
         
+       
+        btnCity.layer.cornerRadius = 7
+        btnCity.layer.cornerRadius = 7
+        btnArea.layer.cornerRadius = 7
+        btnArea.layer.cornerRadius = 7
+        
+        let user = getUserDetail()
+        
+        customerCheck = user.1
+        let BranchAddress = getCompanyObject(keyForSavedCompany)
+        if(((BranchAddress.deliveryZoneType.name) == "CITYAREA")){
+            
+            btnArea.isHidden = false
+        }
+        else{
+            
+            
+            btnArea.isHidden = true
+            
+        }
         if customerCheck != nil  {
            coustomerId = customerCheck.id
         }
@@ -68,7 +82,7 @@ class AddAddressVC: BaseViewController {
             let decoder = JSONDecoder()
             if let loadedArea = try? decoder.decode(AreaObject.self, from: savedArea) {
                 area = loadedArea
-                btnArea.setTitle(loadedArea.area, for: .normal)
+               // btnArea.setTitle(loadedArea.area, for: .normal)
             }
         }
     }
@@ -88,7 +102,7 @@ class AddAddressVC: BaseViewController {
             let decoder = JSONDecoder()
             if let loadedArea = try? decoder.decode(AreaObject.self, from: savedArea) {
                 area = loadedArea
-                btnArea.setTitle(loadedArea.area, for: .normal)
+               // btnArea.setTitle(loadedArea.area, for: .normal)
             }
         }
         
@@ -102,7 +116,7 @@ class AddAddressVC: BaseViewController {
     }
     @IBAction func addAddressTapped(_ sender: Any) {
         
-        if (txtAddress1.text == "" || txtAddress2.text == ""){
+        if (txtAddress1.text == ""){
             showAlert(title: "Address Fields are Empty", message: "Must Enter One Address Feilds")
         }
         else
@@ -124,7 +138,7 @@ class AddAddressVC: BaseViewController {
         let parameters =     ["id":0,
                               "isDefault":0,
                               "archive":0,
-                              "addressFields":[["id":0,"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id":0,"fieldName":"addressLine2","fieldValue":"\(txtAddress2!.text!)","label":"addressLine2"],["id":0,"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id":0,"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
+                              "addressFields":[["id":0,"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id":0,"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id":0,"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id":0,"fieldName":"area","fieldValue":"","label":"area"]],
                               "customer": ["id":customerCheck.id]
             ]
                 as [String: Any]
@@ -140,9 +154,6 @@ class AddAddressVC: BaseViewController {
             if let response = response {
                 print(response)
             }
-            
-            
-            
             if let data = data {
                 do {
                     let json = try JSONSerialization.jsonObject(with: data, options: [])as? NSDictionary
@@ -157,7 +168,7 @@ class AddAddressVC: BaseViewController {
                             restResponse = true
                             self.stopActivityIndicator()
                             self.txtAddress1.text = ""
-                            self.txtAddress2.text = ""
+                           
                             self.showAlert(title: "Request Completed", message: "")
                         }
                         else
@@ -180,7 +191,7 @@ class AddAddressVC: BaseViewController {
         let parameters = ["id": addressId!,
                           "isDefault":0,
                           "archive":0,
-                          "addressFields":[["id": fieldId[0],"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id": fieldId[1],"fieldName":"addressLine2","fieldValue":"\(txtAddress2!.text!)","label":"addressLine2"],["id": fieldId[2],"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id": fieldId[3],"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
+                          "addressFields":[["id": fieldId[0],"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id": fieldId[1],"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id": fieldId[2],"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id": fieldId[3],"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
                           "customer": ["id":customerCheck.id]
             ] as [String: Any]
         var request = URLRequest(url: path!)
@@ -208,7 +219,7 @@ class AddAddressVC: BaseViewController {
                                 restResponse = true
                                 self.stopActivityIndicator()
                                 self.txtAddress1.text = ""
-                                self.txtAddress2.text = ""
+                               
                                 self.showAlert(title: "Request Completed", message: "")
                             }
                             else
@@ -240,7 +251,7 @@ class AddAddressVC: BaseViewController {
             vc.addressSelection = true
             
             UserDefaults.standard.removeObject(forKey: keyForSavedArea)
-            btnArea.setTitle("Area", for: .normal)
+//            btnArea.setTitle("Area", for: .normal)
               self.navigationController?.pushViewController(vc, animated: true)
            // self.present(vc, animated: true, completion: nil)
             //self.navigationController?.pushViewController(vc, animated: true)

@@ -63,9 +63,9 @@ class BranchCategoryProductsVC: BaseViewController {
    
     
     func getProductsBy(pageNo: String, pageSize: String , productName: String = "", categoryId: String) {
-         UIApplication.shared.beginIgnoringInteractionEvents()
+        //UIApplication.shared.beginIgnoringInteractionEvents()
         self.startActivityIndicator()
-        
+        UIApplication.shared.beginIgnoringInteractionEvents()
         
         
         let parameters: [String : Any] = ["pageNo":pageNo,
@@ -94,7 +94,7 @@ class BranchCategoryProductsVC: BaseViewController {
                 self.fetchingMore = false
                 self.collectionViewProduct.reloadData()
                 UIApplication.shared.endIgnoringInteractionEvents()
-                 self.stopActivityIndicator()
+                self.stopActivityIndicator()
                     
                     if (self.isSearchingMore){ self.productSearchBar.becomeFirstResponder() }
                     
@@ -363,7 +363,7 @@ struct Branch: Codable {
         case id, name, urlPath, phone, fax, postCode, addressLine1, addressLine2, town, city, county, country
         case locationWebLogoURL = "locationWebLogoUrl"
         case emailOrder, emailClient1, emailClient2, emailClient3
-        //        case emailClientCC, smsClient
+        //case emailClientCC, smsClient
         case orderConfirmation
         case clientSendSMS = "clientSendSms"
         case clientSendMail, clientSendFax, clientPhoneNotify, encryptPassword, automaticPrinting, defaultBranch, featureBranch, timeZone, score, status, archive, orderConfirmationSetting, outsourcedDelivery, branchType, paymentMethods, services, taxes, dayOpeningTimes, deliveryZones, cuisineTypes,orderDiscountRules,promoCodeDiscountRules     
@@ -400,7 +400,7 @@ struct DeliveryZone: Codable {
     let lessThanFreeDeliveryCharge, deliveryFee: Double
     //    let firstPartZipCode, secondPartZipCode: String
     let city: CityClass
-    let area: AreaStruct
+    let area: AreaStruct?
     let status, archive: Int
     let type: CuisineType
 }
@@ -426,10 +426,12 @@ struct PaymentMethod: Codable {
     let branchDetailService: BranchDetailService
     let paymentType: BranchType
     let paymentGateway: PaymentGateway?
+    let bankDetail: String?
+    
 
     enum CodingKeys: String, CodingKey {
         case id, charge, minimumAmount, freeAmount, status, archive, chargeMode
-        case paymentType, paymentGateway
+        case paymentType, paymentGateway,bankDetail
         case branchDetailService = "service"
 
     }

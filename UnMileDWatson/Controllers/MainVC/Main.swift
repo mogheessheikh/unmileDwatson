@@ -16,6 +16,7 @@ class Main: BaseViewController {
     
     
     @IBOutlet weak var mainTableView: UITableView!
+    var pageController = UIPageControl()
     var bag = 0
     let cartBag = SSBadgeButton()
     var catagoryId = 0
@@ -66,6 +67,7 @@ class Main: BaseViewController {
     func getbranchDetail(){
               
               self.startActivityIndicator()
+        UIApplication.shared.beginIgnoringInteractionEvents()
               let path = ProductionPath.branchUrl + "/\(branchId)"
               print(path)
               
@@ -75,8 +77,9 @@ class Main: BaseViewController {
                       let jsonData =  try json.rawData()
                       let branch = try JSONDecoder().decode(Branch.self, from: jsonData)
                       self.saveBranchObject(Object: branch, key: keyForSavedBranch)
-                      
-                     self.stopActivityIndicator()
+                     
+                    UIApplication.shared.endIgnoringInteractionEvents()
+                    self.stopActivityIndicator()
                   } catch let myJSONError {
                       
                       #if DEBUG
@@ -139,6 +142,15 @@ class Main: BaseViewController {
         UserDefaults.standard.set(bag, forKey: "bag")
         cartBag.badge = String(bag)
         self.navigationItem.rightBarButtonItems = [UIBarButtonItem(customView: cartBag)]
+    }
+    
+    func uploadPrescriptionViewLoad()  {
+            view.addSubview(popUpView)
+                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0))
+                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0))
+                  
+                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
+                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,multiplier: 1, constant: 667))
     }
    @IBAction func cartButtonTapped(_ sender: Any) {
           performSegue(withIdentifier: "mainTocart", sender: self)
@@ -215,15 +227,16 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
         if(section == 0){
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "MainSliderTableviewCell", for: indexPath) as! MainSliderTableviewCell
-                
+            view.addSubview(pageController)
             return cell
             
         }
         else if (section == 1){
                let message =  companyDetails.companyAlertNotification[0].message
             let cell = tableView.dequeueReusableCell(withIdentifier: "WebViewCell", for: indexPath) as! WebViewCell
-            cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='3'><b><marquee style='color:red' scrollamount= '10'>\(message ?? "Notice:Messges")</b></marquee></font></body></html>", baseURL: nil)
+            cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='3'><b><marquee style='color:red' scrollamount= '10'>\(message ?? "")</b></marquee></font></body></html>", baseURL: nil)
             return cell
             
             
@@ -260,23 +273,31 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if(indexPath.section == 2){
-            performSegue(withIdentifier: "menuToSearch", sender: self)
+
+        if let cell = mainTableView.cellForRow(at: indexPath) as? UploadPrescriptionCell
+        {
+            cell.didSelect(indexPath: indexPath as NSIndexPath)
+            
         }
+            mainTableView.deselectRow(at: indexPath, animated: false)
+       
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(indexPath.section == 0){
+        
+        if(indexPath.section == 0)
+        {
             
             return 250
             
         }
-     else if(indexPath.section == 1){
-         
-         return 50
             
-         
-     }
-     else if(indexPath.section == 2){
+        else if(indexPath.section == 1){
+            
+         return 40
+
+        }
+
+        else if(indexPath.section == 2){
              
              return 60
              
@@ -284,7 +305,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             
         else if(indexPath.section == 3){
             
-            return 100
+            return 70
             
         }
         else if(indexPath.section == 5){
@@ -292,40 +313,12 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             return 200
             
         }
-  
         else
         {
-            return 50
-            
+            return 70
         }
     }
-    
-    /*func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        if (section == 5){
-        let headerView = UIView(frame: CGRect(x: 0, y: 5, width: 200, height: 90))//set these values as necessary
-        headerView.backgroundColor = UIColor.white
-        
-        let label = UILabel(frame: CGRect(x: tableView.bounds.size.width/2  , y: 0, width: tableView.bounds.size.width - 10, height: 24))
-        label.text = "Categories"
-        headerView.addSubview(label)
-
-        return headerView
-        }
-        else
-        {
-            return nil
-        }
-    }*/
-//    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-//        if(section == 5)
-//        {
-//            return 20
-//        }
-//        else {
-//
-//            return 0
-//        }
-//    }
+ 
 }
 
 extension Main: delegateCategory{
@@ -340,27 +333,29 @@ extension Main: delegateCategory{
 }
 
 extension Main: orderCellDelegate{
-    func orderNowCell(cell: OrderNowTableViewCell, category: BranchDetailsResponse) {
-        branchCategories = category
-             performSegue(withIdentifier: "mainTOmenu", sender: self)
-        }
-    }
+    func orderNowCell(cell: OrderNowTableViewCell) {
+         let CategoryListVC = Storyboard.main.instantiateViewController(withIdentifier: BranchCategorylistVC.identifier)
+               CategoryListVC.title = "Categorylist"
+               self.navigationController?.pushViewController(CategoryListVC, animated: true)
+               }
+}
+    
+    
+   
     
 extension Main: SearchBarDelegate{
     func didTappedSearchBar(cell: SearchBarCell) {
-         performSegue(withIdentifier: "menuToSearch", sender: self)
+          
+                      let genralSearch = Storyboard.main.instantiateViewController(withIdentifier: GernalSearchVC.identifier)
+                      genralSearch.title = "Search Products"
+                      self.navigationController?.pushViewController(genralSearch, animated: true)
     }
     
     
 }
 extension Main: PrscriptionDelegate{
     func uploadPricriptionTapped(cell: UploadPrescriptionCell) {
-          view.addSubview(popUpView)
-              view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0))
-              view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0))
-              
-              view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
-              view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,multiplier: 1, constant: 667))
+          uploadPrescriptionViewLoad()
 
     }
     
@@ -379,5 +374,56 @@ extension Main : UIImagePickerControllerDelegate, UINavigationControllerDelegate
             self.navigationController?.pushViewController(prescriptionVC, animated: true)
         }
         dismiss(animated: true, completion: nil)
+    }
+}
+
+struct ProductWraper: Codable {
+    let hasNext: Bool
+    let numberOfRecord, totalRecord: Int?
+    let totalStores, totalPages, number: Int?
+    let productWrapperList: [ProductWrapperList]
+}
+
+// MARK: - ProductWrapperList
+struct ProductWrapperList: Codable {
+    let product: Product?
+    let categoryName: String
+    let categoryID: Int
+    
+    enum CodingKeys: String, CodingKey {
+        case product, categoryName
+        case categoryID = "categoryId"
+    }
+}
+
+// MARK: - ProductDiscountRule
+struct ProductDiscountRule: Codable {
+    let id, discount, status: Int
+    let archive: Int?
+    let createdDate, expiryDate: String
+    let chargeMode: ChargeMode
+}
+
+// MARK: - ChargeMode
+struct ChargeMode: Codable {
+    let id: Int
+    let name: String
+}
+
+
+struct BranchBanner: Codable {
+    let id: Int
+    let label, displayType: String
+    let position: Int
+    let bannerURL: String?
+    let mobileBannerUrl: String?
+    let status: Int
+    let createdDate, createdBy, updatedDate, updatedBy: String
+    let company: String?
+    
+    enum CodingKeys: String, CodingKey {
+        case id, label, displayType, position,mobileBannerUrl
+        case bannerURL = "bannerUrl"
+        case status, createdDate, createdBy, updatedDate, updatedBy, company
     }
 }

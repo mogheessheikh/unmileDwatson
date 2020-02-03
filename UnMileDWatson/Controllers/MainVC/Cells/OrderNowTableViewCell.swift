@@ -8,7 +8,7 @@
 
 import UIKit
 protocol orderCellDelegate {
-    func orderNowCell(cell: OrderNowTableViewCell, category: BranchDetailsResponse)
+    func orderNowCell(cell: OrderNowTableViewCell)
 }
 
 class OrderNowTableViewCell: UITableViewCell {
@@ -52,7 +52,7 @@ class OrderNowTableViewCell: UITableViewCell {
         }
     }
     @IBAction func orderNowPressed(_ sender: Any) {
-        delegate.orderNowCell(cell: self, category: branchCategories!)
+        delegate.orderNowCell(cell: self)
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

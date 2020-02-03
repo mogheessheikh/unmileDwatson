@@ -20,7 +20,6 @@ class CartVC: BaseViewController{
     var instruction = ""
     var quantity = 1
     var items: Product!
-    //var items : OrderItem!
     var branch: Branch!
     var allItems : [CustomerOrderItem]!
     var addMoreItems : [CustomerOrderItem]!

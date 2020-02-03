@@ -19,34 +19,38 @@ class MainSliderTableviewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slidercell", for: indexPath) as! MainSliderCollectionCell
           cell.layer.borderWidth = Constants.borderWidth
-        
-        if let urlSliderString =  companyBanner?[indexPath.row].bannerURL,
+        if(companyBanner?[indexPath.row].status == 1){
+        if let urlSliderString =  companyBanner?[indexPath.row].mobileBannerUrl,
                        let url = URL(string: urlSliderString)  {
                        cell.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
                    }
+        }
         return cell
     }
      
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
         return CGSize(width: 375, height: 250)
     }
-    
 
-    
     @IBOutlet weak var pageControl: UIPageControl!
     @IBOutlet weak var sliderCollection: UICollectionView!
+    
     var companyBanner: [BranchBanner]?
     var timer = Timer()
     var counter = 0
     override func awakeFromNib() {
+        
         super.awakeFromNib()
-        // Initialization code
+
         self.sliderCollection.dataSource = self
         self.sliderCollection.delegate = self
+        
         pageControl.numberOfPages = companyBanner?.count ?? 0
         pageControl.currentPage = 0
+        
         getBranchBanners()
-        DispatchQueue.main.async {
+        
+        DispatchQueue.main.async{
                   self.timer = Timer.scheduledTimer(timeInterval: 6.0, target: self, selector: #selector(self.changeImage), userInfo: nil, repeats: true)
               }
         
@@ -56,7 +60,7 @@ class MainSliderTableviewCell: UITableViewCell, UICollectionViewDelegate, UIColl
           if counter < companyBanner?.count ?? 0 {
               let index = IndexPath.init(item: counter, section: 0)
               self.sliderCollection.scrollToItem(at: index , at: .centeredHorizontally, animated: true)
-            self.pageControl.currentPage = counter
+              self.pageControl.currentPage = counter
               counter += 1
           } else {
               counter = 0

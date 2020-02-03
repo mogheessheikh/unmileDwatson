@@ -14,6 +14,8 @@ class UploadPrescriptionView: UIView {
     @IBOutlet weak var btnGallery: UIButton!
     @IBOutlet weak var btnCamera: UIButton!
     
+    
+    
 //    var view:UIView!
 //    override init(frame: CGRect) {
 //        super.init(frame: frame)

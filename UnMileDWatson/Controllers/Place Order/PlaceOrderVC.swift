@@ -475,8 +475,13 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 else {
                     fatalError("Unknown cell")
             }
+            if(customerOrder.paymentType == "BANK"){
+                cell.lblPaymentType.text =  "\(branch.paymentMethods?[1].bankDetail ?? "")"
+            }
+            else{
+               cell.lblPaymentType.text =  "\(customerOrder.paymentType)"
+            }
             
-            cell.lblPaymentType.text =  "\(customerOrder.paymentType)"
             cell.lblInstruction.text = "\(customerOrder.specialInstructions)"
             cell.lblDeliveryTime.text = "minimum 50-70 mints"
             return cell
@@ -507,6 +512,10 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             
             return 150
         }
+            else if (indexPath.section == 1){
+                
+                return 200
+            }
         else {return UITableView.automaticDimension}
     }
     

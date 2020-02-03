@@ -2,15 +2,15 @@
 //  GernalSearchCellTableViewCell.swift
 //  UnMile
 //
-//  Created by user on 11/16/19.
-//  Copyright © 2019 Moghees Sheikh. All rights reserved.
+//  Created by user on 1/18/20.
+//  Copyright © 2020 Moghees Sheikh. All rights reserved.
 //
 
 import UIKit
 
 class GernalSearchCellTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var lblProduct: UILabel!
+ @IBOutlet weak var lblProduct: UILabel!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
