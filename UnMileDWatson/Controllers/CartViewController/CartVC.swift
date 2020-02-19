@@ -130,7 +130,7 @@ class CartVC: BaseViewController{
       
         if (isBranchClose == "false")
         {
-           subTotal = 0.0
+            subTotal = 0.0
             allItems = getAlreadyCartItems()
             for (_,j) in allItems.enumerated(){
                 subTotal += j.purchaseSubTotal
@@ -207,9 +207,6 @@ extension CartVC: CartDelegate{
             quantity += 1
             itemTotalPrice = itemPrice * Double(quantity)
             var subTotal = 0.0
-       
-        
-        
         addMoreItems[(indexPath?.row)!].quantity = quantity
         addMoreItems[(indexPath?.row)!].purchaseSubTotal = itemTotalPrice
         saveItems(allItems: addMoreItems )

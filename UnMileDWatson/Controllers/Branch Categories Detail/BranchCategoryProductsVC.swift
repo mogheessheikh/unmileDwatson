@@ -34,23 +34,18 @@ class BranchCategoryProductsVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-
         if(categoryName != ""){
            title = categoryName
-            
         }
-        
-
         if(catagoryId != 0){
-            getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
-            getCategoryDiscount(catId: catagoryId)
-
+        getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
+        getCategoryDiscount(catId: catagoryId)
         }
         else{
-          //  let segment = segmentControl.selectedSegmentIndex
-              getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
-              getCategoryDiscount(catId: branchCategoryDetails.categories[0].id)
+        getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
+        getCategoryDiscount(catId: branchCategoryDetails.categories[0].id)
         }
+        
 //
     }
     override func viewDidAppear(_ animated: Bool) {
@@ -104,11 +99,13 @@ class BranchCategoryProductsVC: BaseViewController {
             } catch let myJSONError {
                 print(myJSONError)
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+                 UIApplication.shared.endIgnoringInteractionEvents()
             }
             
         }) { (error) in
             //self.dismissHUD()
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+             //UIApplication.shared.endIgnoringInteractionEvents()
         }
 }
     
@@ -154,6 +151,7 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         productSearchBar.text = ""
+        
         productSearchBar.endEditing(true)
         
     }

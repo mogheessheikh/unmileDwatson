@@ -260,13 +260,17 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
         }
         else if (section == 4){
             
-            let cell = tableView.dequeueReusableCell(withIdentifier: "OrderNowTableViewCell", for: indexPath) as! OrderNowTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "OrderNowTableViewCell", for: indexPath) as! OrderNowTableViewCell
             cell.delegate = self
+            cell.orderBtn.layer.cornerRadius = 7
+            cell.orderBtn.layer.borderWidth = 2
+            cell.orderBtn.layer.borderColor = UIColor.lightGray.cgColor
+            
             return cell
         }
         else {
                    
-                   let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as! CategoryTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as! CategoryTableViewCell
             cell.delegate = self
                    return cell
                }
@@ -305,12 +309,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             
         else if(indexPath.section == 3){
             
-            return 70
-            
-        }
-        else if(indexPath.section == 5){
-            
-            return 200
+            return 120
             
         }
         else

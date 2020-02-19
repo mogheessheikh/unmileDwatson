@@ -215,9 +215,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                     } else {
                         cell.productImg.image  = UIImage(named: "logo")
                     }
-                    
                 }
-                
                 return cell
             }
               
@@ -282,8 +280,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 else{
 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell5", for: indexPath) as!productSpecialInstructionCell
-
-
+                
                 return cell
 
         }
@@ -292,7 +289,6 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if (indexPath.section >= 3 && !product.optionGroups.isEmpty){
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)
-            
             let cell = self.tblOptionGroup.cellForRow(at: indexPath) as! productOptionGroupCell
             if(product.optionGroups[indexPath.section-3].maxChoice ?? 0 <= 1)
             {
@@ -323,7 +319,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 
                 optionGroupOptions =  product.optionGroups[indexPath.section-3].options?[indexPath.row]
                 
-                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity: customerOptionGroupArray.count, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions,  parentOptionGroup:product?.optionGroups[indexPath.section-2],customerOrderItem: items)
+                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity: customerOptionGroupArray.count, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions,  parentOptionGroup:product?.optionGroups[indexPath.section-3],customerOrderItem: items)
                 
                 customerOrderItemOptionArray.append(customerOrderItemOptionObj)
                 
@@ -333,7 +329,6 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                     
                     if((optionalArray[indexPath.section - 3 - mustCount]) is String)
                     {
-                        
                         optionalArray[indexPath.section - 3 - mustCount ] = [oG]
                         customerOptionGroupArray += [oG]
                     }
@@ -359,7 +354,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
             }
         }
         else{
-            tblOptionGroup.allowsSelection = false
+            tblOptionGroup.deselectRow(at: indexPath, animated: true)
         }
     }
 }
@@ -378,40 +373,39 @@ extension NewItemDetailVC: radio_checkDelegate{
 
 extension NewItemDetailVC: itemDelegate{
     func didPressAddItem(cell: addToCartButtonCell) {
+
         
         if(mustArray.contains("") && optionGroup.count > 0 ){
-            showAlert(title: "Selection is missing", message: "Must choose required selection")
+        showAlert(title: "Selection is missing", message: "Must choose required selection")
         }
         else{
-//            let indexPath = NSIndexPath(row: 0, section: product.optionGroups?.count ?? 0 + 5)
-//            let cell = tblOptionGroup.cellForRow(at: indexPath as IndexPath) as! productSpecialInstructionCell
-            let specialIstruction = "" //cell.specialInstructions.text!
             
-            if (optionGroup.count > 0){
-                customerOptionGroupArray += mustArray as! Array<CustomerOptionGroup>
-                for (j,i) in customerOptionGroupArray.enumerated(){
-                    itemPurchaseSubTotal += Double(i.options[j].price ?? 0.0)
-                }
-            }
-            else{
-                
-                itemPurchaseSubTotal = ((product.price  ?? 0.0) * Double(qNumber))
-            }
+            let specialIstruction = ""
             var productPrice = 0.0
-            if(product.price != 0.0){
-                productPrice = product.price ?? 0.0
+            if !(optionGroup.isEmpty){
+                customerOptionGroupArray += mustArray as! Array<CustomerOptionGroup>
+                var optionsSubtotal = 0.0
                 
+                for i in 0..<customerOptionGroupArray[0].options.count {
+                 optionsSubtotal += customerOptionGroupArray[0].options[i].price!
+                }
+                itemPurchaseSubTotal = (Double(qNumber)) * optionsSubtotal
+                productPrice = customerOptionGroupArray[0].options[0].price!
             }
             else{
-                productPrice = itemPurchaseSubTotal
+
+                itemPurchaseSubTotal = ((product.price ?? 0.0) * Double(qNumber))
+                productPrice = product.price ?? 0.0
+
             }
-            
             cProduct = CustomerProduct.init(id: product.id, code: product.code, name: product.name, description: product.description, productPhotoURL: product.productPhotoURL ?? "logo", price: productPrice, position: product.position, status: product.status, archive: product.archive, optionGroups: customerOptionGroupArray)
             
             var alreadyItems = getAlreadyCartItems()
+            
             // update existing item in cart
-            if alreadyItems.contains(where: { $0.product.name == product.name }) {
-                
+            
+            if alreadyItems.contains(where: { $0.product.name == product.name }) || customerOptionGroupArray.contains(where: {$0.name == product.optionGroups[0].name})  {
+
                 for i in alreadyItems.indices {
                     if(alreadyItems[i].product.name == product.name){
                         if(alreadyItems[i].quantity == qNumber || alreadyItems[i].quantity! > qNumber ){
@@ -419,7 +413,6 @@ extension NewItemDetailVC: itemDelegate{
                             itemPurchaseSubTotal = itemPurchaseSubTotal * Double(qNumber)
                             // alreadyItems[i].quantity = qNumber
                         }
-                        
                         alreadyItems[i].quantity = qNumber
                         alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
                         alreadyItems[i].instructions = specialIstruction
@@ -429,6 +422,7 @@ extension NewItemDetailVC: itemDelegate{
                 saveItems(allItems: alreadyItems)
             }
                 // add new item in cart
+                
             else{
                 items?.quantity = qNumber
                 items?.purchaseSubTotal = itemPurchaseSubTotal
@@ -462,7 +456,6 @@ extension NewItemDetailVC : itemPlusMinusDelegate{
         if qNumber  > 1 {
             qNumber -= 1
             cell.quantity.text = String(qNumber)
-          
         }
     }
 }

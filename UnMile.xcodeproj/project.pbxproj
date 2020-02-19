@@ -262,6 +262,7 @@
 		CE85FD64231E6EF9008099CA /* productSpecialInstructionCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = productSpecialInstructionCell.xib; sourceTree = "<group>"; };
 		CE85FD67231E6F76008099CA /* addToCartButtonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = addToCartButtonCell.swift; sourceTree = "<group>"; };
 		CE85FD68231E6F76008099CA /* addToCartButtonCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = addToCartButtonCell.xib; sourceTree = "<group>"; };
+		CE88D41723F1B61F006FC56F /* Easypay.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Easypay.framework; path = "../EasyPesa sdk /Build Production_UAT/Easypay.framework"; sourceTree = "<group>"; };
 		CE91170F234DF07D00C44552 /* branchCategoriesCellCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = branchCategoriesCellCollectionViewCell.swift; sourceTree = "<group>"; };
 		CEA38168236C62070045BE37 /* MoreVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreVC.swift; sourceTree = "<group>"; };
 		CEB34B832359D74300470378 /* PreviousOrderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviousOrderDetailVC.swift; sourceTree = "<group>"; };
@@ -590,6 +591,7 @@
 		79E003D93CB1AEFDB6C8CAE5 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CE88D41723F1B61F006FC56F /* Easypay.framework */,
 				0EF8567F7141A8E81B1169D8 /* libPods-UnMile.a */,
 			);
 			name = Frameworks;
@@ -1172,7 +1174,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1202,7 +1204,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 2.3;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

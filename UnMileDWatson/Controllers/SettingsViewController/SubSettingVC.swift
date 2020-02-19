@@ -36,17 +36,25 @@ class SubSettingVC: BaseViewController {
         
     }
     @IBAction func updateDidPressed(_ sender: Any) {
-         self.startActivityIndicator()
+      
         
-        let path = URL(string: ProductionPath.customerUrl + "/update")
+        
+       
         let firstName = tfFirstName.text
         let lastName = tfLastName.text
         let email = tfEmail.text
         let phone = tfPhone.text
         let mobile = tfMobile.text
-    
         
-        let parameters =   ["id":userData!.id,
+        if(phone!.isEmpty || mobile!.isEmpty){
+            self.showAlert(title: "Contact number is not entered", message: "Must enter your contact number")
+            return
+        }
+        else{
+            
+            self.startActivityIndicator()
+             let path = URL(string: ProductionPath.customerUrl + "/update")
+            let parameters =   ["id":userData!.id,
                             "customerType": "\(userData!.customerType)",
                             "ipAddress": "\(userData!.ipAddress)",
                             "internalInfo": "",
@@ -105,6 +113,7 @@ class SubSettingVC: BaseViewController {
             }
             
             }.resume()
+        }
         
     }
 
@@ -153,22 +162,4 @@ class SubSettingVC: BaseViewController {
     }
     
 }
-//"id":company.id,
-//"name": "\(company.name)",
-//"description": "\(company.description)",
-//"locationWebLogoURL": "\(company.locationWebLogoURL)",
-//"iOSAppURL": "\(company.iOSAppURL)",
-//"androidAppURL": "\(company.androidAppURL)",
-//"status": company.status,
-//"archive": company.archive,
-//"salesCompanyName": "\(company.salesCompanyName)",
-//"clientSendPushNotification": company.clientSendPushNotification,
-//"homeURL": "\(company.homeURL)",
-//"companyEmailDetails": "\(company.companyEmailDetails)",
-//"country": "\(company.country)",
-//"companyType": company.companyType,
-//"deliveryZoneType": company.deliveryZoneType,
-//"companyTemplate": company.companyTemplate,
-//"listingRedirection": company.listingRedirection,
-//"companyLocales": company.companyLocales,
-//"addressFieldRules": company?.addressFieldRules
+

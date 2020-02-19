@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class CheckOutVC: BaseViewController {
  
     @IBOutlet var checkOutButton: UIButton!
@@ -106,19 +107,21 @@ class CheckOutVC: BaseViewController {
             
             showAlert(title: "Selection Missing", message: "Must select all selection")
         }
+        else if(userPhone == ""){
+            
+           showAlert(title: "Phone Number Field Can't be Empty", message: "Update your phone number in 'MyProfile'" )
+            return
+        }
+            
         else{
-            //for i in branch.deliveryZones{
-               // if i.area.area == area?.area{
-                 //   if(Int(totalprice) < i.minimumDelivery){
-                       // showAlert(title: "AddItem in Cart", message: "")
-                  //  }
-                  //  else{
-                        customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: deliveryCharges, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
-                        performSegue(withIdentifier: "checkout2Summary", sender: self)
-                    //}
-                //}
-                
-            //}
+            
+            if(paymentType == "CARD"){
+                showAlert(title: "no card", message: "cant select card")
+            }
+            else{
+                customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: deliveryCharges, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
+                    performSegue(withIdentifier: "checkout2Summary", sender: self)
+        }
         }
         
     }
@@ -382,7 +385,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                                          selectedIndex = indexPath as NSIndexPath
                                          
                                          tblCheckOut.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
-                                         
+                                         paymentType = branch.paymentMethods![indexPath.row].paymentType.name   
                                          tblCheckOut.reloadData()
                                      }
                        else{

@@ -469,32 +469,32 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "5AE85E9B-D5D0-42CE-B28D-2597E16426D4"
-            shouldBeEnabled = "Yes"
+            uuid = "FC9D07FD-26EE-4EDE-9164-E8C21AA7740E"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UnMileDWatson/Controllers/Place Order/PlaceOrderVC.swift"
+            filePath = "UnMileDWatson/Controllers/ItemDetail/NewItemDetailVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
-            landmarkName = "tappedToPlaceOrder(_:)"
+            startingLineNumber = "293"
+            endingLineNumber = "293"
+            landmarkName = "tableView(_:didSelectRowAt:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "F553F9F2-0E3E-4A8F-83D5-F6D4D697BEE0"
+            uuid = "56721859-6CA0-41EC-B978-398C01753D61"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "UnMileDWatson/Controllers/CheckOut/CheckOutVC.swift"
+            filePath = "UnMileDWatson/Controllers/CartViewController/CartVC.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "219"
-            endingLineNumber = "219"
-            landmarkName = "deliverCharges()"
+            startingLineNumber = "131"
+            endingLineNumber = "131"
+            landmarkName = "checkOut(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

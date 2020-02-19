@@ -18,8 +18,9 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="EWv-d9-pfW">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <rect key="frame" x="20" y="7" width="280" height="30"/>
                         <color key="backgroundColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="24"/>
                         <state key="normal" title="Order Now">
                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
@@ -29,17 +30,17 @@
                     </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="bottom" secondItem="EWv-d9-pfW" secondAttribute="bottom" id="D9e-V7-U5n"/>
-                    <constraint firstAttribute="trailing" secondItem="EWv-d9-pfW" secondAttribute="trailing" id="RC5-Mj-pdy"/>
-                    <constraint firstItem="EWv-d9-pfW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="aiC-H1-eXG"/>
-                    <constraint firstItem="EWv-d9-pfW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="ewZ-xx-C5H"/>
+                    <constraint firstAttribute="trailing" secondItem="EWv-d9-pfW" secondAttribute="trailing" constant="20" id="LXW-U3-TFW"/>
+                    <constraint firstItem="EWv-d9-pfW" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="7" id="Olv-Yn-LIP"/>
+                    <constraint firstItem="EWv-d9-pfW" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="20" id="Ryh-Ev-25J"/>
+                    <constraint firstAttribute="bottom" secondItem="EWv-d9-pfW" secondAttribute="bottom" constant="7" id="oaR-mH-65B"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="orderBtn" destination="EWv-d9-pfW" id="tYt-hS-B7Q"/>
             </connections>
-            <point key="canvasLocation" x="139" y="106"/>
+            <point key="canvasLocation" x="137.68115942028987" y="105.80357142857143"/>
         </tableViewCell>
     </objects>
 </document>

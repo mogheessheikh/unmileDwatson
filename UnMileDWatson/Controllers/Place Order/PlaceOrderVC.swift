@@ -162,7 +162,7 @@ class PlaceOrderVC: BaseViewController {
             "paymentType": customerOrder.paymentType,
             "phoneNotify":false,
             "sendFax":false,
-            "sendSms":false,
+            "sendSms":true,
             "specialInstructions":"\(customerOrder.specialInstructions)",
             "subTotal": "\(finalsubTotal)",
             "amount": "\(customerOrder.subTotal)",
