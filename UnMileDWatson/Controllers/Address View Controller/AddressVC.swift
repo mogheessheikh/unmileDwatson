@@ -12,8 +12,6 @@ class AddressVC: BaseViewController {
 
     var totalAddress : [Address]!
     var addressList : [Address]?
-
-    
     var addressFields = [AddressField]()
     var addressField : CustomerOrderAddressField!
     var customerorderaddress : CustomerOrderAddress!
@@ -167,8 +165,6 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
     {
         return true
     }
-   
-    
     }
 
 extension AddressVC : editAddressDelegate {

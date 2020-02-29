@@ -299,14 +299,13 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             if let savedAddress = UserDefaults.standard.object(forKey: keyForSavedCustomerAddress) as? Data  {
                 let decoder = JSONDecoder()
                 if let loaded = try? decoder.decode(Address.self, from: savedAddress) {
-                    
                     selectedAddress  =  CustomerOrderAddress.init(id: 0, addressID: loaded.id, customerOrderAddressFields: loaded.addressFields)
                     
                 }
                 // Do any additional setup after loading the view.
             }
             if(selectedAddress != nil){
-                cell.deliveryAddress.text = "\(selectedAddress.customerOrderAddressFields[1].fieldValue + " " + selectedAddress.customerOrderAddressFields[2].fieldValue + " " + selectedAddress.customerOrderAddressFields[3].fieldValue)"
+            cell.deliveryAddress.text = "\(selectedAddress.customerOrderAddressFields[0].fieldValue + " " + selectedAddress.customerOrderAddressFields[1].fieldValue + " " + selectedAddress.customerOrderAddressFields[2].fieldValue + " " + selectedAddress.customerOrderAddressFields[3].fieldValue)"
             }
             cell.delegate = self
             return cell

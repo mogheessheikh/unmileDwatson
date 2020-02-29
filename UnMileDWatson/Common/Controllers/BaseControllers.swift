@@ -13,6 +13,7 @@ class BaseViewController: UIViewController {
 
     var cityCheck: CityObject?
     var areaCheck: AreaObject?
+    var slectedProduct:Product?
     var branchCheck: Branch?
     var customerCheck: CustomerDetail!
     var companyCheck: CompanyDetails!
@@ -498,6 +499,15 @@ class BaseViewController: UIViewController {
         }
         
     }
+    func saveProduct(Object: Product, key: String) {
+           
+           let encoder = JSONEncoder()
+           if let encoded = try? encoder.encode(Object) {
+               let defaults = UserDefaults.standard
+               defaults.set(encoded, forKey: key)
+           }
+           
+       }
     
     func saveCityObject(Object : CityObject , key: String){
         
@@ -548,6 +558,20 @@ class BaseViewController: UIViewController {
                 areaCheck = loadedArea
             }
              return areaCheck!
+        }
+        else{
+            return nil
+        }
+       
+    }
+    func getSavedProductObject(key: String) -> Product? {
+        
+        if let savedArea = UserDefaults.standard.object(forKey: key) as? Data  {
+            let decoder = JSONDecoder()
+            if let loadedProduct = try? decoder.decode(Product.self, from: savedArea) {
+                slectedProduct = loadedProduct
+            }
+             return slectedProduct!
         }
         else{
             return nil

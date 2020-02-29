@@ -13,7 +13,7 @@ protocol addAddressDelegate {
 }
 class DeliveryAddress: UITableViewCell {
 
-    @IBOutlet var deliveryAddress: UITextField!
+    @IBOutlet var deliveryAddress: UILabel!
     var delegate: addAddressDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()

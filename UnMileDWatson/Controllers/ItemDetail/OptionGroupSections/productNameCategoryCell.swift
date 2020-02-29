@@ -8,13 +8,19 @@
 
 import UIKit
 
+protocol detailDescriptionDelegate {
+    func didPressedDetailDescription(cell: productNameCategoryCell)
+}
+
 class productNameCategoryCell: UITableViewCell {
 
+    @IBOutlet weak var detailDescriptionBtn: UIButton!
     @IBOutlet weak var subview1: UIView!
     @IBOutlet weak var descriptionLbl: UILabel!
     @IBOutlet weak var subview2: UIView!
     @IBOutlet weak var price: UILabel!
     @IBOutlet weak var productName: UILabel!
+    var delegate : detailDescriptionDelegate?
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
@@ -26,4 +32,8 @@ class productNameCategoryCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+    @IBAction func detailDescriptionPressed(_ sender: Any) {
+        delegate?.didPressedDetailDescription(cell: self)
+        
+    }
 }

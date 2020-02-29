@@ -10,7 +10,7 @@ import UIKit
 import Alamofire
 import AlamofireImage
 
-class NewItemDetailVC: BaseViewController {
+class NewItemDetailVC: BaseViewController,UIPopoverPresentationControllerDelegate {
     
     @IBOutlet weak var tblOptionGroup: UITableView!
     var product: Product!
@@ -221,9 +221,17 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
               
             else if (indexPath.section == 1){
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell2", for: indexPath) as! productNameCategoryCell
-                cell.subview1.layer.cornerRadius = 5
-                cell.descriptionLbl.text = product.description
+                
+                let htmlString = product?.description ?? ""
+                let htmlData = NSString(string: htmlString).data(using: String.Encoding.unicode.rawValue)
+
+                let options = [NSAttributedString.DocumentReadingOptionKey.documentType: NSAttributedString.DocumentType.html]
+
+                let attributedString = try! NSAttributedString(data: htmlData!, options: options, documentAttributes: nil)
+
+                cell.descriptionLbl.attributedText = attributedString
                 cell.productName.text = product.name
+                cell.delegate = self
                 return cell
             }
                 
@@ -404,13 +412,13 @@ extension NewItemDetailVC: itemDelegate{
             
             // update existing item in cart
             
-            if alreadyItems.contains(where: { $0.product.name == product.name }) || customerOptionGroupArray.contains(where: {$0.name == product.optionGroups[0].name})  {
+            if alreadyItems.contains(where: { $0.product.name == product.name }) {
 
                 for i in alreadyItems.indices {
                     if(alreadyItems[i].product.name == product.name){
                         if(alreadyItems[i].quantity == qNumber || alreadyItems[i].quantity! > qNumber ){
-                            qNumber = alreadyItems[i].quantity! + 1
-                            itemPurchaseSubTotal = itemPurchaseSubTotal * Double(qNumber)
+                            qNumber = (alreadyItems[i].quantity!) + 1
+                            itemPurchaseSubTotal =  alreadyItems[i].product.price * Double(qNumber)
                             // alreadyItems[i].quantity = qNumber
                         }
                         alreadyItems[i].quantity = qNumber
@@ -419,6 +427,7 @@ extension NewItemDetailVC: itemDelegate{
                         alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
                     }
                 }
+                
                 saveItems(allItems: alreadyItems)
             }
                 // add new item in cart
@@ -458,6 +467,25 @@ extension NewItemDetailVC : itemPlusMinusDelegate{
             cell.quantity.text = String(qNumber)
         }
     }
+}
+
+
+extension NewItemDetailVC: detailDescriptionDelegate{
+    func didPressedDetailDescription(cell: productNameCategoryCell) {
+        let popoverContentController = DetailDescription.init(nibName: "DetailDescription", bundle: nil)
+        popoverContentController.modalPresentationStyle = .popover
+
+        if let popoverPresentationController = popoverContentController.popoverPresentationController {
+        popoverPresentationController.permittedArrowDirections = .up
+        popoverPresentationController.sourceView = self.view
+        popoverPresentationController.sourceRect = self.view.frame
+        popoverPresentationController.delegate = self
+       
+        present(popoverContentController as UIViewController, animated: true, completion: nil)
+        
+    }
+ 
+}
 }
 struct CustomerOrder: Codable {
     let id: Int
@@ -538,7 +566,7 @@ struct CustomerOrderItem: Codable {
 struct CustomerOrderItemOption: Codable {
     //let id : Int
     let quantity, purchaseSubTotal: Int
-    let option: Option?
+    var option: Option?
    // let parentOption: Option?
     var parentOptionGroup: OptionGroup?
     var customerOrderItem : CustomerOrderItem?

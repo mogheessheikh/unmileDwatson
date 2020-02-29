@@ -17,13 +17,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="56"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <textField opaque="NO" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="&quot;Click + To Add Address&quot;" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="YCl-1s-kRp">
-                        <rect key="frame" x="8" y="8" width="254" height="40"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </textField>
                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FkC-ah-VkY">
                         <rect key="frame" x="252" y="8" width="60" height="40"/>
                         <constraints>
@@ -38,23 +31,29 @@
                             <action selector="AddDeliveryAddress:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="zS6-tG-Xnu"/>
                         </connections>
                     </button>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="My Address" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VFu-Bx-jow">
+                        <rect key="frame" x="8" y="8" width="236" height="40"/>
+                        <fontDescription key="fontDescription" name="AppleSDGothicNeo-Medium" family="Apple SD Gothic Neo" pointSize="16"/>
+                        <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
                 <constraints>
                     <constraint firstAttribute="bottom" secondItem="FkC-ah-VkY" secondAttribute="bottom" constant="8" id="64Y-sZ-F3X"/>
                     <constraint firstAttribute="trailing" secondItem="FkC-ah-VkY" secondAttribute="trailing" constant="8" id="Of0-at-jZL"/>
                     <constraint firstItem="FkC-ah-VkY" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="252" id="U9C-f5-TpY"/>
                     <constraint firstItem="FkC-ah-VkY" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="Y8S-QQ-Ngn"/>
-                    <constraint firstAttribute="bottom" secondItem="YCl-1s-kRp" secondAttribute="bottom" constant="8" id="YuY-Ot-gsB"/>
-                    <constraint firstItem="YCl-1s-kRp" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="e9F-92-uPm"/>
-                    <constraint firstItem="YCl-1s-kRp" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="pjH-oQ-91f"/>
-                    <constraint firstAttribute="trailing" secondItem="YCl-1s-kRp" secondAttribute="trailing" constant="58" id="y86-w3-9gZ"/>
+                    <constraint firstAttribute="bottom" secondItem="VFu-Bx-jow" secondAttribute="bottom" constant="8" id="c17-MM-tRy"/>
+                    <constraint firstItem="FkC-ah-VkY" firstAttribute="leading" secondItem="VFu-Bx-jow" secondAttribute="trailing" constant="8" id="iBK-MI-ixp"/>
+                    <constraint firstItem="VFu-Bx-jow" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="8" id="rsk-DC-a5M"/>
+                    <constraint firstItem="VFu-Bx-jow" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="8" id="uOm-ez-lIK"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="deliveryAddress" destination="YCl-1s-kRp" id="SnI-5b-gqn"/>
+                <outlet property="deliveryAddress" destination="VFu-Bx-jow" id="w81-Nc-EUK"/>
             </connections>
-            <point key="canvasLocation" x="132.80000000000001" y="149.32533733133434"/>
+            <point key="canvasLocation" x="170" y="107"/>
         </tableViewCell>
     </objects>
     <resources>

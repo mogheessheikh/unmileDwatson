@@ -104,6 +104,8 @@
 		CE24C6CF23BFD301007EFEDF /* StartMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6CE23BFD301007EFEDF /* StartMenu.swift */; };
 		CE261F5D23D2F8320019AADE /* GernalSearchCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */; };
 		CE261F5F23D2F86B0019AADE /* GernalSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */; };
+		CE3EF0AB240A64E3001CEDE2 /* DetailDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3EF0A9240A64E3001CEDE2 /* DetailDescription.swift */; };
+		CE3EF0AC240A64E3001CEDE2 /* DetailDescription.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3EF0AA240A64E3001CEDE2 /* DetailDescription.xib */; };
 		CE4367DA238FAE710002FCCC /* ChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */; };
 		CE4A4DAB236F555E0077D481 /* thankYouCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4A4DA9236F555E0077D481 /* thankYouCell.swift */; };
 		CE4A4DAC236F555E0077D481 /* thankYouCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE4A4DAA236F555E0077D481 /* thankYouCell.xib */; };
@@ -241,6 +243,8 @@
 		CE24C6CE23BFD301007EFEDF /* StartMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenu.swift; sourceTree = "<group>"; };
 		CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchCellTableViewCell.swift; sourceTree = "<group>"; };
 		CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchVC.swift; sourceTree = "<group>"; };
+		CE3EF0A9240A64E3001CEDE2 /* DetailDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescription.swift; sourceTree = "<group>"; };
+		CE3EF0AA240A64E3001CEDE2 /* DetailDescription.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailDescription.xib; sourceTree = "<group>"; };
 		CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVC.swift; sourceTree = "<group>"; };
 		CE4A4DA9236F555E0077D481 /* thankYouCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = thankYouCell.swift; sourceTree = "<group>"; };
 		CE4A4DAA236F555E0077D481 /* thankYouCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = thankYouCell.xib; sourceTree = "<group>"; };
@@ -616,6 +620,8 @@
 				CEBA7EA6231CFD80006CD2E0 /* NewItemDetailVC.swift */,
 				39E715B6230BE8DA00C85B16 /* OptionGroupCell.swift */,
 				CE85FD6B231E6FBD008099CA /* OptionGroupSections */,
+				CE3EF0A9240A64E3001CEDE2 /* DetailDescription.swift */,
+				CE3EF0AA240A64E3001CEDE2 /* DetailDescription.xib */,
 			);
 			path = ItemDetail;
 			sourceTree = "<group>";
@@ -865,6 +871,7 @@
 				88B64C12225CA57B005BF0A1 /* PaymentMethodCell.xib in Resources */,
 				39086EE622CB859C0077B6D4 /* OrderDetail.xib in Resources */,
 				CE4A4DB0236F565D0077D481 /* orderDetailCell.xib in Resources */,
+				CE3EF0AC240A64E3001CEDE2 /* DetailDescription.xib in Resources */,
 				CE85FD66231E6EF9008099CA /* productSpecialInstructionCell.xib in Resources */,
 				39231B6E22D0C42000FDA3D2 /* OrderSummery.xib in Resources */,
 				39086EE222CB82150077B6D4 /* OrderItemsSummery.xib in Resources */,
@@ -954,6 +961,7 @@
 				39086EE522CB859C0077B6D4 /* OrderDetail.swift in Sources */,
 				73C9E13321E0824300AB8BB4 /* AppDelegate.swift in Sources */,
 				39231B6D22D0C42000FDA3D2 /* OrderSummery.swift in Sources */,
+				CE3EF0AB240A64E3001CEDE2 /* DetailDescription.swift in Sources */,
 				CE24C6C923BF5979007EFEDF /* CategoryCollectionCell.swift in Sources */,
 				88283E322282C28F00CEC1CA /* AddAddressVC.swift in Sources */,
 				39D4819D22D61BBB000BEDE3 /* SSRadioButton.swift in Sources */,
@@ -1174,7 +1182,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1204,7 +1212,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.3;
+				CURRENT_PROJECT_VERSION = 2.5;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

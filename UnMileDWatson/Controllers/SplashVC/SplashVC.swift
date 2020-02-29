@@ -79,13 +79,13 @@ struct CompanyDetails: Codable {
     let chatScript, facebookPixel, googleAnalytics: String
     let showGuestCheckout: Int
     let companyEmailDetails: CompanyEmailDetails
-    let country: Country
+    let country: Country?
     var companyType, deliveryZoneType: CompanyTypeClass
     let companyTemplate: CompanyTemplate
     let widgetTheme: TTheme
     let widgetSetting: WidgetSetting
     let listingRedirection: String
-    let companyLocales: [CompanyLocale]
+    let companyLocales: [CompanyLocale]?
     let addressFieldRules: [AddressFieldRule]
     let companyIntegrations: [CompanyIntegration]
     let emailTemplates: String?
@@ -167,8 +167,8 @@ struct CompanyIntegrationParam: Codable {
 // MARK: - CompanyLocale
 struct CompanyLocale: Codable {
     let id: Int
-    let country, language: String
-    let isdefault, status, archive: Int
+    let country, language: String?
+    let isdefault, status, archive: Int?
 }
 
 // MARK: - CompanyTemplate
@@ -206,9 +206,9 @@ struct CompanyTypeClass: Codable {
 
 // MARK: - Country
 struct Country: Codable {
-    let id: Int
-    let country: String
-    let status, archive: Int
+    let id: Int?
+    let country: String?
+    let status, archive: Int?
 }
 
 // MARK: - PaymentGateway

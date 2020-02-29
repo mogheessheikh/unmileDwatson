@@ -336,7 +336,7 @@ struct Branch: Codable {
     let id: Int
     let name, urlPath, phone, fax: String
     let postCode, addressLine1, addressLine2, town: String
-    let city, county, country: String
+    let city, county, country: String?
     let locationWebLogoURL: String?
     let emailOrder, emailClient1, emailClient2, emailClient3: String
     //    let emailClientCC, smsClient: String

@@ -23,6 +23,9 @@ class CartTableViewCell: UITableViewCell {
     @IBOutlet var SpecialInstruction: UILabel!
     @IBOutlet var ProductImage: UIImageView!
     
+    @IBOutlet weak var Discount: UILabel!
+    @IBOutlet weak var optionPrice: UILabel!
+    @IBOutlet weak var optionName: UILabel!
     @IBOutlet weak var btnDelete: UIButton!
     var delegate: CartDelegate?
     

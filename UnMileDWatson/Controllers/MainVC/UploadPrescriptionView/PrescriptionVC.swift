@@ -99,6 +99,23 @@ class PrescriptionVC: BaseViewController {
         return strBase64!
     }
     
+    func resizeImageWithAspect(image: UIImage,scaledToMaxWidth width:CGFloat,maxHeight height :CGFloat)->UIImage? {
+        let oldWidth = image.size.width;
+        let oldHeight = image.size.height;
+
+        let scaleFactor = (oldWidth > oldHeight) ? width / oldWidth : height / oldHeight;
+
+        let newHeight = oldHeight * scaleFactor;
+        let newWidth = oldWidth * scaleFactor;
+        let newSize = CGSize(width: newWidth, height: newHeight)
+
+        UIGraphicsBeginImageContextWithOptions(newSize,false,UIScreen.main.scale);
+
+        image.draw(in: CGRect(x: 0, y: 0, width: newSize.width, height: newSize.height));
+        let newImage = UIGraphicsGetImageFromCurrentImageContext();
+        UIGraphicsEndImageContext();
+        return newImage
+    }
     func resizeImage(image: UIImage, targetSize: CGSize) -> UIImage {
         let size = image.size
 
@@ -121,16 +138,15 @@ class PrescriptionVC: BaseViewController {
         img.draw(in: rect)
         let newImage = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
-
         return newImage!
     }
     
     @IBAction func submitTapped(_ sender: Any) {
        var string64Bit = ""
-        let reSizedImg = self.resizeImage(image: img, targetSize: CGSize(width: 300,height: 300))
-        string64Bit = convertImageToBase64String(image: reSizedImg)
+        let imge = img
+        let reSizedImg = resizeImageWithAspect(image: img, scaledToMaxWidth: 500, maxHeight: 500)//self.resizeImage(image: img, targetSize: CGSize(width: 300,height: 300))
+        string64Bit = convertImageToBase64String(image: reSizedImg!)
         make64BitToPathFile(Bit64String: string64Bit)
        self.dismiss(animated: true, completion: nil)
     }
-    
 }

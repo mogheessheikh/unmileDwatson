@@ -15,6 +15,7 @@ public var keyForSavedCategory =  "SavedCategory"
 public var keyForSavedCustomer =  "SavedCustomer"
 public var keyForSavedArea =  "SavedArea"
 public var keyForSavedCity = "SavedCity"
+public var keyForSelectedProduct = "SaveProduct"
 public var keyForSavedCustomerAddress = "SavedAddress"
 public var keyForFilePath =     "filePath"
 public var customerId = 0

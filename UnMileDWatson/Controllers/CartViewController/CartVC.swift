@@ -275,11 +275,28 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
             }
         }
         cell.ProductName.text = items.product.name//itemName
-        cell.TotalPrice.text = "Total Pkr\(Int(items.purchaseSubTotal ))"//String(items.subTotal)//
-//        cell.SpecialInstruction.text = "Special Instructions:\(items.instructions ?? "No Instruction")"//items.instruction//
-        cell.Quantity.text = " Quantity \(items.quantity ?? 1)"
+        cell.TotalPrice.text = "RS.\(Double(items.purchaseSubTotal ))"
+        if(items.customerOrderItemOptions.count != 0){
+            var optionGroupName = ""
+            var optionGroupPrice = ""
+            for i in items.customerOrderItemOptions.indices {
+                optionGroupName += items.customerOrderItemOptions[i].option?.name ?? ""
+                optionGroupPrice += "RS.\(Double((items.customerOrderItemOptions[i].option?.price)!))"
+            }
+            cell.optionName.text = optionGroupName//items.customerOrderItemOptions[indexPath.row].option?.name
+            cell.optionPrice.text = optionGroupPrice //"RS.\(Double((items.customerOrderItemOptions[indexPath.row].option?.price)!))"
+            cell.Discount.text = "0%"
+        }
+        else{
+            cell.optionName.text = ""
+            cell.optionPrice.text = ""
+        }
+        
+        cell.Quantity.text = " \(items.quantity ?? 1)"
         
         return cell
     }
-  
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 220;
+    }
 }
