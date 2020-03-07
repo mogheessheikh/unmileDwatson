@@ -74,11 +74,12 @@ class SearchVC: BaseViewController {
     // MARK: - API Calls
     
     func getCities() {
-
-        let params: [String : Any] = ["countryID":"7",
-                      "companyID": self.companyId]
         
-        NetworkManager.getDetails(path: ProductionPath.companyCityUrl+"/getAll/app", params: params, success: { (json, isError) in
+        let company = getCompanyObject(keyForSavedCompany)
+        let id = company.country?.id
+        let params: [String : Any] = ["countryId":"\(id!)"]
+        
+        NetworkManager.getDetails(path: ProductionPath.companyCityUrl, params: params, success: { (json, isError) in
 
             do {
                 let jsonData =  try json.rawData()
@@ -160,9 +161,9 @@ extension SearchVC: UITableViewDataSource, UITableViewDelegate {
         switch self.isFor {
         case .city:
             if searchBarIsActive {
-                cell.titleLabel?.text = filteredCities[indexPath.row].name
+                cell.titleLabel?.text = filteredCities[indexPath.row].city
             } else {
-                cell.titleLabel?.text = cities[indexPath.row].name
+                cell.titleLabel?.text = cities[indexPath.row].city
             }
         case .area:
             if searchBarIsActive {
@@ -269,7 +270,7 @@ extension SearchVC: UISearchBarDelegate {
         searchBarIsActive = true
         if self.isFor == .city {
             filteredCities = cities.filter({
-                $0.name.localizedCaseInsensitiveContains(searchText)
+                ($0.city.localizedCaseInsensitiveContains(searchText) ?? true)
             })
 
             if filteredCities.count == 0 && searchText.count == 0 {
@@ -277,7 +278,7 @@ extension SearchVC: UISearchBarDelegate {
             }
         } else {
             filteredAreas = areas.filter({
-                $0.area.localizedCaseInsensitiveContains(searchText)
+                ($0.area?.localizedCaseInsensitiveContains(searchText) ?? false)
             })
 
             if filteredAreas.count == 0 && searchText.count == 0 {
@@ -293,14 +294,17 @@ extension SearchVC: UISearchBarDelegate {
 typealias CitiesResponse = [CityObject]
 
 struct CityObject: Codable{
-    let id: Int
-    let name: String
+     let id: Int
+       let city: String
+       let status, archive: Int
+       let country: Country
+       let areas: AreaResponse?
 }
 
 typealias AreaResponse = [AreaObject]
 
 struct AreaObject: Codable {
-    let id: Int
-    let area: String
-    let status, archive: Int
+    let id: Int?
+    let area: String?
+    let status, archive: Int?
 }

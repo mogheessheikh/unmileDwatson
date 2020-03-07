@@ -305,22 +305,23 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 
                 customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity: customerOptionGroupArray.count, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions, parentOptionGroup: product?.optionGroups[indexPath.section-3], customerOrderItem: items)
                 
-                if(previusSelectedCellIndexPath != nil)
-                {
-                    let previusSelectedCell = self.tblOptionGroup.cellForRow(at: previusSelectedCellIndexPath!) as! productOptionGroupCell
-                    previusSelectedCell.radio_check_button.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
-                    selectedIndex = indexPath as NSIndexPath
-                    customerOrderItemOptionArray.append(customerOrderItemOptionObj)
-                    mustArray.replaceObject(at: indexPath.section-3, with:oG)
-                    tblOptionGroup.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
-                    
-                    tblOptionGroup.reloadData()
-                }
-                else{
+//                if(previusSelectedCellIndexPath != nil)
+//                {
+//                    let previusSelectedCell = self.tblOptionGroup.cellForRow(at: previusSelectedCellIndexPath!) as! productOptionGroupCell
+//                    previusSelectedCell.radio_check_button.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
+//                    selectedIndex = indexPath as NSIndexPath
+//                    customerOrderItemOptionArray.append(customerOrderItemOptionObj)
+//                    mustArray.replaceObject(at: indexPath.section-3, with:oG)
+//                    tblOptionGroup.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
+//
+//                    tblOptionGroup.reloadData()
+//                }
+                //else{
                     cell.radio_check_button.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
                     mustArray.replaceObject(at: indexPath.section-3, with:oG)
                     customerOrderItemOptionArray.append(customerOrderItemOptionObj)
-                }
+                    tblOptionGroup.reloadData()
+                //}
             }
             else {
                 let oG  =  CustomerOptionGroup.init(id: product.optionGroups[indexPath.section-3].id, name: product.optionGroups[indexPath.section-3].name, identifierName: product.optionGroups[indexPath.section-3].identifierName, listQuantity: product.optionGroups[indexPath.section-3].listQuantity, minChoice: product.optionGroups[indexPath.section-3].minChoice, maxChoice: product.optionGroups[indexPath.section-3].maxChoice, status: product.optionGroups[indexPath.section-3].status, archive: product.optionGroups[indexPath.section-3].archive, optID: product.optionGroups[indexPath.section-3].optID, options: [product.optionGroups[indexPath.section-3].options![indexPath.row]])
@@ -404,7 +405,6 @@ extension NewItemDetailVC: itemDelegate{
 
                 itemPurchaseSubTotal = ((product.price ?? 0.0) * Double(qNumber))
                 productPrice = product.price ?? 0.0
-
             }
             cProduct = CustomerProduct.init(id: product.id, code: product.code, name: product.name, description: product.description, productPhotoURL: product.productPhotoURL ?? "logo", price: productPrice, position: product.position, status: product.status, archive: product.archive, optionGroups: customerOptionGroupArray)
             

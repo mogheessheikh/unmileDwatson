@@ -184,3 +184,40 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
         
 }
 }
+
+struct BranchListResponse: Codable {
+    let hasNext: Bool
+    let totalStores: Int?
+    let branchWrapperAppList: [BranchWrapperAppList]
+}
+
+struct BranchWrapperAppList: Codable {
+    let id: Int
+    let name: String
+    let locationWebLogoURL: String?
+    let cuisineTypes: [String]
+    let services: [Service]
+    let paymentTypes: [PaymentType]
+    let discountRules: [String]
+    let minOrderAmount: String
+    let isOpen: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case locationWebLogoURL = "locationWebLogoUrl"
+        case cuisineTypes, services, paymentTypes, discountRules, minOrderAmount
+        case isOpen = "open"
+    }
+}
+
+enum PaymentType: String, Codable {
+    case card = "CARD"
+    case cash = "CASH"
+}
+
+enum Service: String, Codable {
+    case collection = "COLLECTION"
+    case delivery = "DELIVERY"
+    case cash = "CASH"
+}
+

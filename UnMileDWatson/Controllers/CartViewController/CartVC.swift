@@ -160,7 +160,7 @@ class CartVC: BaseViewController{
 extension CartVC: CartDelegate{
     
     func didTappedDeleteButton(cell: CartTableViewCell) {
-         var indexPath = self.tblCart.indexPath(for: cell)
+        let indexPath = self.tblCart.indexPath(for: cell)
          var subTotal = 0.0
         let alreadyItems = NSMutableArray.init(array: getAlreadyCartItems())
         if (alreadyItems.count != 0){
@@ -199,7 +199,7 @@ extension CartVC: CartDelegate{
 
     func didTappedAddButton(cell: CartTableViewCell) {
         addMoreItems = getAlreadyCartItems()
-        var indexPath = self.tblCart.indexPath(for: cell)
+        let indexPath = self.tblCart.indexPath(for: cell)
         
         itemPrice = Double(addMoreItems[(indexPath?.row)!].product.price)
         quantity = addMoreItems[(indexPath?.row)!].quantity!
@@ -216,7 +216,7 @@ extension CartVC: CartDelegate{
             subTotal += j.purchaseSubTotal
         }
         
-        cell.Quantity.text = "Quantity \(quantity)"
+        cell.Quantity.text = "\(quantity)"
         cell.TotalPrice.text = "Total Pkr : \(itemTotalPrice)"
         lblTotalPrice.text = "Grand Total : \(subTotal)"
         
@@ -224,7 +224,7 @@ extension CartVC: CartDelegate{
     }
     
     func didTappedMinusButton(cell: CartTableViewCell) {
-        var indexPath = self.tblCart.indexPath(for: cell)
+        let indexPath = self.tblCart.indexPath(for: cell)
         addMoreItems = getAlreadyCartItems()
         quantity = addMoreItems[indexPath!.row].quantity!
         itemPrice = Double(addMoreItems[indexPath!.row].product.price)
@@ -239,7 +239,7 @@ extension CartVC: CartDelegate{
             for (_,j) in addMoreItems.enumerated(){
                 subTotal  += j.purchaseSubTotal
             }
-        cell.Quantity.text = "Quantity \(quantity)"
+        cell.Quantity.text = " \(quantity)"
         cell.TotalPrice.text = "Total Pkr: \(itemTotalPrice)"
         lblTotalPrice.text = "Grand Total : \(subTotal)"
             
@@ -266,7 +266,7 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
         
        // totalPrice += items.price
         
-        Alamofire.request(items.product.productPhotoURL ?? "").responseImage { response in
+        Alamofire.request(items.product.productPhotoURL).responseImage { response in
             if let image = response.result.value {
                 cell.ProductImage.image = image
                 

@@ -72,7 +72,7 @@ class AddAddressVC: BaseViewController {
             let decoder = JSONDecoder()
             if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
                city = loadedCity
-               btnCity.setTitle(loadedCity.name, for: .normal)
+               btnCity.setTitle(loadedCity.city, for: .normal)
             }
            //self.showNavigationBar()
         }
@@ -93,7 +93,7 @@ class AddAddressVC: BaseViewController {
             let decoder = JSONDecoder()
             if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
                city = loadedCity
-               btnCity.setTitle(loadedCity.name, for: .normal)
+               btnCity.setTitle(loadedCity.city, for: .normal)
             }
            //self.showNavigationBar()
         }
@@ -138,7 +138,7 @@ class AddAddressVC: BaseViewController {
         let parameters =     ["id":0,
                               "isDefault":0,
                               "archive":0,
-                              "addressFields":[["id":0,"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id":0,"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id":0,"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id":0,"fieldName":"area","fieldValue":"","label":"area"]],
+                              "addressFields":[["id":0,"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id":0,"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id":0,"fieldName":"city","fieldValue":"\(city!.city)","label":"city"],["id":0,"fieldName":"area","fieldValue":"","label":"area"]],
                               "customer": ["id":customerCheck.id]
             ]
                 as [String: Any]
@@ -191,7 +191,7 @@ class AddAddressVC: BaseViewController {
         let parameters = ["id": addressId!,
                           "isDefault":0,
                           "archive":0,
-                          "addressFields":[["id": fieldId[0],"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id": fieldId[1],"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id": fieldId[2],"fieldName":"city","fieldValue":"\(city!.name)","label":"city"],["id": fieldId[3],"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
+                          "addressFields":[["id": fieldId[0],"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id": fieldId[1],"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id": fieldId[2],"fieldName":"city","fieldValue":"\(city!.city)","label":"city"],["id": fieldId[3],"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
                           "customer": ["id":customerCheck.id]
             ] as [String: Any]
         var request = URLRequest(url: path!)

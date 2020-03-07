@@ -223,7 +223,7 @@ class CheckOutVC: BaseViewController {
             
                 for (i,j) in (branch?.deliveryZones.enumerated())!{
                 
-                    if(j.city.city == city.name){
+                    if(j.city.city == city.city){
                     
                     deliverCharge = branch?.deliveryZones[i].deliveryFee ?? 0.0
                 }

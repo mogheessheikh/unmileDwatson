@@ -3983,10 +3983,6 @@ Cg
                                                         <constraint firstAttribute="height" constant="60" id="TFT-Ns-Y5h"/>
                                                     </constraints>
                                                 </view>
-                                                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eXe-q1-sPF">
-                                                    <rect key="frame" x="324" y="36" width="21" height="28"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                                </view>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Product Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QSD-uL-isr">
                                                     <rect key="frame" x="75" y="20" width="105" height="22.5"/>
                                                     <fontDescription key="fontDescription" name="MarkerFelt-Wide" family="Marker Felt" pointSize="17"/>
@@ -3994,7 +3990,7 @@ Cg
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Product Price" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cWw-Ew-DZM">
-                                                    <rect key="frame" x="75" y="51" width="119" height="21"/>
+                                                    <rect key="frame" x="75" y="51" width="90" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="JTO-Fb-gUQ"/>
                                                     </constraints>
@@ -4046,17 +4042,6 @@ Cg
                                                         </button>
                                                     </subviews>
                                                 </stackView>
-                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7U-aO-3La">
-                                                    <rect key="frame" x="340" y="20" width="30" height="30.5"/>
-                                                    <constraints>
-                                                        <constraint firstAttribute="width" constant="30" id="Vvk-M1-Sod"/>
-                                                    </constraints>
-                                                    <color key="tintColor" red="0.6467891335" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                    <state key="normal" backgroundImage="trash" catalog="system"/>
-                                                    <connections>
-                                                        <action selector="btnDeleteTapped:" destination="iEJ-fz-QKB" eventType="touchUpInside" id="sYo-3T-3vk"/>
-                                                    </connections>
-                                                </button>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Option Name" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IrP-8o-Kl6">
                                                     <rect key="frame" x="75" y="80" width="153" height="21"/>
                                                     <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="17"/>
@@ -4074,7 +4059,7 @@ Cg
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Discount" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VQb-xt-9Qj">
-                                                    <rect key="frame" x="226" y="53" width="119" height="21"/>
+                                                    <rect key="frame" x="197" y="53" width="119" height="21"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="21" id="M7n-yV-IQH"/>
                                                         <constraint firstAttribute="width" constant="119" id="c1h-Aa-Are"/>
@@ -4089,37 +4074,44 @@ Cg
                                                     <color key="textColor" red="0.80000000000000004" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7U-aO-3La">
+                                                    <rect key="frame" x="315" y="21" width="30" height="30.5"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="30" id="Vvk-M1-Sod"/>
+                                                    </constraints>
+                                                    <color key="tintColor" red="0.6467891335" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <state key="normal" backgroundImage="trash" catalog="system"/>
+                                                    <connections>
+                                                        <action selector="btnDeleteTapped:" destination="iEJ-fz-QKB" eventType="touchUpInside" id="sYo-3T-3vk"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
                                             <constraints>
-                                                <constraint firstItem="eXe-q1-sPF" firstAttribute="leading" secondItem="pfA-hE-L7E" secondAttribute="leading" constant="324" id="3du-9H-aNF"/>
-                                                <constraint firstItem="VQb-xt-9Qj" firstAttribute="trailing" secondItem="eXe-q1-sPF" secondAttribute="trailing" id="78L-rn-vvc"/>
                                                 <constraint firstItem="VQb-xt-9Qj" firstAttribute="top" secondItem="pfA-hE-L7E" secondAttribute="top" constant="53" id="ASY-yL-hAD"/>
                                                 <constraint firstItem="wpO-Ox-Mg6" firstAttribute="top" secondItem="gzi-oW-Qpv" secondAttribute="bottom" constant="35" id="Abp-Ju-i27"/>
                                                 <constraint firstAttribute="trailing" secondItem="GwV-Ot-Lrk" secondAttribute="trailing" constant="308" id="GVx-dU-rqe"/>
                                                 <constraint firstItem="gzi-oW-Qpv" firstAttribute="trailing" secondItem="IrP-8o-Kl6" secondAttribute="trailing" id="MGH-ZO-w5E"/>
                                                 <constraint firstItem="Q3u-b3-l9J" firstAttribute="top" secondItem="GwV-Ot-Lrk" secondAttribute="bottom" constant="85" id="Oke-hE-JL1"/>
                                                 <constraint firstItem="cWw-Ew-DZM" firstAttribute="leading" secondItem="QSD-uL-isr" secondAttribute="leading" id="P1A-KW-qiA"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="eXe-q1-sPF" secondAttribute="trailing" constant="15" id="PTX-7I-0aY"/>
                                                 <constraint firstItem="cWw-Ew-DZM" firstAttribute="top" secondItem="QSD-uL-isr" secondAttribute="bottom" constant="8.5" id="Pvn-yj-22S"/>
                                                 <constraint firstItem="QSD-uL-isr" firstAttribute="leading" secondItem="GwV-Ot-Lrk" secondAttribute="trailing" constant="8" id="RCe-x8-QOs"/>
-                                                <constraint firstItem="VQb-xt-9Qj" firstAttribute="top" secondItem="g7U-aO-3La" secondAttribute="bottom" constant="2" id="SdY-3V-NKU"/>
+                                                <constraint firstItem="VQb-xt-9Qj" firstAttribute="top" secondItem="g7U-aO-3La" secondAttribute="bottom" constant="1" id="SdY-3V-NKU"/>
                                                 <constraint firstItem="gzi-oW-Qpv" firstAttribute="top" secondItem="IrP-8o-Kl6" secondAttribute="bottom" constant="8" id="USp-oz-Wie"/>
                                                 <constraint firstItem="cWw-Ew-DZM" firstAttribute="leading" secondItem="gzi-oW-Qpv" secondAttribute="leading" id="V8V-CW-jm6"/>
-                                                <constraint firstAttribute="trailingMargin" secondItem="g7U-aO-3La" secondAttribute="trailing" constant="-10" id="WwK-pS-QAq"/>
-                                                <constraint firstItem="eXe-q1-sPF" firstAttribute="top" secondItem="pfA-hE-L7E" secondAttribute="topMargin" constant="25" id="aTj-Ww-24O"/>
+                                                <constraint firstAttribute="trailingMargin" secondItem="g7U-aO-3La" secondAttribute="trailing" constant="15" id="WwK-pS-QAq"/>
                                                 <constraint firstItem="cWw-Ew-DZM" firstAttribute="leading" secondItem="IrP-8o-Kl6" secondAttribute="leading" id="aXX-ac-DSm"/>
                                                 <constraint firstItem="wpO-Ox-Mg6" firstAttribute="top" secondItem="VQb-xt-9Qj" secondAttribute="bottom" constant="91" id="aaA-J2-FJY"/>
                                                 <constraint firstItem="wpO-Ox-Mg6" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="Q3u-b3-l9J" secondAttribute="trailing" constant="8" symbolic="YES" id="afW-XC-n5O"/>
-                                                <constraint firstItem="VQb-xt-9Qj" firstAttribute="leading" secondItem="cWw-Ew-DZM" secondAttribute="trailing" constant="32" id="dKC-vw-F3d"/>
+                                                <constraint firstItem="VQb-xt-9Qj" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="cWw-Ew-DZM" secondAttribute="trailing" symbolic="YES" id="dKC-vw-F3d"/>
                                                 <constraint firstItem="IrP-8o-Kl6" firstAttribute="top" secondItem="cWw-Ew-DZM" secondAttribute="bottom" constant="8" id="fgh-iJ-k8R"/>
                                                 <constraint firstItem="GwV-Ot-Lrk" firstAttribute="top" secondItem="pfA-hE-L7E" secondAttribute="top" constant="20" id="gDf-Xh-z5e"/>
-                                                <constraint firstItem="eXe-q1-sPF" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QSD-uL-isr" secondAttribute="trailing" constant="8" symbolic="YES" id="hKQ-gd-MKa"/>
-                                                <constraint firstItem="g7U-aO-3La" firstAttribute="top" secondItem="pfA-hE-L7E" secondAttribute="topMargin" constant="10" id="oEP-iw-7qi"/>
+                                                <constraint firstItem="g7U-aO-3La" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="QSD-uL-isr" secondAttribute="trailing" constant="8" symbolic="YES" id="m7c-6M-3LP"/>
+                                                <constraint firstItem="g7U-aO-3La" firstAttribute="top" secondItem="pfA-hE-L7E" secondAttribute="topMargin" constant="11" id="oEP-iw-7qi"/>
                                                 <constraint firstItem="GwV-Ot-Lrk" firstAttribute="leading" secondItem="pfA-hE-L7E" secondAttribute="leading" constant="7" id="qgO-Ul-qPu"/>
-                                                <constraint firstItem="g7U-aO-3La" firstAttribute="trailing" secondItem="wpO-Ox-Mg6" secondAttribute="trailing" id="saY-Jq-tkw"/>
+                                                <constraint firstItem="g7U-aO-3La" firstAttribute="trailing" secondItem="wpO-Ox-Mg6" secondAttribute="trailing" constant="-25" id="saY-Jq-tkw"/>
+                                                <constraint firstAttribute="trailing" secondItem="VQb-xt-9Qj" secondAttribute="trailing" constant="59" id="tMR-1P-sxc"/>
                                                 <constraint firstItem="GwV-Ot-Lrk" firstAttribute="top" secondItem="QSD-uL-isr" secondAttribute="top" id="tVN-0x-B4P"/>
                                                 <constraint firstItem="GwV-Ot-Lrk" firstAttribute="leading" secondItem="Q3u-b3-l9J" secondAttribute="leading" id="tZ0-c9-Zy5"/>
-                                                <constraint firstItem="eXe-q1-sPF" firstAttribute="centerY" secondItem="GwV-Ot-Lrk" secondAttribute="centerY" id="tcd-H3-5OQ"/>
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
@@ -4301,7 +4293,7 @@ Cg
                                                     <rect key="frame" x="263" y="0.0" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <directionalEdgeInsets key="directionalLayoutMargins" top="7" leading="26" bottom="-12" trailing="-2"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4322,7 +4314,7 @@ Cg
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.0PKR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cOB-yc-fJS">
                                                     <rect key="frame" x="263" y="72" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4343,7 +4335,7 @@ Cg
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.0PKR" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uaq-or-yos">
                                                     <rect key="frame" x="263" y="144" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4364,7 +4356,7 @@ Cg
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CQb-DD-F1n">
                                                     <rect key="frame" x="263" y="217" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4385,7 +4377,7 @@ Cg
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Dqp-YK-nh2">
                                                     <rect key="frame" x="263" y="289" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
@@ -4413,7 +4405,7 @@ Cg
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0.0" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="KKE-QZ-XQ8">
                                                     <rect key="frame" x="263" y="361" width="111" height="40"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" name="BodoniSvtyTwoOSITCTT-Book" family="Bodoni 72 Oldstyle" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" name="MarkerFelt-Thin" family="Marker Felt" pointSize="16"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>

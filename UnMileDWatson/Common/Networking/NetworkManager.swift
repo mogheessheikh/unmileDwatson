@@ -1066,7 +1066,7 @@ enum Path {
 
 enum ProductionPath {
     static let companyUrl                = ServerURLs.productionURL + "/company"
-    static let companyCityUrl            = ServerURLs.productionURL + "/companycity"
+    static let companyCityUrl            = ServerURLs.productionURL + "/v2/city/all/"
     static let branchUrl                 = ServerURLs.productionURL + "/branch"
     static let menuUrl                   = ServerURLs.productionURL + "/menu"
     static let categoryUrl               = ServerURLs.productionURL + "/category"
