@@ -135,7 +135,7 @@ class LoginViewController: BaseViewController {
                             if(email == customer.email && psw == customer.password )
                             {
                                 self.stopActivityIndicator()
-                                UserDefaults.standard.setValue(customer.firstName, forKey: "customerName")
+                                UserDefaults.standard.setValue(customer.firstName, forKey: keyForSavedCustomerName)
                                 UserDefaults.standard.set(customer.id, forKey: "customerId")
                                
                                 self.saveCustomerObj(obj: customer, key: keyForSavedCustomer)

@@ -28,6 +28,12 @@ class ContainerVC: BaseViewController {
         super.viewDidLoad()
         
     }
+    override func viewWillAppear(_ animated: Bool) {
+        tblSlideMenu.reloadData()
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        tblSlideMenu.reloadData()
+    }
     
 }
 extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
@@ -47,7 +53,8 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? SideMenuCell else {
             fatalError("Unknown cell")
         }
-        if UserDefaults.standard.object(forKey: "customerName") != nil{
+        
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
             
             cell.lblSideMenu.text = menuItems[indexPath.row]
           
@@ -172,14 +179,15 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         let headerView = Bundle.main.loadNibNamed("SideMenuHeaderViewCell", owner: self, options: nil)?.first as! SideMenuHeaderViewCell
         headerView.backgroundColor = Color.blue
 
-        if UserDefaults.standard.object(forKey: "SavedCustomer") != nil{
-            customerCheck = getCustomerObject("SavedCustomer")
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
+            customerCheck = getCustomerObject(keyForSavedCustomer)
+            if customerCheck != nil  {
+                headerView.imgHeader.image = UIImage(named: "client-img")!
+                headerView.lblUserName.text = customerCheck.firstName
+                headerView.lblUserEmail.text = customerCheck.email
+            }
         }
-        if customerCheck != nil  {
-            headerView.imgHeader.image = UIImage(named: "client-img")!
-            headerView.lblUserName.text = customerCheck.firstName
-            headerView.lblUserEmail.text = customerCheck.email
-        }
+        
         else{
             headerView.lblUserName.text = "User is Not LogIn"
             headerView.lblUserEmail.text = ""

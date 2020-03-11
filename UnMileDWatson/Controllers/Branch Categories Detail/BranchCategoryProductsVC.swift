@@ -186,14 +186,21 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        
+        var price = 0.0
+        let currentDate = currentDateTime()
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! branchCategoriesCellCollectionViewCell
         cell.layer.borderWidth = 2.0
         cell.layer.borderColor = UIColor.gray.cgColor
         
-        let price = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
-        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: price)
+        if((productWrapperlist?[indexPath.row].product?.price ?? 0.0) == 0.0 ){
+            price = productWrapperlist?[indexPath.row].product?.optionGroups[0].options?[0].price ?? 0.0
+        }
+        else{
+             price = productWrapperlist?[indexPath.row].product?.price ?? 0.0
+        }
+        
+       
+        let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "\(price)")
         attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
         
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
@@ -202,7 +209,7 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
         }
          cell.productName.text = productWrapperlist?[indexPath.row].product?.name
         
-        if(((branchCategory?.productDiscountRule) != nil)){
+        if(((branchCategory?.productDiscountRule) != nil && branchCategory?.productDiscountRule?.expiryDate ?? "" > currentDate)){
            
             let today = currentDateTime()
             if((branchCategory?.productDiscountRule!.expiryDate)! >= today){
@@ -221,12 +228,12 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
             else
             {
                 
-                cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+                cell.productPrice.text = "\(price)"
                 cell.discountPrice.text = ""
             }
         }
            // else if for product level discount is not null
-        else if(productWrapperlist?[indexPath.row].product?.productDiscountRule != nil){
+        else if(productWrapperlist?[indexPath.row].product?.productDiscountRule != nil && productWrapperlist?[indexPath.row].product?.productDiscountRule?.expiryDate ?? "" > currentDate ){
             let today = currentDateTime()
             if((productWrapperlist?[indexPath.row].product?.productDiscountRule?.expiryDate)! >= today){
            cell.productPrice.attributedText = attributeString
@@ -244,28 +251,29 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
             else
             {
                 
-                cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+                cell.productPrice.text = "\(price)"
                 cell.discountPrice.text = ""
             }
         }
             
         else{
-             cell.productPrice.text = "\(productWrapperlist?[indexPath.row].product?.price ?? 0.0)"
+             cell.productPrice.text = "\(price)"
              cell.discountPrice.text = ""
         }
        
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-     
-        if(((branchCategory?.productDiscountRule) != nil)){
+        
+        let currentDate = currentDateTime()
+        if(((branchCategory?.productDiscountRule) != nil) && branchCategory?.productDiscountRule?.expiryDate ?? "" > currentDate  ){
             
             let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
             discountedPrice = Int((productWrapperlist?[indexPath.row].product!.price)!)  - discount
             
             product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
         }
-        else if (productWrapperlist?[indexPath.row].product?.productDiscountRule != nil){
+        else if (productWrapperlist?[indexPath.row].product?.productDiscountRule != nil && productWrapperlist?[indexPath.row].product?.productDiscountRule?.expiryDate ?? "" > currentDate){
             let today = currentDateTime()
           if((productWrapperlist?[indexPath.row].product?.productDiscountRule!.chargeMode.name)! == "fixed"){
                 discountedPrice = Int(productWrapperlist?[indexPath.row].product?.price ?? 0.0) - (productWrapperlist?[indexPath.row].product!.productDiscountRule?.discount)!

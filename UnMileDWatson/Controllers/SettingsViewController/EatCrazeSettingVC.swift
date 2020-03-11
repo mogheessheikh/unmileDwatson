@@ -32,7 +32,7 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
     
-        if UserDefaults.standard.object(forKey: "customerName") != nil{
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
             return userSettingArray.count
         }
         else {return 1}
@@ -45,7 +45,7 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
             else {
                 fatalError("Unknown cell")
         }
-        if UserDefaults.standard.object(forKey: "customerName") != nil{
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
             cell.settingLbl.text = userSettingArray[indexPath.row]
             cell.settingLogo.image = UserSettingLogos[indexPath.row]
             return cell
@@ -59,7 +59,7 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
     
-        if UserDefaults.standard.object(forKey: "customerName") == nil{
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) == nil{
             if indexPath.section == 0 && indexPath.row == 0 {
     
                 let loginVC = UIStoryboard.init(name: "Login", bundle: nil).instantiateViewController(withIdentifier: LoginViewController.identifier)

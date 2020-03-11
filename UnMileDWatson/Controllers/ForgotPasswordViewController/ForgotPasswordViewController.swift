@@ -58,7 +58,7 @@ class ForgotPasswordViewController: BaseViewController {
     
     
     func sendPasswordDetailToSender(customerDetail: CustomerDetail){
-        
+           self.startActivityIndicator()
         let myUrl = URL(string: ProductionPath.sendEmailUrl+"/send-password")
         var request = URLRequest(url: myUrl!)
         request.httpMethod = "PUT"
@@ -94,7 +94,8 @@ class ForgotPasswordViewController: BaseViewController {
             
             do {
                 DispatchQueue.main.async {
-                self.showAlert(title: "Check Your MailBox", message: "Recovery Email is send to Your Email Address")
+                    self.stopActivityIndicator()
+                    self.showAlert(title: "Check Your MailBox", message: "Recovery Email is send to Your Email Address")
                     self.txtEmail.text = ""
             
                 print(response)

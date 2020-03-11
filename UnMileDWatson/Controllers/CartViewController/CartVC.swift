@@ -280,8 +280,8 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
             var optionGroupName = ""
             var optionGroupPrice = ""
             for i in items.customerOrderItemOptions.indices {
-                optionGroupName += items.customerOrderItemOptions[i].option?.name ?? ""
-                optionGroupPrice += "RS.\(Double((items.customerOrderItemOptions[i].option?.price)!))"
+                optionGroupName += ""//items.customerOrderItemOptions[i].option?.name ?? ""
+                optionGroupPrice += "" //"RS.\(Double((items.customerOrderItemOptions[i].option?.price)!))"
             }
             cell.optionName.text = optionGroupName//items.customerOrderItemOptions[indexPath.row].option?.name
             cell.optionPrice.text = optionGroupPrice //"RS.\(Double((items.customerOrderItemOptions[indexPath.row].option?.price)!))"

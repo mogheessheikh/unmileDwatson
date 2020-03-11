@@ -33,7 +33,7 @@ class BaseViewController: UIViewController {
     }
     func currentDateTime () -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
     
@@ -178,7 +178,7 @@ class BaseViewController: UIViewController {
             deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                
                     UserDefaults.standard.removeObject(forKey: keyForSavedCustomer)//(forKey: "savedCustomer")
-                    UserDefaults.standard.removeObject(forKey: "customerName")
+                    UserDefaults.standard.removeObject(forKey:keyForSavedCustomerName)
                 
                     dataTable.reloadData()
             }))
@@ -527,16 +527,16 @@ class BaseViewController: UIViewController {
         }
     }
     
-    func getSavedCityObject(key: String) -> CityObject {
+    func getSavedCityObject(key: String) -> CityObject? {
        
         if let savedCity = UserDefaults.standard.object(forKey: key) as? Data  {
             let decoder = JSONDecoder()
             if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
                 cityCheck = loadedCity
             }
-            
+             return cityCheck
         }
-        return cityCheck!
+        else{return nil}
     }
     func getSavedCustomerAddress(key: String) -> [Address]? {
         

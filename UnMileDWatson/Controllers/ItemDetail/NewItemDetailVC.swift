@@ -295,10 +295,11 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
        
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if (indexPath.section >= 3 && !product.optionGroups.isEmpty){
+        
+        if (indexPath.section == 3 && !product.optionGroups.isEmpty){
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)
             let cell = self.tblOptionGroup.cellForRow(at: indexPath) as! productOptionGroupCell
-            if(product.optionGroups[indexPath.section-3].maxChoice ?? 0 <= 1)
+            if(product.optionGroups[indexPath.section-3].maxChoice <= 1)
             {
                 oG  =  CustomerOptionGroup.init(id: product.optionGroups[indexPath.section-3].id, name: product.optionGroups[indexPath.section-3].name, identifierName: product.optionGroups[indexPath.section-3].identifierName, listQuantity: product.optionGroups[indexPath.section-3].listQuantity, minChoice: product.optionGroups[indexPath.section-3].minChoice, maxChoice: product.optionGroups[indexPath.section-3].maxChoice, status: product.optionGroups[indexPath.section-3].status, archive: product.optionGroups[indexPath.section-3].archive, optID: product.optionGroups[indexPath.section-3].optID, options: [product.optionGroups[indexPath.section-3].options![indexPath.row]])
                 optionGroupOptions =  product.optionGroups[indexPath.section-3].options?[indexPath.row]
@@ -421,10 +422,10 @@ extension NewItemDetailVC: itemDelegate{
                             itemPurchaseSubTotal =  alreadyItems[i].product.price * Double(qNumber)
                             // alreadyItems[i].quantity = qNumber
                         }
-                        alreadyItems[i].quantity = qNumber
-                        alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
-                        alreadyItems[i].instructions = specialIstruction
-                        alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
+            alreadyItems[i].quantity = qNumber
+            alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
+            alreadyItems[i].instructions = specialIstruction
+            alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
                     }
                 }
                 

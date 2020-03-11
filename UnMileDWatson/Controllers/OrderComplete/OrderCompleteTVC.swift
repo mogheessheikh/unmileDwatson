@@ -54,7 +54,7 @@ class OrderCompleteTVC: UITableViewController {
 
     func currentDateTime () -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "dd-MM-yyyy hh:mm:ss"
+        formatter.dateFormat = "dd-MM-yyyy HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
     

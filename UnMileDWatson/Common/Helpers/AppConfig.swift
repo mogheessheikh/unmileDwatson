@@ -10,6 +10,7 @@ import Foundation
 
 public var companyId = 70
 public var keyForSavedCompany = "SavedCompany"
+public var keyForSavedCustomerName = "SavedCustomerName"
 public var keyForSavedBranch =  "SavedBranch"
 public var keyForSavedCategory =  "SavedCategory"
 public var keyForSavedCustomer =  "SavedCustomer"

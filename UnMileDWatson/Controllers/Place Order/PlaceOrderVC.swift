@@ -217,7 +217,7 @@ class PlaceOrderVC: BaseViewController {
                     DispatchQueue.main.async {
                         self.stopActivityIndicator()
                         UIApplication.shared.endIgnoringInteractionEvents()
-                        //                       self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
+                //self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
                         self.saveCustomerOrder(obj: customerOrder, key: "savedCustomerOrder" )
                         
                         let vc : UIViewController = Storyboard.main.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
