@@ -21,10 +21,17 @@ class LoginViewController: BaseViewController {
     var loginDelegate: LoginDelegate?
 
 
+    @IBOutlet weak var btnRegisterUser: UIButton!
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    var CompId : Int!
     var userDataArray = [String]()
-     var customerObj: CustomerDetail!
+    var customerObj: CustomerDetail!
+    var gUserName = ""
+    var gUserEmail = ""
+    var gUserPhoneNo = ""
+    var gUserPassword = ""
+    
    
 //    var isFrom = LoginIsFrom.Intro
 
@@ -34,13 +41,13 @@ class LoginViewController: BaseViewController {
        
         
       let googleButton = GIDSignInButton()
-        googleButton.frame = CGRect(x: 16, y: 450, width: view.frame.width - 45, height: 50)
+        googleButton.frame = CGRect(x: 16, y: btnRegisterUser.frame.maxY + 70, width: view.frame.width - 45, height: 50)
         view.addSubview(googleButton)
         
-     GIDSignIn.sharedInstance()?.delegate = self
-     GIDSignIn.sharedInstance()?.presentingViewController = self
-     GIDSignIn.sharedInstance().signIn()
-        
+        GIDSignIn.sharedInstance()?.delegate = self
+        GIDSignIn.sharedInstance()?.presentingViewController = self
+        let company = getCompanyObject(keyForSavedCompany)
+        CompId = company.id
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -69,7 +76,7 @@ class LoginViewController: BaseViewController {
         }
     }
     func loginUser(email:String,password: String){
-        NetworkManager.getDetails(path:ProductionPath.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)", params: nil, success: { (json, isError) in
+        NetworkManager.getDetails(path:ProductionPath.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(CompId)", params: nil, success: { (json, isError) in
             
             self.view.endEditing(true)
             
@@ -109,13 +116,13 @@ class LoginViewController: BaseViewController {
         
         let URL_USER_LOGIN = ProductionPath.customerUrl+"/find-customer-id-companyid?email=\(email)&customerType=MEMBER&companyID=\(companyId)"
         
-        let parameters: Parameters=[
-            "userName":usernameField.text!,
-            "userPassword":passwordField.text!
-        ]
+//        let parameters: Parameters=[
+//            "userName":usernameField.text!,
+//            "userPassword":passwordField.text!
+//        ]
         
         //making a post request
-        Alamofire.request(URL_USER_LOGIN, method: .get, parameters: parameters).responseJSON
+        Alamofire.request(URL_USER_LOGIN, method: .get, parameters: nil).responseJSON
             {
                 response in
                 //printing response
@@ -125,21 +132,23 @@ class LoginViewController: BaseViewController {
                 if let result = response.result.value {
                     let anItem = result as! NSDictionary
                     
-                        do {
+                    do {
                             let jsonData = try JSONSerialization.data(withJSONObject: anItem, options: .prettyPrinted)
                             // here "jsonData" is the dictionary encoded in JSON data
                             let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
                             let jsonData1 = encodedObjectJsonString.data(using: .utf8)
                             
                             let customer = try! JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
-                            if(email == customer.email && psw == customer.password )
+                            if(email == customer.email )
                             {
                                 self.stopActivityIndicator()
                                 UserDefaults.standard.setValue(customer.firstName, forKey: keyForSavedCustomerName)
                                 UserDefaults.standard.set(customer.id, forKey: "customerId")
                                
                                 self.saveCustomerObj(obj: customer, key: keyForSavedCustomer)
+                                
                                 self.getUserDetail()
+                                
                                 //switching the screen
                                 if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                                     let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
@@ -180,13 +189,14 @@ class LoginViewController: BaseViewController {
         let ipAddress = self.getDeviceIP()
 
         let myUrl = URL(string: ProductionPath.customerUrl + "/create")
+        
         var request = URLRequest(url: myUrl!)
         request.httpMethod = "POST"
         request.addValue("application/json", forHTTPHeaderField: "content-type")
         request.addValue("application/json", forHTTPHeaderField: "Accept")
 
         let postString = ["companyId":companyId,
-                          "customerType":"Google",
+                          "customerType":"MEMBER",
                           "firstName": userName,
                           "internalInfo":"",
                           "ipAddress": ipAddress,
@@ -229,6 +239,8 @@ class LoginViewController: BaseViewController {
 
                     DispatchQueue.main.async {
                     let userId = parseJSON["firstName"] as? String
+                    let userEmail = parseJSON["email"] as? String
+                    let userPassword = parseJSON["password"] as? String
                     print("User id: \(String(describing: userId!))")
 
                     if (userId?.isEmpty)!
@@ -238,7 +250,7 @@ class LoginViewController: BaseViewController {
                         return
                     } else {
                         let id = parseJSON["id"]!
-                        self.loginwithGoogle(userId: "\(id)")
+                        self.login(userEmail!, userPassword!)
                         
                         }
 
@@ -259,61 +271,46 @@ class LoginViewController: BaseViewController {
 
         task.resume()
     }
+
     
-    
-    func loginwithGoogle(userId: String){
-        
+   func checkEmail(_ email:String ){
         startActivityIndicator()
-              
-              let URL_USER_LOGIN = ProductionPath.customerUrl+"/\(userId)"
-              
-             
-              
-              //making a post request
-              Alamofire.request(URL_USER_LOGIN, method: .get, parameters: nil).responseJSON
-                  {
-                      response in
-                      //printing response
-                      print(response)
-                      
-                      //getting the json value from the server
-                      if let result = response.result.value {
-                          let anItem = result as! NSDictionary
-                          
-                              do {
-                                  let jsonData = try JSONSerialization.data(withJSONObject: anItem, options: .prettyPrinted)
-                                  // here "jsonData" is the dictionary encoded in JSON data
-                                  let encodedObjectJsonString = String(data: jsonData, encoding: String.Encoding(rawValue: String.Encoding.utf8.rawValue))!
-                                  let jsonData1 = encodedObjectJsonString.data(using: .utf8)
-                                  
-                                  let customer = try! JSONDecoder().decode(CustomerDetail.self, from: jsonData1!)
-                               
-                                      self.stopActivityIndicator()
-                                      UserDefaults.standard.setValue(customer.firstName, forKey: "customerName")
-                                      UserDefaults.standard.set(customer.id, forKey: "customerId")
-                                     
-                                      self.saveCustomerObj(obj: customer, key: keyForSavedCustomer)
-                                      
-                                      //switching the screen
-                                      if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
-                                          let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                                          let _ = nvc.viewControllers[0] as? Main {
         
-                                          UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
-                                      }
-                                      
-                                      
-                                      self.dismiss(animated: false, completion: nil)
-                                      
-                                  
-                              } catch {
-                                  self.stopActivityIndicator()
-                                  print(error.localizedDescription)
-                              }
-                      }
-              }
-              
+        let URL_USER_LOGIN = ProductionPath.customerUrl+"/find-customer-id-companyid"
+       
+            let parameters: Parameters=[
+                "email":email,
+                "companyID": companyId,
+                "customerType": "MEMBER"
+            ]
+
+        // let postString = ["userName": name, "userPassword": password] as [String: String]
+        //making a post request
+        Alamofire.request(URL_USER_LOGIN, method: .get, parameters: parameters).responseJSON
+            {
+                response in
+                //printing response
+                print(response)
+                
+                //getting the json value from the server
+                if response.result.value != nil {
+                    self.stopActivityIndicator()
+                
+//                    self.showAlert(title: "User Already Registered", message: "user is already registerd with this email \(email)")
+                    self.login(email, "123")
+                }
+                    // if response.result.value found nil then registrationNewUser Called
+                else{
+                    self.stopActivityIndicator()
+                    self.registerNewUser(userName: self.gUserName, userEmail: self.gUserEmail, userPhone: self.gUserPhoneNo, userPassword: self.gUserPassword)
+                   
+                }
+                
+        }
+        
+        
     }
+
 }
 
 extension LoginViewController: GIDSignInDelegate{
@@ -328,16 +325,21 @@ extension LoginViewController: GIDSignInDelegate{
              
              guard let idToken = user.authentication.idToken else {return}
              guard let accessToken = user.authentication.accessToken  else {return}
-             
+
              let credentials = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
              Auth.auth().signIn(with: credentials) { (user, error) in
                  if let err = error{
                      print ("Failed to create a firbase user with google account",err)
                      return
                  }
-              guard let  uid = user?.user.uid else{return}
+            guard let  uid = user?.user.uid else{return}
+                self.gUserName = (user?.user.displayName)!
+                self.gUserEmail = (user?.user.email)!
+                self.gUserPhoneNo = (user?.user.phoneNumber ?? "")
+                self.checkEmail((user?.user.email)!)
+
+        // self.registerNewUser(userName: (user?.user.displayName)!, userEmail: (user?.user.email)!, userPhone: (user?.user.phoneNumber ?? ""), userPassword: (user?.user.uid)!)
                 
-                self.registerNewUser(userName: (user?.user.displayName)!, userEmail: (user?.user.email)!, userPhone: (user?.user.phoneNumber ?? ""), userPassword: (user?.user.uid)!)
               self.stopActivityIndicator()
             
               print("Successfully logged into firebase with google", uid)

@@ -7,16 +7,19 @@
 //
 
 import UIKit
-protocol SearchBarDelegate {
-    func didTappedSearchBar(cell:SearchBarCell )
-}
-class SearchBarCell: UITableViewCell,UISearchBarDelegate {
 
-    @IBOutlet weak var productSearch: UISearchBar!
+protocol SearchBarDelegate {
+func didTappedSearchBar(cell:SearchBarCell)
+}
+class SearchBarCell: UITableViewCell{
+
+    @IBOutlet weak var searchProductBtn: UIButton!
+
     var delegate: SearchBarDelegate!
     override func awakeFromNib() {
         super.awakeFromNib()
-        productSearch.delegate = self
+        searchProductBtn.layer.cornerRadius = 9
+        searchProductBtn.layer.borderWidth = 4
         // Initialization code
     }
 
@@ -25,9 +28,10 @@ class SearchBarCell: UITableViewCell,UISearchBarDelegate {
 
         // Configure the view for the selected state
     }
-    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-         delegate.didTappedSearchBar(cell: self)
-        return true
+  
+    
+    @IBAction func searchProductTapped(_ sender: Any) {
+        delegate.didTappedSearchBar(cell: self)
     }
 }
 

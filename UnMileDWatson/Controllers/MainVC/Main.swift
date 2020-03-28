@@ -10,6 +10,7 @@ import UIKit
 import SideMenu
 
 
+
 class Main: BaseViewController {
 
     
@@ -23,7 +24,7 @@ class Main: BaseViewController {
     var categoryLocationId = 0
     var categoryName = ""
     var branchCategories: BranchDetailsResponse?
-     var companyDetails: CompanyDetails!
+    var companyDetails: CompanyDetails!
     var popUpView: UploadPrescriptionView!
     var imagePicker = UIImagePickerController()
     var img :UIImage!
@@ -38,7 +39,7 @@ class Main: BaseViewController {
                popUpView.btnCamera.layer.cornerRadius = 7
                popUpView.btnGallery.layer.cornerRadius = 7
                
-     imagePicker.delegate = (self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate)
+               imagePicker.delegate = (self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate)
                popUpView.btnCloseView.addTarget(self, action: #selector(closePopUp(with:)), for: .touchUpInside)
                popUpView.btnCamera.addTarget(self, action: #selector(openCamera(with:)), for: .touchUpInside)
                popUpView.btnGallery.addTarget(self, action: #selector(openGallery(with:)), for: .touchUpInside)
@@ -87,11 +88,15 @@ class Main: BaseViewController {
                       #endif
                       
                       print(myJSONError)
+                    self.stopActivityIndicator()
+                      UIApplication.shared.endIgnoringInteractionEvents()
                       self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
                   }
                   
               }) { (error) in
                  // self.dismissHUD()
+                self.stopActivityIndicator()
+                UIApplication.shared.endIgnoringInteractionEvents()
                   self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
               }
           }
@@ -114,14 +119,17 @@ class Main: BaseViewController {
                       
                       #if DEBUG
                      self.showAlert(title: "Error", message: myJSONError.localizedDescription)
+                    self.stopActivityIndicator()
                       #endif
                       
                       print(myJSONError)
+                    self.stopActivityIndicator()
                      self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
                   }
                   
               }) { (error) in
                   //self.dismissHUD()
+                self.stopActivityIndicator()
                   self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
               }
           }
@@ -344,10 +352,11 @@ extension Main: orderCellDelegate{
     
 extension Main: SearchBarDelegate{
     func didTappedSearchBar(cell: SearchBarCell) {
-          
-                      let genralSearch = Storyboard.main.instantiateViewController(withIdentifier: GernalSearchVC.identifier)
-                      genralSearch.title = "Search Products"
-                      self.navigationController?.pushViewController(genralSearch, animated: true)
+          //fatalError()
+//        let genralSearch = Storyboard.main.instantiateViewController(withIdentifier: GernalSearchVC.identifier) as! GernalSearchVC
+//    genralSearch.title = "Search Products"
+//    self.navigationController?.pushViewController(genralSearch, animated: true)
+        performSegue(withIdentifier: "MainToSearch", sender: self)
     }
     
     

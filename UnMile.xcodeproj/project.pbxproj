@@ -104,6 +104,7 @@
 		CE24C6CF23BFD301007EFEDF /* StartMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6CE23BFD301007EFEDF /* StartMenu.swift */; };
 		CE261F5D23D2F8320019AADE /* GernalSearchCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */; };
 		CE261F5F23D2F86B0019AADE /* GernalSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */; };
+		CE38A8D1242F87DF000EE9E6 /* MainViewSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE38A8D0242F87DF000EE9E6 /* MainViewSearch.swift */; };
 		CE3EF0AB240A64E3001CEDE2 /* DetailDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE3EF0A9240A64E3001CEDE2 /* DetailDescription.swift */; };
 		CE3EF0AC240A64E3001CEDE2 /* DetailDescription.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE3EF0AA240A64E3001CEDE2 /* DetailDescription.xib */; };
 		CE4367DA238FAE710002FCCC /* ChatRoomVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */; };
@@ -243,6 +244,7 @@
 		CE24C6CE23BFD301007EFEDF /* StartMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenu.swift; sourceTree = "<group>"; };
 		CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchCellTableViewCell.swift; sourceTree = "<group>"; };
 		CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchVC.swift; sourceTree = "<group>"; };
+		CE38A8D0242F87DF000EE9E6 /* MainViewSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewSearch.swift; sourceTree = "<group>"; };
 		CE3EF0A9240A64E3001CEDE2 /* DetailDescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailDescription.swift; sourceTree = "<group>"; };
 		CE3EF0AA240A64E3001CEDE2 /* DetailDescription.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DetailDescription.xib; sourceTree = "<group>"; };
 		CE4367D9238FAE710002FCCC /* ChatRoomVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomVC.swift; sourceTree = "<group>"; };
@@ -724,6 +726,7 @@
 			children = (
 				CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */,
 				CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */,
+				CE38A8D0242F87DF000EE9E6 /* MainViewSearch.swift */,
 			);
 			path = "Genral Search";
 			sourceTree = "<group>";
@@ -1013,6 +1016,7 @@
 				734121C8220C08C70003C19F /* ForgotPasswordViewController.swift in Sources */,
 				39DEF2D222BCE57000E4FB3F /* FeedBackVC.swift in Sources */,
 				88283E302282C24300CEC1CA /* AddressVC.swift in Sources */,
+				CE38A8D1242F87DF000EE9E6 /* MainViewSearch.swift in Sources */,
 				881F48D622522C2C0047F9BD /* DeliveryAddress.swift in Sources */,
 				CE4A4DAB236F555E0077D481 /* thankYouCell.swift in Sources */,
 				CE24C6CC23BF69B4007EFEDF /* SearchBarCell.swift in Sources */,
@@ -1182,7 +1186,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.8;
+				CURRENT_PROJECT_VERSION = 3.2;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1212,7 +1216,7 @@
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 2.8;
+				CURRENT_PROJECT_VERSION = 3.2;
 				DEVELOPMENT_TEAM = 7G9DBXH7J4;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",

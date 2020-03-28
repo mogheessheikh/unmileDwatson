@@ -39,7 +39,7 @@ class ContainerVC: BaseViewController {
 extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if UserDefaults.standard.object(forKey: "customerName") != nil
+        if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil
         {
             return menuItems.count
         }

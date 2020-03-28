@@ -27,13 +27,19 @@ class SubSettingVC: BaseViewController {
     @IBOutlet weak var tfMobile: UITextField!
     @IBOutlet weak var tfPhone: UITextField!
     @IBOutlet weak var tfEmail: UITextField!
+      var dismissHandler: (() -> Void)!
     var company: CompanyDetails!
     override func viewDidLoad() {
         super.viewDidLoad()
        
         getUser()
        company = getCompanyObject("SavedCompany")
+      
         
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        let vc = storyboard?.instantiateViewController(withIdentifier: "CheckOutVC") as! CheckOutVC
+        vc.getUser()
     }
     @IBAction func updateDidPressed(_ sender: Any) {
       

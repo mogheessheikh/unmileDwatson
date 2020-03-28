@@ -19,8 +19,6 @@ target 'UnMile' do
   pod 'ZDCChat'
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
-  pod 'FacebookCore'
-  pod 'FacebookLogin'
+  pod 'Firebase/Analytics'
  
-
 end 

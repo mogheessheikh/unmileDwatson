@@ -9,14 +9,14 @@
 import UIKit
 
 
-class CheckOutVC: BaseViewController {
+class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
  
     @IBOutlet var checkOutButton: UIButton!
     @IBOutlet var tblCheckOut: UITableView!
     var userName = ""
     var userEmail = ""
     var userPhone = ""
-    var userL: [String] = ["Name*", "Email*", "Phone*"]
+    var userLables: [String] = ["Name*", "Email*", "Phone*"]
   
     var branch : Branch!
     var sectionTitle = [ "User","Order Type","Delivery Address","Payment Type","Special Instruction(optional)"]
@@ -82,10 +82,15 @@ class CheckOutVC: BaseViewController {
         tblCheckOut.register(UINib(nibName: "PromoCodeCell", bundle: Bundle.main), forCellReuseIdentifier: "promocell")
        
     }
+    override func viewDidAppear(_ animated: Bool) {
+      
+    }
     override func viewWillAppear(_ animated: Bool) {
+      
         tblCheckOut.reloadData()
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+      
     if segue.identifier == "checkout2Summary"
     {
         let vc = segue.destination as? PlaceOrderVC
@@ -167,6 +172,7 @@ class CheckOutVC: BaseViewController {
     }
     func getUser() {
         self.startActivityIndicator()
+        userArray.removeAll()
         if let customerDetail = UserDefaults.standard.object(forKey: keyForSavedCustomer) as? Data{
             let decoder = JSONDecoder()
             let customer = try? decoder.decode(CustomerDetail.self, from: customerDetail)
@@ -283,7 +289,7 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             guard let  cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CheckOutTableViewCell else {fatalError("Unknown cell")}
        
                 cell.lblUser.text = "\(userArray[indexPath.row])"
-                cell.lblUserL.text = "\(userL[indexPath.row])"
+                cell.lblUserL.text = "\(userLables[indexPath.row])"
                 cell.icons.image = userSectionImagesArray[indexPath.row]
             
             
@@ -354,6 +360,20 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       
+        if(indexPath.section == 0){
+            
+            guard let popVC = storyboard?.instantiateViewController(withIdentifier: "SubSettingVC") else { return }
+
+            popVC.modalPresentationStyle = .popover
+
+            let popOverVC = popVC.popoverPresentationController
+            popOverVC?.delegate = self
+            popOverVC?.sourceView = self.tblCheckOut
+            popOverVC?.sourceRect = CGRect(x: self.tblCheckOut.bounds.midX, y: self.tblCheckOut.bounds.minY, width: 0, height: 0)
+            popVC.preferredContentSize = CGSize(width: 250, height: 250)
+
+            self.present(popVC, animated: true)
+        }
         
         if(indexPath.section == 3){
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)

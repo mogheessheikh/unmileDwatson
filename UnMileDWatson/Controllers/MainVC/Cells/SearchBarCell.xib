@@ -10,32 +10,37 @@
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
-        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchBarCell" id="KGk-i7-Jjw" customClass="SearchBarCell" customModule="UnMile" customModuleProvider="target">
-            <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+        <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="SearchBarCell" rowHeight="71" id="KGk-i7-Jjw" customClass="SearchBarCell" customModule="UnMile" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="KGk-i7-Jjw" id="H2p-sc-9uM">
-                <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                <rect key="frame" x="0.0" y="0.0" width="320" height="71"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <searchBar contentMode="redraw" placeholder="Search Any Product" translatesAutoresizingMaskIntoConstraints="NO" id="Oos-nn-eds">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a1f-Bw-0hc">
+                        <rect key="frame" x="13" y="12" width="294" height="47"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <color key="barTintColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <textInputTraits key="textInputTraits"/>
-                    </searchBar>
+                        <state key="normal" title="search any product">
+                            <color key="titleColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </state>
+                        <connections>
+                            <action selector="searchProductTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="JIz-e3-Nto"/>
+                        </connections>
+                    </button>
                 </subviews>
                 <constraints>
-                    <constraint firstAttribute="trailing" secondItem="Oos-nn-eds" secondAttribute="trailing" id="BjD-UM-cqh"/>
-                    <constraint firstAttribute="bottom" secondItem="Oos-nn-eds" secondAttribute="bottom" id="Lsg-Gd-cTs"/>
-                    <constraint firstItem="Oos-nn-eds" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="gRW-1x-XrF"/>
-                    <constraint firstItem="Oos-nn-eds" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="mEy-vu-203"/>
+                    <constraint firstItem="a1f-Bw-0hc" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="12" id="3XR-kL-8mb"/>
+                    <constraint firstAttribute="trailing" secondItem="a1f-Bw-0hc" secondAttribute="trailing" constant="13" id="fWk-rP-Tok"/>
+                    <constraint firstItem="a1f-Bw-0hc" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="13" id="l2i-g2-sOl"/>
+                    <constraint firstAttribute="bottom" secondItem="a1f-Bw-0hc" secondAttribute="bottom" constant="12" id="oVh-uD-9Zc"/>
                 </constraints>
             </tableViewCellContentView>
+            <color key="backgroundColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
-                <outlet property="productSearch" destination="Oos-nn-eds" id="rTu-eF-ZHT"/>
+                <outlet property="searchProductBtn" destination="a1f-Bw-0hc" id="AUn-el-Scb"/>
             </connections>
-            <point key="canvasLocation" x="139" y="112"/>
+            <point key="canvasLocation" x="137.68115942028987" y="102.79017857142857"/>
         </tableViewCell>
     </objects>
 </document>

@@ -37,11 +37,6 @@
 	<string>Dwatson</string>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
-	<key>LSApplicationQueriesSchemes</key>
-	<array>
-		<string>googlechromes</string>
-		<string>comgooglemaps</string>
-	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -61,6 +56,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>used for upload prescription</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Allow "D.Watson" to access your location</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>used for prescription</string>
 	<key>UILaunchStoryboardName</key>

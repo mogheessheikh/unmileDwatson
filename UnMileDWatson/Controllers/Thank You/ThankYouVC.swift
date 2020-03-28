@@ -7,7 +7,8 @@
 //
 
 import UIKit
-
+import MapKit
+import CoreLocation
 
 class ThankYouVC: BaseViewController {
 
@@ -15,20 +16,22 @@ class ThankYouVC: BaseViewController {
     
     
    
+    @IBOutlet weak var maps: MKMapView!
     var restuarentAddress: String!
     var itemSummery : [CustomerOrderItem]!
     @IBOutlet weak var tblCompleteSummery: UITableView!
     var orderSummery: CustomerOrder!
     var branch: Branch!
     var company: CompanyDetails!
-   
+    let locationManager = CLLocationManager()
     var customerOrder: CustomerOrder!
+    let regionInMeters:Double = 10000
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
        
-        
+        checkLocationServices()
         
        hideNavigationBar()
         company  = getCompanyObject("SavedCompany")
@@ -54,31 +57,79 @@ class ThankYouVC: BaseViewController {
                restuarentAddress  = branch.addressLine1
         }
         
-        
-        
-        
+    }
+    
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        disMiss()
     }
     
     
     @IBAction func goToMain(_ sender: Any) {
         
-        UserDefaults.standard.removeObject(forKey:"savedCustomerOrder")
-        UserDefaults.standard.removeObject(forKey:"branchAddress")
-        UserDefaults.standard.removeObject(forKey:"SavedBranch")
-        
-        let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
-        if (alreadyItems.count != 0){
-            alreadyItems.removeAllObjects()
-            self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
-        }
-        if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
-            let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-            let _ = nvc.viewControllers[0] as? Main{
-            
-            UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
-    }
+    disMiss()
     
 }
+    
+    func disMiss()  {
+          UserDefaults.standard.removeObject(forKey:"savedCustomerOrder")
+              UserDefaults.standard.removeObject(forKey:"branchAddress")
+              UserDefaults.standard.removeObject(forKey:"SavedBranch")
+              
+              let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+              if (alreadyItems.count != 0){
+                  alreadyItems.removeAllObjects()
+                  self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
+              }
+              if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+                  let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+                  let _ = nvc.viewControllers[0] as? Main{
+                  
+                  UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+          }
+          
+    }
+    func setupLocationManager(){
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        
+    }
+    func centerViewOnUserLocation(){
+        if let location = locationManager.location?.coordinate{
+            let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
+            maps.setRegion(region, animated: true)
+        }
+        
+    }
+    
+    func checkLocationServices(){
+        
+        if CLLocationManager.locationServicesEnabled(){
+            setupLocationManager()
+            checkLocationAutherization()
+            
+        }
+        else{
+            showAlert(title: "Dwatson don't have permission to access location ", message: "")
+        }
+    }
+    
+    func checkLocationAutherization(){
+        switch CLLocationManager.authorizationStatus() {
+        case .authorizedWhenInUse:
+            maps.showsUserLocation = true
+            centerViewOnUserLocation()
+            locationManager.startUpdatingLocation()
+        case .denied:
+            break
+        case .notDetermined:
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted:
+            break
+        case .authorizedAlways:
+            break
+        }
+    }
 }
 extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -155,4 +206,19 @@ extension ThankYouVC : NeedSupportDelegate{
     }
     
     
+}
+extension ThankYouVC: CLLocationManagerDelegate{
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        //Update user location
+        guard let location = locations.last else {return}
+        let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
+        
+        maps.setRegion(region, animated: true)
+    }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
+        checkLocationAutherization()
+        
+    }
 }

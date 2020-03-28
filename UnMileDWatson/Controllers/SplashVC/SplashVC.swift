@@ -25,6 +25,7 @@ class SplashVC: BaseViewController {
     }
 
     // MARK: - API Calls
+    
     func getCompanyDetails() {
 
         let path = ProductionPath.companyUrl + "/\(companyId)"
@@ -47,6 +48,7 @@ class SplashVC: BaseViewController {
                     if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
                         let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
                         let mainVC = nvc.viewControllers[0] as? Main {
+                        
                        // mainVC.companyDetails = companyDetails
                        // mainVC.deliveryZoneType = companyDetails.deliveryZoneType.name //"POSTALCODE"
                         
@@ -64,9 +66,7 @@ class SplashVC: BaseViewController {
             self.showAlert(title: Strings.error, message: error.localizedDescription)
         }
     }
-    
-    
-  
+ 
     }
     
 

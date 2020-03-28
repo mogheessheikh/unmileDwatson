@@ -133,6 +133,7 @@
                     </navigationItem>
                     <nil key="simulatedTopBarMetrics"/>
                     <connections>
+                        <outlet property="btnRegisterUser" destination="Kqu-nG-PHW" id="o0h-c4-noC"/>
                         <outlet property="passwordField" destination="fn2-pu-LOF" id="dAW-C4-z2q"/>
                         <outlet property="usernameField" destination="b2o-CH-Oum" id="5mO-fG-TnU"/>
                         <segue destination="GzY-TQ-yPC" kind="show" identifier="loginToRejister" id="rOi-SA-JZz"/>
@@ -331,7 +332,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yhW-Vh-Ruo" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1262" y="945"/>
+            <point key="canvasLocation" x="1553" y="618"/>
         </scene>
         <!--Forgot Password View Controller-->
         <scene sceneID="BxZ-n1-6F6">

@@ -12,7 +12,7 @@ import ScrollableSegmentedControl
 import ZDCChat
 import Firebase
 import GoogleSignIn
-
+//import GoogleMaps
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate{
@@ -24,7 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate{
         // Override point for customization after application launch.
        
         ZDCChat.initialize(withAccountKey: "Q4tc8dF2Gec8k0SUZ3TAm3xLlWPokWdp")
-        
+        //GMSServices.provideAPIKey("AIzaSyDHsxs_5WO9L4fEj6hFsgG-nT78hcYDSXU")
         FirebaseApp.configure()
         GIDSignIn.sharedInstance().clientID = FirebaseApp.app()?.options.clientID
         GIDSignIn.sharedInstance()?.delegate = self as? GIDSignInDelegate
