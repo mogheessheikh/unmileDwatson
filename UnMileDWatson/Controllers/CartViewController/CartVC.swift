@@ -33,11 +33,17 @@ class CartVC: BaseViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            lblTotalPrice.font =  lblTotalPrice.font.withSize(35)
+            checkOut.titleLabel?.font = checkOut.titleLabel?.font.withSize(30)
+        }
+        
         allItems = getAlreadyCartItems()
         for (_,j) in allItems.enumerated(){
           self.subTotal  += j.purchaseSubTotal
         }
       
+        
         lblTotalPrice.text = "Grand Total : \(self.subTotal)"
 
         branch = getBranchObject(key: keyForSavedBranch)
@@ -128,7 +134,7 @@ class CartVC: BaseViewController{
        }
        else{
       
-        if (isBranchClose == "false")
+        if (isBranchClose == "false")//"false"
         {
             subTotal = 0.0
             allItems = getAlreadyCartItems()
@@ -151,7 +157,7 @@ class CartVC: BaseViewController{
             
         }
         else{
-            showAlert(title: "Dwatson is Close Now", message: "You cant place your order when branch is close")
+            showAlert(title: "D.Watson is close now", message: "You cant place your order when branch is close")
         }
     }
 }
@@ -261,6 +267,14 @@ extension CartVC : UITableViewDataSource, UITableViewDelegate{
         let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! CartTableViewCell
         cell.delegate = self
         let items = allItems[indexPath.row]
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            cell.ItemPrice.font =  cell.ItemPrice.font.withSize(17)
+            cell.ProductName.font =  cell.ProductName.font.withSize(25)
+            cell.TotalPrice.font =  cell.TotalPrice.font.withSize(17)
+            cell.Discount.font =  cell.Discount.font.withSize(17)
+            cell.btnDelete.layer.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+        }
         
         cell.ItemPrice.text = "Price:\(items.product.price )"//String(items.itemPrice)//
         

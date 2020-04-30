@@ -11,7 +11,7 @@ import UIKit
 class MoreVC: UITableViewController {
 
     
-    var moreArray : [String] = ["Term and Condition", "Feed Back"]
+    var moreArray : [String] = ["Terms & Condition", "Feed Back"]
     override func viewDidLoad() {
         super.viewDidLoad()
 

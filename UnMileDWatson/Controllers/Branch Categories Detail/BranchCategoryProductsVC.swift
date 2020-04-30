@@ -30,23 +30,34 @@ class BranchCategoryProductsVC: BaseViewController {
     var discountedPrice = 0
     var optionPrice = 0
     var categoryNameArray:[String] = []
-    
+    var pageSize = "0"
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            pageSize = "30"
+        }
+        else{
+            pageSize = "10"
+        }
         
         if(categoryName != ""){
            title = categoryName
         }
         if(catagoryId != 0){
-        getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
+        getProductsBy(pageNo: "0" , pageSize: pageSize, productName: "", categoryId: "\(catagoryId)")
         getCategoryDiscount(catId: catagoryId)
         }
         else{
-        getProductsBy(pageNo: "0" , pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
+        getProductsBy(pageNo: "0" , pageSize: pageSize, productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
         getCategoryDiscount(catId: branchCategoryDetails.categories[0].id)
         }
         
-//
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
+
     }
     override func viewDidAppear(_ animated: Bool) {
         productSearchBar.becomeFirstResponder()
@@ -55,7 +66,10 @@ class BranchCategoryProductsVC: BaseViewController {
         return .lightContent
     }
     
-   
+   @objc func dismissKeyboard() {
+       //Causes the view (or one of its embedded text fields) to resign the first responder status.
+       view.endEditing(true)
+   }
     
     func getProductsBy(pageNo: String, pageSize: String , productName: String = "", categoryId: String) {
         //UIApplication.shared.beginIgnoringInteractionEvents()
@@ -68,8 +82,9 @@ class BranchCategoryProductsVC: BaseViewController {
                                           "categoryId": categoryId,
                                           "productName":productName]
         print(parameters)
-
-        NetworkManager.getDetails(path: ProductionPath.productUrl + "/get-active-bycategoryId/", params: parameters, success: { (json, isError) in
+        let path = ProductionPath.productUrl + "/get-active-bycategoryId/"
+        print(path)
+        NetworkManager.getDetails(path: path, params: parameters, success: { (json, isError) in
             
             self.view.endEditing(true)
             
@@ -164,12 +179,12 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
         if(catagoryId != 0){
-            getProductsBy(pageNo: "0" , pageSize: "10", productName: searchText, categoryId: "\(catagoryId)")
+            getProductsBy(pageNo: "0" , pageSize: pageSize, productName: searchText, categoryId: "\(catagoryId)")
             
         }
         else{
             //  let segment = segmentControl.selectedSegmentIndex
-            getProductsBy(pageNo: "0" , pageSize: "10", productName: searchText, categoryId: "\(branchCategoryDetails.categories[0].id)")
+            getProductsBy(pageNo: "0" , pageSize: pageSize, productName: searchText, categoryId: "\(branchCategoryDetails.categories[0].id)")
         }
       
         
@@ -191,9 +206,11 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! branchCategoriesCellCollectionViewCell
         cell.layer.borderWidth = 2.0
         cell.layer.borderColor = UIColor.gray.cgColor
+//
+        if((productWrapperlist?[indexPath.row].product?.price ?? 0.0) == 0.0  && productWrapperlist?[indexPath.row].product?.optionGroups.count != 0){
         
-        if((productWrapperlist?[indexPath.row].product?.price ?? 0.0) == 0.0 ){
-            price = productWrapperlist?[indexPath.row].product?.optionGroups[0].options?[0].price ?? 0.0
+        price = productWrapperlist?[indexPath.row].product?.optionGroups[0].options?[0].price ?? 0.0
+    
         }
         else{
              price = productWrapperlist?[indexPath.row].product?.price ?? 0.0
@@ -203,10 +220,15 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
         let attributeString: NSMutableAttributedString =  NSMutableAttributedString(string: "\(price)")
         attributeString.addAttribute(NSAttributedString.Key.strikethroughStyle, value: 2, range: NSMakeRange(0, attributeString.length))
         
+       
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
             let url = URL(string: urlString) {
+        
             cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+      
+        
         }
+      
          cell.productName.text = productWrapperlist?[indexPath.row].product?.name
         
         if(((branchCategory?.productDiscountRule) != nil && branchCategory?.productDiscountRule?.expiryDate ?? "" > currentDate)){
@@ -270,7 +292,7 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
             
             let discount = (Int((productWrapperlist?[indexPath.row].product!.price)!) * ((branchCategory?.productDiscountRule!.discount)!)/100)
             discountedPrice = Int((productWrapperlist?[indexPath.row].product!.price)!)  - discount
-            
+        
             product = Product.init(id: productWrapperlist?[indexPath.row].product?.id ?? 0, code: productWrapperlist?[indexPath.row].product?.code ?? "", name: productWrapperlist?[indexPath.row].product!.name ?? "", description: productWrapperlist?[indexPath.row].product?.description ?? "", productPhotoURL: productWrapperlist?[indexPath.row].product?.productPhotoURL, promotionCode: productWrapperlist?[indexPath.row].product?.promotionCode, price: Double(discountedPrice), totalPrice: productWrapperlist?[indexPath.row].product?.price , specialInstruction: productWrapperlist?[indexPath.row].product?.specialInstruction, quantity: productWrapperlist?[indexPath.row].product?.quantity, position: productWrapperlist?[indexPath.row].product?.position ?? 0, status: productWrapperlist?[indexPath.row].product?.status ?? 0, archive: productWrapperlist?[indexPath.row].product?.archive ?? 0, productDiscountRule: productWrapperlist?[indexPath.row].product?.productDiscountRule, optionGroups: productWrapperlist?[indexPath.row].product?.optionGroups ?? [])
         }
         else if (productWrapperlist?[indexPath.row].product?.productDiscountRule != nil && productWrapperlist?[indexPath.row].product?.productDiscountRule?.expiryDate ?? "" > currentDate){
@@ -301,16 +323,18 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
             if !fetchingMore{
                 if self.productWraper.hasNext {
                     if(catagoryId != 0){
-                        getProductsBy(pageNo: "\(self.productWraper.number! + 1)" , pageSize: "10", productName: "", categoryId: "\(catagoryId)")
-                        
+                        getProductsBy(pageNo: "\(self.productWraper.number! + 1)" , pageSize: pageSize, productName: "", categoryId: "\(catagoryId)")
                     }
-                    else{
-                        //  let segment = segmentControl.selectedSegmentIndex
-                        getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: "10", productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
-                    }
+        else{
+        //  let segment = segmentControl.selectedSegmentIndex
+        getProductsBy(pageNo: "\(self.productWraper.number! + 1)", pageSize: pageSize, productName: "", categoryId: "\(branchCategoryDetails.categories[0].id)")
+            }
                 
             }
                 fetchingMore = true
+            }
+            else{
+            view.endEditing(true)
             }
     }
 }

@@ -18,18 +18,28 @@ class MainSliderTableviewCell: UITableViewCell, UICollectionViewDelegate, UIColl
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "slidercell", for: indexPath) as! MainSliderCollectionCell
-          cell.layer.borderWidth = Constants.borderWidth
+//          cell.layer.borderWidth = Constants.borderWidth
         if(companyBanner?[indexPath.row].status == 1){
         if let urlSliderString =  companyBanner?[indexPath.row].mobileBannerUrl,
-                       let url = URL(string: urlSliderString)  {
-                       cell.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+        let url = URL(string: urlSliderString)  {
+        cell.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
                    }
         }
+        
         return cell
     }
+    
      
     public func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize{
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+        return CGSize(width: 1024, height: 800)
+        }
+        else{
         return CGSize(width: 375, height: 250)
+        }
+        
+        
     }
 
     @IBOutlet weak var pageControl: UIPageControl!

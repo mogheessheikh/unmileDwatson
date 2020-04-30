@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "73C9E12E21E0824300AB8BB4"
-               BuildableName = "UnMile.app"
+               BuildableName = "D.Watson.app"
                BlueprintName = "UnMile"
                ReferencedContainer = "container:UnMile.xcodeproj">
             </BuildableReference>
@@ -45,7 +45,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "73C9E12E21E0824300AB8BB4"
-            BuildableName = "UnMile.app"
+            BuildableName = "D.Watson.app"
             BlueprintName = "UnMile"
             ReferencedContainer = "container:UnMile.xcodeproj">
          </BuildableReference>
@@ -62,7 +62,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "73C9E12E21E0824300AB8BB4"
-            BuildableName = "UnMile.app"
+            BuildableName = "D.Watson.app"
             BlueprintName = "UnMile"
             ReferencedContainer = "container:UnMile.xcodeproj">
          </BuildableReference>

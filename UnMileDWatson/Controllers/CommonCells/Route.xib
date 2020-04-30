@@ -36,6 +36,7 @@
                 <constraints>
                     <constraint firstItem="mrb-2f-TxG" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="16" id="ERG-dR-yir"/>
                     <constraint firstItem="PM6-mU-YVQ" firstAttribute="centerY" secondItem="H2p-sc-9uM" secondAttribute="centerY" id="PpT-Gf-54h"/>
+                    <constraint firstItem="PM6-mU-YVQ" firstAttribute="leading" secondItem="mrb-2f-TxG" secondAttribute="trailing" constant="13" id="W2T-e4-NVk"/>
                     <constraint firstItem="PM6-mU-YVQ" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="Xbk-7c-uum"/>
                     <constraint firstItem="mrb-2f-TxG" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="9" id="Za3-nn-fZA"/>
                     <constraint firstItem="mrb-2f-TxG" firstAttribute="centerY" secondItem="PM6-mU-YVQ" secondAttribute="centerY" id="rN9-fd-fLD"/>

@@ -8,17 +8,20 @@
 
 import UIKit
 
+protocol RefreshDataDelegate: class {
+  func refreshData()
+}
 class SubSettingVC: BaseViewController {
     
+    @IBOutlet var btnClose: UIButton!
     @IBOutlet var tblSubSettings: UITableView!
     var userArray: [String] = ["First Name", "Last Name", "Email", "Phone"]
     var userData : CustomerDetail?
     var userDataArray: [String]?
-
+     weak var  viewDelegate: RefreshDataDelegate!
     @IBOutlet weak var subview: UIView!
     @IBOutlet weak var tfFirstName: UITextField!
     @IBOutlet weak var tfLastName: UITextField!
-    
     @IBOutlet weak var phoneNumberView: UIView!
     @IBOutlet weak var mobilenumberView: UIView!
     @IBOutlet weak var emailView: UIView!
@@ -27,25 +30,38 @@ class SubSettingVC: BaseViewController {
     @IBOutlet weak var tfMobile: UITextField!
     @IBOutlet weak var tfPhone: UITextField!
     @IBOutlet weak var tfEmail: UITextField!
-      var dismissHandler: (() -> Void)!
+    var isCloseHidden = true;
+    var checkoutVC = CheckOutVC()
     var company: CompanyDetails!
     override func viewDidLoad() {
         super.viewDidLoad()
        
         getUser()
        company = getCompanyObject("SavedCompany")
-      
+    
+        if isCloseHidden{
+            
+            btnClose.isHidden = true
+            
+        }
+        else{
+              btnClose.isHidden = false
+        }
+        
         
     }
     override func viewWillDisappear(_ animated: Bool) {
-        let vc = storyboard?.instantiateViewController(withIdentifier: "CheckOutVC") as! CheckOutVC
-        vc.getUser()
+        
+        viewDelegate?.refreshData()
+    }
+    
+    @IBAction func closePressed(_ sender: Any) {
+        
+        self.dismiss(animated: true, completion: nil)
+        
     }
     @IBAction func updateDidPressed(_ sender: Any) {
       
-        
-        
-       
         let firstName = tfFirstName.text
         let lastName = tfLastName.text
         let email = tfEmail.text
@@ -105,6 +121,8 @@ class SubSettingVC: BaseViewController {
                             self.stopActivityIndicator()
                              //self.showAlert(title: "Request Completed", message: "Your Profile is updated now")
                              self.getUser()
+//
+                            
                            
                         }
                         else

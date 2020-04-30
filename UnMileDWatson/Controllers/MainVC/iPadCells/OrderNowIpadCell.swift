@@ -1,26 +1,23 @@
 //
-//  OrderNowTableViewCell.swift
+//  OrderNowIpadCell.swift
 //  UnMile
 //
-//  Created by user on 1/3/20.
+//  Created by user on 4/3/20.
 //  Copyright © 2020 Moghees Sheikh. All rights reserved.
 //
 
 import UIKit
-protocol orderCellDelegate {
-    func orderNowCell(cell: OrderNowTableViewCell)
+protocol IpadOrderCellDelegate {
+    func orderNowCell(cell: OrderNowIpadCell)
 }
 
-class OrderNowTableViewCell: UITableViewCell {
-
-    var delegate :  orderCellDelegate!
-    @IBOutlet weak var orderBtn: UIButton!
+class OrderNowIpadCell: UITableViewCell {
+    var delegate :  IpadOrderCellDelegate!
     var branchCategories: BranchDetailsResponse?
+    @IBOutlet weak var orderBtn: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-         getBranchCategories()
-         
         // Initialization code
     }
     func getBranchCategories() {
@@ -28,8 +25,9 @@ class OrderNowTableViewCell: UITableViewCell {
         //self.startActivityIndicator()
         let path = ProductionPath.menuUrlV2 + "/?branchId=\(branchId)&productName="
         print(path)
+        
         NetworkManager.getDetails(path: path, params: nil, success: { (json, isError) in
-
+            
             do {
                 let jsonData =  try json.rawData()
                 self.branchCategories = try JSONDecoder().decode(BranchDetailsResponse.self, from: jsonData)
@@ -51,13 +49,14 @@ class OrderNowTableViewCell: UITableViewCell {
             //self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
     }
-    @IBAction func orderNowPressed(_ sender: Any) {
-        delegate.orderNowCell(cell: self)
-    }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
         // Configure the view for the selected state
+    }
+    
+    @IBAction func orderNowTapped(_ sender: Any) {
+        delegate.orderNowCell(cell: self)
     }
     
 }

@@ -14,7 +14,8 @@ class AddAddressVC: BaseViewController {
     @IBOutlet var addressView2: UIView!
     @IBOutlet var addressView1: UIView!
     @IBOutlet var txtAddress1: UITextField!
-   
+    var cities = [CityObject]()
+    @IBOutlet var cityAreaPickerView: UIPickerView!
     @IBOutlet var btnArea: UIButton!
     @IBOutlet var btnCity: UIButton!
     var companyDetails: CompanyDetails!
@@ -34,12 +35,23 @@ class AddAddressVC: BaseViewController {
         showNavigationBar()
        
         
+        cityAreaPickerView.isHidden = true
+        let toolBar = UIToolbar()
+        toolBar.barStyle = .default
+        toolBar.isTranslucent = true
+        toolBar.tintColor = UIColor(red: 92/255, green: 216/255, blue: 255/255, alpha: 1)
+        toolBar.sizeToFit()
+        let doneButton = UIBarButtonItem(title: "Done", style: .plain, target: self, action: #selector(doneClick))
        
-        btnCity.layer.cornerRadius = 7
-        btnCity.layer.cornerRadius = 7
-        btnArea.layer.cornerRadius = 7
-        btnArea.layer.cornerRadius = 7
+        toolBar.setItems([doneButton], animated: false)
+        toolBar.isUserInteractionEnabled = true
+        cityAreaPickerView.addSubview(toolBar)
         
+        btnCity.layer.cornerRadius = 7
+        btnCity.layer.cornerRadius = 7
+        btnArea.layer.cornerRadius = 7
+        btnArea.layer.cornerRadius = 7
+        getCities()
         let user = getUserDetail()
         
         customerCheck = user.1
@@ -68,14 +80,7 @@ class AddAddressVC: BaseViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         
-        if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
-            let decoder = JSONDecoder()
-            if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
-               city = loadedCity
-               btnCity.setTitle(loadedCity.city, for: .normal)
-            }
-           //self.showNavigationBar()
-        }
+       
         
         
         if let savedArea = UserDefaults.standard.object(forKey: keyForSavedArea) as? Data  {
@@ -97,6 +102,7 @@ class AddAddressVC: BaseViewController {
             }
            //self.showNavigationBar()
         }
+        
 
         if let savedArea = UserDefaults.standard.object(forKey: keyForSavedArea) as? Data  {
             let decoder = JSONDecoder()
@@ -105,12 +111,44 @@ class AddAddressVC: BaseViewController {
                // btnArea.setTitle(loadedArea.area, for: .normal)
             }
         }
-        
     }
     
     @IBAction func addCityTapped(_ sender: Any) {
-        CityArea(sender: sender as! UIButton)
+        //CityArea(sender: sender as! UIButton)
+        cityAreaPickerView.isHidden = false
     }
+    
+    @objc func doneClick(){
+        cityAreaPickerView.isHidden = true
+    }
+    
+    func getCities() {
+           
+           let company = getCompanyObject(keyForSavedCompany)
+           let id = company.country?.id
+           let params: [String : Any] = ["countryId":"\(id!)"]
+        
+           NetworkManager.getDetails(path: ProductionPath.companyCityUrl, params: params, success: { (json, isError) in
+
+               do {
+                   let jsonData =  try json.rawData()
+                   self.cities = try JSONDecoder().decode(CitiesResponse.self, from: jsonData)
+                   self.cityAreaPickerView.reloadAllComponents()
+                   self.stopActivityIndicator()
+                   print(self.cities)
+
+               } catch let myJSONError {
+                   print(myJSONError)
+                   self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+               }
+
+           }) { (error) in
+               //self.dismissHUD()
+               self.stopActivityIndicator()
+               self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
+           }
+       }
+
     @IBAction func addAreaTapped(_ sender: Any) {
           CityArea(sender: sender as! UIButton)
     }
@@ -133,8 +171,17 @@ class AddAddressVC: BaseViewController {
     }
 
     func addAddressToServer(){
-        startActivityIndicator()
+        startActivityIndicator()	
+        if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
+                   let decoder = JSONDecoder()
+                   if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
+                      city = loadedCity
+                    
+            }
+                  //self.showNavigationBar()
+               }
         let path = URL(string: ProductionPath.addressUrl + "/add-address")
+
         let parameters =     ["id":0,
                               "isDefault":0,
                               "archive":0,
@@ -180,6 +227,7 @@ class AddAddressVC: BaseViewController {
                     
                 } catch {
                     print(error)
+                    self.showAlert(title: "Request Decline", message: "Something goes worng")
                 }
             }
             
@@ -187,12 +235,30 @@ class AddAddressVC: BaseViewController {
     }
     func updateAddressToServer(){
         startActivityIndicator()
+        if let savedCity = UserDefaults.standard.object(forKey: keyForSavedCity) as? Data  {
+                          let decoder = JSONDecoder()
+                          if let loadedCity = try? decoder.decode(CityObject.self, from: savedCity) {
+                             city = loadedCity
+                            
+                          }
+                         //self.showNavigationBar()
+                      }
         let path = URL(string: ProductionPath.addressUrl + "/update-address")
-        let parameters = ["id": addressId!,
-                          "isDefault":0,
-                          "archive":0,
-                          "addressFields":[["id": fieldId[0],"fieldName":"addressLine1","fieldValue":"\(txtAddress1!.text!)","label":"addressLine1"],["id": fieldId[1],"fieldName":"addressLine2","fieldValue":"","label":"addressLine2"],["id": fieldId[2],"fieldName":"city","fieldValue":"\(city!.city)","label":"city"],["id": fieldId[3],"fieldName":"area","fieldValue":"\(area!.area)","label":"area"]],
-                          "customer": ["id":customerCheck.id]
+        let parameters = [
+            
+            "id": addressId!,
+            "isDefault":0,
+            "archive":0,
+            "addressFields":[
+                ["id": fieldId[0],
+                              "fieldName":"addressLine1",
+                              "fieldValue":"\(txtAddress1!.text!)",
+                              "label":"addressLine1"],
+                             ["id": fieldId[1],
+                              "fieldName":"city",
+                              "fieldValue":"\(city!.city)",
+                                "label":"city"]],
+            "customer": ["id":customerCheck.id]
             ] as [String: Any]
         var request = URLRequest(url: path!)
         request.httpMethod = "POST"
@@ -289,4 +355,25 @@ class AddAddressVC: BaseViewController {
             }
         }
     }
+}
+extension AddAddressVC : UIPickerViewDelegate,UIPickerViewDataSource{
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+       return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        return cities.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        
+        return cities[row].city
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        let city = cities[row]
+        saveCityObject(Object: city, key: keyForSavedCity)
+        btnCity.setTitle(city.city, for: .normal)
+    }
+    
 }

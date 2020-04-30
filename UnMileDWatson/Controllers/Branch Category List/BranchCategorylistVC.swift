@@ -24,6 +24,8 @@ class BranchCategorylistVC: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getBranchCategories()
+
+        categoryCollection.register(UINib(nibName: "CollectionViewCell", bundle: Bundle.main), forCellWithReuseIdentifier: "CollectionViewCell")
         // Do any additional setup after loading the view.
     }
     
@@ -99,6 +101,23 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CollectionViewCell", for: indexPath) as! CollectionViewCell
+                   
+        cell.layer.borderWidth = 2.0
+        cell.layer.borderColor = UIColor.gray.cgColor
+        cell.categoryName.text = branchCategories?.categories[indexPath.row].name
+                   
+        if let urlString = branchCategories?.categories[indexPath.row].imageURL,
+         let url = URL(string: urlString)  {
+        cell.categoryImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+            // cell.delegate = self as? CategoryCellDelegate
+            }
+
+
+            return cell
+        }
+        else{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CategoryCollectionCell", for: indexPath) as! CategoryCollectionCell
         
         cell.layer.borderWidth = 2.0
@@ -111,6 +130,7 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
             cell.delegate = self as? CategoryCellDelegate
         }
         return cell
+        }
     }
         func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
             
@@ -123,13 +143,21 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
             
         }
          func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-              
+            if(UIDevice.current.userInterfaceIdiom == .pad){
+                return CGSize(width: 400, height: 500)
+            }
+            else{
                     return CGSize(width: 70, height: 70)
-                
+            }
             }
         func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-            return 0
+             if(UIDevice.current.userInterfaceIdiom == .pad){
+                return 500
+                }
+             else{
+                return 0
+                }
         }
-            
+//
 
 }

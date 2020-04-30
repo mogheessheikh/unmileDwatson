@@ -72,21 +72,15 @@ class ThankYouVC: BaseViewController {
 }
     
     func disMiss()  {
-          UserDefaults.standard.removeObject(forKey:"savedCustomerOrder")
-              UserDefaults.standard.removeObject(forKey:"branchAddress")
-              UserDefaults.standard.removeObject(forKey:"SavedBranch")
-              
-              let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
-              if (alreadyItems.count != 0){
-                  alreadyItems.removeAllObjects()
-                  self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
-              }
-              if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
-                  let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
-                  let _ = nvc.viewControllers[0] as? Main{
-                  
-                  UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
-          }
+    UserDefaults.standard.removeObject(forKey:"savedCustomerOrder")
+    UserDefaults.standard.removeObject(forKey:"branchAddress")
+    UserDefaults.standard.removeObject(forKey:"SavedBranch")
+    if let tabbarVC = Storyboard.main.instantiateViewController(withIdentifier: "TabbarController") as? UITabBarController,
+    let nvc = tabbarVC.viewControllers?[0] as? UINavigationController,
+    let _ = nvc.viewControllers[0] as? Main{
+    UIApplication.shared.keyWindow!.replaceRootViewControllerWith(tabbarVC, animated: true, completion: nil)
+         
+        }
           
     }
     func setupLocationManager(){
@@ -97,7 +91,7 @@ class ThankYouVC: BaseViewController {
     func centerViewOnUserLocation(){
         if let location = locationManager.location?.coordinate{
             let region = MKCoordinateRegion.init(center: location, latitudinalMeters: regionInMeters, longitudinalMeters: regionInMeters)
-            maps.setRegion(region, animated: true)
+            //maps.setRegion(region, animated: true)
         }
         
     }
@@ -117,7 +111,7 @@ class ThankYouVC: BaseViewController {
     func checkLocationAutherization(){
         switch CLLocationManager.authorizationStatus() {
         case .authorizedWhenInUse:
-            maps.showsUserLocation = true
+            //maps.showsUserLocation = true
             centerViewOnUserLocation()
             locationManager.startUpdatingLocation()
         case .denied:
@@ -191,9 +185,7 @@ extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
             return cell
         }
     }
-    
-  
-    
+
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 10
     }
@@ -215,7 +207,7 @@ extension ThankYouVC: CLLocationManagerDelegate{
         let center = CLLocationCoordinate2D(latitude: location.coordinate.latitude, longitude: location.coordinate.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01))
         
-        maps.setRegion(region, animated: true)
+        //maps.setRegion(region, animated: true)
     }
     func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         checkLocationAutherization()

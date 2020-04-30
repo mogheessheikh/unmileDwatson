@@ -18,8 +18,8 @@ class SearchBarCell: UITableViewCell{
     var delegate: SearchBarDelegate!
     override func awakeFromNib() {
         super.awakeFromNib()
-        searchProductBtn.layer.cornerRadius = 9
-        searchProductBtn.layer.borderWidth = 4
+        searchProductBtn.layer.cornerRadius = 6
+        searchProductBtn.layer.borderWidth = 2
         // Initialization code
     }
 

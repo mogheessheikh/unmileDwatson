@@ -133,7 +133,8 @@ extension PreviousOrderDetailVC: orderDetailDelegate{
         customerOrderItems = preOrder.customerOrders[(indexPath?.row)!].customerOrderItem
         for (_,j) in (customerOrderItems?.enumerated())!{
             
-            items = CustomerOrderItem.init(id: 0, orderItemID: "" , forWho: "", instructions: j.instructions, quantity: j.quantity, purchaseSubTotal: j.purchaseSubTotal, product: j.product, customerOrderItemOptions: j.customerOrderItemOptions )
+            items = CustomerOrderItem.init(id: 0, orderItemID: "", forWho: "", instructions: j.instructions, quantity: j.quantity, purchaseSubTotal: j.purchaseSubTotal, productPrice: j.product.price, discount: j.discount, product: j.product, customerOrderItemOptions: j.customerOrderItemOptions)
+            
             alreadyItems.append(items!)
             saveItems(allItems: alreadyItems)
         }

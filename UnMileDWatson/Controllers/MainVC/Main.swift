@@ -11,7 +11,7 @@ import SideMenu
 
 
 
-class Main: BaseViewController {
+class Main: BaseViewController,UIPopoverPresentationControllerDelegate {
 
     
     
@@ -25,24 +25,22 @@ class Main: BaseViewController {
     var categoryName = ""
     var branchCategories: BranchDetailsResponse?
     var companyDetails: CompanyDetails!
-    var popUpView: UploadPrescriptionView!
-    var imagePicker = UIImagePickerController()
-    var img :UIImage!
+    
     override func viewDidLoad() {
        
         // Do any additional setup after loading the view.
         
         // ******************START-POPUPVIEW**********************
-               popUpView = Bundle.main.loadNibNamed("UploadPrescriptionPopUP", owner: nil, options: [:])?.first as? UploadPrescriptionView
+             
                
                
-               popUpView.btnCamera.layer.cornerRadius = 7
-               popUpView.btnGallery.layer.cornerRadius = 7
-               
-               imagePicker.delegate = (self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate)
-               popUpView.btnCloseView.addTarget(self, action: #selector(closePopUp(with:)), for: .touchUpInside)
-               popUpView.btnCamera.addTarget(self, action: #selector(openCamera(with:)), for: .touchUpInside)
-               popUpView.btnGallery.addTarget(self, action: #selector(openGallery(with:)), for: .touchUpInside)
+//               popUpView.btnCamera.layer.cornerRadius = 7
+//               popUpView.btnGallery.layer.cornerRadius = 7
+//
+//
+//               popUpView.btnCloseView.addTarget(self, action: #selector(closePopUp(with:)), for: .touchUpInside)
+//               popUpView.btnCamera.addTarget(self, action: #selector(openCamera(with:)), for: .touchUpInside)
+//               popUpView.btnGallery.addTarget(self, action: #selector(openGallery(with:)), for: .touchUpInside)
                
                // ******************END-POPUPVIEW***************************
 
@@ -137,8 +135,12 @@ class Main: BaseViewController {
     func registerTableViewCells(){
         mainTableView.register(UINib(nibName: "WebViewCell", bundle: Bundle.main), forCellReuseIdentifier: "WebViewCell")
         mainTableView.register(UINib(nibName: "UploadPrescriptionCell", bundle: Bundle.main), forCellReuseIdentifier: "UploadPrescriptionCell")
+         mainTableView.register(UINib(nibName: "UploadPrescriptionIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "UploadPrescriptionIpadCell")
         mainTableView.register(UINib(nibName: "OrderNowTableViewCell", bundle: Bundle.main), forCellReuseIdentifier: "OrderNowTableViewCell")
+        mainTableView.register(UINib(nibName: "OrderNowIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "OrderNowIpadCell")
+        mainTableView.register(UINib(nibName: "SearchBarIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "SearchBarIpadCell")
         mainTableView.register(UINib(nibName: "SearchBarCell", bundle: Bundle.main), forCellReuseIdentifier: "SearchBarCell")
+         mainTableView.register(UINib(nibName: "SliderViewIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "SliderViewIpadCell")
     }
     func initiateCartButton(){
         let alreadyItems = getAlreadyCartItems()
@@ -153,12 +155,35 @@ class Main: BaseViewController {
     }
     
     func uploadPrescriptionViewLoad()  {
-            view.addSubview(popUpView)
-                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: 0))
-                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 0))
-                  
-                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .top, relatedBy: .equal, toItem: self.topLayoutGuide, attribute: .bottom, multiplier: 1, constant: 0))
-                  view.addConstraint(NSLayoutConstraint(item: popUpView as Any, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute,multiplier: 1, constant: 667))
+        
+    if UIDevice.current.userInterfaceIdiom == .pad{
+    let popVC = UploadPrescriptionIpad (nibName: "UploadPrescriptionIpad", bundle: nil)
+
+        popVC.modalPresentationStyle = .popover
+
+        let popOverVC = popVC.popoverPresentationController
+        popOverVC?.delegate = self
+        popOverVC?.sourceView = self.view
+        popOverVC?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.minY, width: 0, height: 0)
+        popVC.preferredContentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
+
+        self.present(popVC, animated: true)
+
+        }
+    else{
+      let popVC = UploadPrescription (nibName: "UploadPrescription", bundle: nil)
+
+        popVC.modalPresentationStyle = .popover
+
+        let popOverVC = popVC.popoverPresentationController
+        popOverVC?.delegate = self
+        popOverVC?.sourceView = self.view
+        popOverVC?.sourceRect = CGRect(x: self.view.bounds.midX, y: self.view.bounds.minY, width: 0, height: 0)
+        popVC.preferredContentSize = CGSize(width: self.view.frame.size.width, height: self.view.frame.size.height)
+
+        self.present(popVC, animated: true)
+        }
+
     }
    @IBAction func cartButtonTapped(_ sender: Any) {
           performSegue(withIdentifier: "mainTocart", sender: self)
@@ -201,27 +226,7 @@ class Main: BaseViewController {
       }
     
     
-    @objc func closePopUp(with sender: UIButton){
-           
-           popUpView.removeFromSuperview()
-       }
-       @objc func openCamera(with sender:UIButton){
-           
-           if(UIImagePickerController .isSourceTypeAvailable(.camera)){
-               imagePicker.sourceType = .camera
-               imagePicker.allowsEditing = true
-               self.present(imagePicker, animated: true, completion: nil)
-           } else {
-               showAlert(title: "Warning", message:  "You don't have camera")
-           }
-       }
-       @objc func openGallery(with sender: UIButton){
-           
-           imagePicker.sourceType = .savedPhotosAlbum
-           imagePicker.allowsEditing = true
-           
-           present(imagePicker, animated: true, completion: nil)
-       }
+   
 }
 extension Main: UITableViewDelegate,UITableViewDataSource{
     
@@ -234,6 +239,56 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let section = indexPath.section
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            if(section == 0){
+                       
+                       let cell = tableView.dequeueReusableCell(withIdentifier: "SliderViewIpadCell", for: indexPath) as! SliderViewIpadCell
+                       view.addSubview(pageController)
+                       return cell
+                       
+                   }
+                   else if (section == 1){
+                          let message =  companyDetails.companyAlertNotification[0].message
+                       let cell = tableView.dequeueReusableCell(withIdentifier: "WebViewCell", for: indexPath) as! WebViewCell
+                       cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='3'><b><marquee style='color:red' scrollamount= '10'>\(message ?? "")</b></marquee></font></body></html>", baseURL: nil)
+                       return cell
+                       
+                       
+                   }
+                    else if (section == 2){
+                        let cell = tableView.dequeueReusableCell(withIdentifier: "SearchBarIpadCell", for: indexPath) as! SearchBarIpadCell
+                        cell.delegate = self as? IpadSearchBarDelegate
+                        return cell
+                        }
+                   else if (section == 3)
+                   {
+                       
+                    let cell = tableView.dequeueReusableCell(withIdentifier: "UploadPrescriptionIpadCell", for: indexPath) as! UploadPrescriptionIpadCell
+                    cell.layer.cornerRadius = 10
+                    cell.delegate = self as? IPadPrscriptionDelegate
+                    
+                    return cell
+                       
+                   }
+                   else if (section == 4){
+                       
+                   let cell = tableView.dequeueReusableCell(withIdentifier: "OrderNowIpadCell", for: indexPath) as! OrderNowIpadCell
+                       cell.delegate = self as? IpadOrderCellDelegate
+                       cell.orderBtn.layer.cornerRadius = 10
+                       cell.orderBtn.layer.borderWidth = 6
+                       cell.orderBtn.layer.borderColor = UIColor.lightGray.cgColor
+                       
+                       return cell
+                   }
+                   else {
+                              
+                   let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as! CategoryTableViewCell
+                       cell.delegate = self
+                              return cell
+                          }
+        }
+        else{
+        
         if(section == 0){
             
             let cell = tableView.dequeueReusableCell(withIdentifier: "MainSliderTableviewCell", for: indexPath) as! MainSliderTableviewCell
@@ -260,6 +315,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
                    }
         else if (section == 3)
         {
+            
             let cell = tableView.dequeueReusableCell(withIdentifier: "UploadPrescriptionCell", for: indexPath) as! UploadPrescriptionCell
             cell.layer.cornerRadius = 7
             cell.delegate = self
@@ -282,6 +338,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             cell.delegate = self
                    return cell
                }
+        }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -295,36 +352,46 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
        
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            
+            if(indexPath.section == 0){
+            return 408
+            }
+                       
+            else if(indexPath.section == 1){
+            return 90
+            }
+            else if(indexPath.section == 2){
+            return 150
+            }
+            else if(indexPath.section == 3){
+            return 240
+            }
+            else{
+            return 140
+            }
+            }
         
-        if(indexPath.section == 0)
-        {
-            
+    
+    else{
+        
+        if(indexPath.section == 0){
             return 250
-            
         }
-            
         else if(indexPath.section == 1){
-            
          return 40
-
         }
-
         else if(indexPath.section == 2){
-             
-             return 60
-             
+         return 60
          }
-            
         else if(indexPath.section == 3){
-            
-            return 120
-            
+        return 120
         }
-        else
-        {
-            return 70
+        else{
+        return 70
         }
     }
+}
  
 }
 
@@ -341,26 +408,37 @@ extension Main: delegateCategory{
 
 extension Main: orderCellDelegate{
     func orderNowCell(cell: OrderNowTableViewCell) {
+        
          let CategoryListVC = Storyboard.main.instantiateViewController(withIdentifier: BranchCategorylistVC.identifier)
                CategoryListVC.title = "Categorylist"
                self.navigationController?.pushViewController(CategoryListVC, animated: true)
                }
 }
     
-    
+extension Main: IpadOrderCellDelegate{
+    func orderNowCell(cell: OrderNowIpadCell) {
+        let CategoryListVC = Storyboard.main.instantiateViewController(withIdentifier: BranchCategorylistVC.identifier)
+        CategoryListVC.title = "Categorylist"
+        self.navigationController?.pushViewController(CategoryListVC, animated: true)
+        }
+    }
    
     
 extension Main: SearchBarDelegate{
     func didTappedSearchBar(cell: SearchBarCell) {
-          //fatalError()
-//        let genralSearch = Storyboard.main.instantiateViewController(withIdentifier: GernalSearchVC.identifier) as! GernalSearchVC
-//    genralSearch.title = "Search Products"
-//    self.navigationController?.pushViewController(genralSearch, animated: true)
         performSegue(withIdentifier: "MainToSearch", sender: self)
     }
     
     
 }
+extension Main: IpadSearchBarDelegate{
+    func didTappedSearchBar(cell: SearchBarIpadCell) {
+        performSegue(withIdentifier: "MainToSearch", sender: self)
+    }
+    
+    
+}
+
 extension Main: PrscriptionDelegate{
     func uploadPricriptionTapped(cell: UploadPrescriptionCell) {
           uploadPrescriptionViewLoad()
@@ -369,21 +447,14 @@ extension Main: PrscriptionDelegate{
     
     
 }
-extension Main : UIImagePickerControllerDelegate, UINavigationControllerDelegate{
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let image = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
-            img = image
-            
-            let prescriptionVC = Storyboard.main.instantiateViewController(withIdentifier: PrescriptionVC.identifier)as! PrescriptionVC
-            prescriptionVC.title = "Upload Prescription"
-            prescriptionVC.img = img
-            popUpView.removeFromSuperview()
-            self.navigationController?.pushViewController(prescriptionVC, animated: true)
-        }
-        dismiss(animated: true, completion: nil)
+extension Main: IPadPrscriptionDelegate{
+    func uploadPricriptionTapped(cell: UploadPrescriptionIpadCell) {
+        uploadPrescriptionViewLoad()
     }
+    
+    
 }
+
 
 struct ProductWraper: Codable {
     let hasNext: Bool

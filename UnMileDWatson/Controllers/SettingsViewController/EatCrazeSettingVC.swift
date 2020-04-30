@@ -45,6 +45,10 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
             else {
                 fatalError("Unknown cell")
         }
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+                 cell.settingLbl.font =   cell.settingLbl.font.withSize(25)
+             }
+        
         if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
             cell.settingLbl.text = userSettingArray[indexPath.row]
             cell.settingLogo.image = UserSettingLogos[indexPath.row]
@@ -97,7 +101,7 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
             
             if (indexPath.row == 5)
             {
-                logOutAlert(title: "Do You Want to LogOut?", message: "You will not able to place any order",dataTable: tblSettings )  
+                logOutAlert(title: "Do You Want to LogOut?", message: ".You will not able to place any order \n.All Items in cart will be deleted",dataTable: tblSettings )  
             }
             
             
@@ -105,7 +109,16 @@ extension EatCrazeSettingVC: UITableViewDelegate,UITableViewDataSource{
         tblSettings.deselectRow(at: indexPath, animated: false)
         
     }
-    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+            
+            return 140
+        }
+        else{
+            
+        return 70
+        }
+    }
     
 }
 

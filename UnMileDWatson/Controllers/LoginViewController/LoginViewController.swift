@@ -32,18 +32,24 @@ class LoginViewController: BaseViewController {
     var gUserPhoneNo = ""
     var gUserPassword = ""
     
-   
+    @IBOutlet weak var googleView: UIView!
+    
 //    var isFrom = LoginIsFrom.Intro
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
        
-        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            let googleButton = GIDSignInButton()
+                  googleButton.frame = CGRect(x: 0, y: 0, width: googleView.frame.width, height:  googleView.frame.height)
+                  googleView.addSubview(googleButton)
+        }
+        else{
       let googleButton = GIDSignInButton()
         googleButton.frame = CGRect(x: 16, y: btnRegisterUser.frame.maxY + 70, width: view.frame.width - 45, height: 50)
         view.addSubview(googleButton)
-        
+        }
         GIDSignIn.sharedInstance()?.delegate = self
         GIDSignIn.sharedInstance()?.presentingViewController = self
         let company = getCompanyObject(keyForSavedCompany)

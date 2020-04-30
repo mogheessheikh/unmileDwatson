@@ -9,7 +9,7 @@
 import UIKit
 
 
-class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
+class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate,RefreshDataDelegate{
  
     @IBOutlet var checkOutButton: UIButton!
     @IBOutlet var tblCheckOut: UITableView!
@@ -17,7 +17,6 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
     var userEmail = ""
     var userPhone = ""
     var userLables: [String] = ["Name*", "Email*", "Phone*"]
-  
     var branch : Branch!
     var sectionTitle = [ "User","Order Type","Delivery Address","Payment Type","Special Instruction(optional)"]
     var oderType = ""
@@ -58,7 +57,7 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
+        let subVC = SubSettingVC()
         orderDate = currentDateTime()
         orderTime = currentTime()
         transId  = getTransId()
@@ -83,7 +82,7 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
        
     }
     override func viewDidAppear(_ animated: Bool) {
-      
+      print("here")
     }
     override func viewWillAppear(_ animated: Bool) {
       
@@ -112,9 +111,9 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
             
             showAlert(title: "Selection Missing", message: "Must select all selection")
         }
-        else if(userPhone == ""){
+        else if(userPhone == "" || userPhone == nil){
             
-           showAlert(title: "Phone Number Field Can't be Empty", message: "Update your phone number in 'MyProfile'" )
+           showAlert(title: "Phone Number Field Can't be Empty", message: "Update your phone number in 'Phone*' field" )
             return
         }
             
@@ -244,7 +243,9 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate {
             
     }
     
-    
+    func refreshData(){
+        getUser()
+    }
 }
 
 
@@ -287,7 +288,11 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
       else if(indexPath.section == 0)
         {
             guard let  cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? CheckOutTableViewCell else {fatalError("Unknown cell")}
-       
+            if UIDevice.current.userInterfaceIdiom == .pad
+            {
+                cell.lblUser.font =  cell.lblUser.font.withSize(30)
+                cell.lblUserL.font = cell.lblUserL.font.withSize(30)
+            }
                 cell.lblUser.text = "\(userArray[indexPath.row])"
                 cell.lblUserL.text = "\(userLables[indexPath.row])"
                 cell.icons.image = userSectionImagesArray[indexPath.row]
@@ -302,18 +307,35 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
+            if UIDevice.current.userInterfaceIdiom == .pad{
+                cell.deliveryAddress.font = cell.deliveryAddress.font.withSize(30)
+        
+                
+            }
+            cell.delegate = self
+            
             if let savedAddress = UserDefaults.standard.object(forKey: keyForSavedCustomerAddress) as? Data  {
                 let decoder = JSONDecoder()
-                if let loaded = try? decoder.decode(Address.self, from: savedAddress) {
-                    selectedAddress  =  CustomerOrderAddress.init(id: 0, addressID: loaded.id, customerOrderAddressFields: loaded.addressFields)
-                    
+                if let loadedAddress = try? decoder.decode(Address.self, from: savedAddress) {
+                selectedAddress  =  CustomerOrderAddress.init(id: 0, addressID: loadedAddress.id, customerOrderAddressFields: loadedAddress.addressFields)
+           var customerAddress = ""
+            for i in 0..<((selectedAddress.customerOrderAddressFields.count))
+                             {
+                                customerAddress +=  "\(selectedAddress.customerOrderAddressFields[i].fieldValue)" + " "
+                    }
+                         cell.deliveryAddress.text = customerAddress
                 }
                 // Do any additional setup after loading the view.
             }
-            if(selectedAddress != nil){
-            cell.deliveryAddress.text = "\(selectedAddress.customerOrderAddressFields[0].fieldValue + " " + selectedAddress.customerOrderAddressFields[1].fieldValue + " " + selectedAddress.customerOrderAddressFields[2].fieldValue + " " + selectedAddress.customerOrderAddressFields[3].fieldValue)"
+            else{
+                 cell.deliveryAddress.text = "Add Address"
             }
-            cell.delegate = self
+            
+            if(selectedAddress != nil ){
+               
+           
+            }
+            
             return cell
         }
        else if (indexPath.section == 3){
@@ -321,11 +343,15 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
+            if UIDevice.current.userInterfaceIdiom == .pad{
+              orderTypeCell.orderTypelbl.font =  orderTypeCell.orderTypelbl.font.withSize(30)
+            }
             orderTypeCell.orderTypelbl.text =  branch.paymentMethods?[indexPath.row].branchDetailService.orderType.name
                 if(self.indexPathIsSelected(indexPath)) {
-                                     orderTypeCell.orderTypeRadioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
-                                  } else {
-                                      orderTypeCell.orderTypeRadioButton    .setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
+                 orderTypeCell.orderTypeRadioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
+                                  }
+                else {
+                orderTypeCell.orderTypeRadioButton    .setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
                                   }
             return orderTypeCell
         }
@@ -336,15 +362,19 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
                 else {
                     fatalError("Unknown cell")
             }
-            
+            if UIDevice.current.userInterfaceIdiom == .pad{
+              paymentTypeCell.lblPaymentMethod.font =   paymentTypeCell.lblPaymentMethod.font.withSize(30)
+            }
             
             paymentTypeCell.lblPaymentMethod.text = branch.paymentMethods![indexPath.row].paymentType.name
+            
             if(self.indexPathIsSelected(indexPath)) {
-                                                paymentTypeCell.radioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
-                                                 
-                                             } else {
-                                                 paymentTypeCell.radioButton    .setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
-                                             }
+            paymentTypeCell.radioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
+                }
+            else {
+            paymentTypeCell.radioButton.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
+                                             
+            }
             
             return paymentTypeCell
         }
@@ -362,17 +392,12 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
       
         if(indexPath.section == 0){
             
-            guard let popVC = storyboard?.instantiateViewController(withIdentifier: "SubSettingVC") else { return }
-
+            guard let popVC = storyboard?.instantiateViewController(withIdentifier: "SubSettingVC") as? SubSettingVC else { return }
+            
+            popVC.viewDelegate = self
+            popVC.isCloseHidden = false
             popVC.modalPresentationStyle = .popover
-
-            let popOverVC = popVC.popoverPresentationController
-            popOverVC?.delegate = self
-            popOverVC?.sourceView = self.tblCheckOut
-            popOverVC?.sourceRect = CGRect(x: self.tblCheckOut.bounds.midX, y: self.tblCheckOut.bounds.minY, width: 0, height: 0)
-            popVC.preferredContentSize = CGSize(width: 250, height: 250)
-
-            self.present(popVC, animated: true)
+            present(popVC, animated: true, completion: nil)
         }
         
         if(indexPath.section == 3){
@@ -417,6 +442,41 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
 
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            
+            if (indexPath.section == 0){
+                       
+            return 100
+            
+        }
+            else if(indexPath.section == 1){
+                
+                return 160
+                
+                
+            }
+        else if(indexPath.section == 2){
+            
+            return 160
+        }
+        else if (indexPath.section == 3){
+            return 110
+        }
+        else if(indexPath.section == 4){
+            
+            return 110
+            
+        }
+        else if(indexPath.section == 5){
+            return 200
+            
+        }
+        else{ return UITableView.automaticDimension
+            
+        }
+        }
+        else{
+        
         if (indexPath.section == 0){
             
             return 50
@@ -447,16 +507,36 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         else{ return UITableView.automaticDimension
             
         }
+        }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let headerView = UIView(frame: CGRect(x: 0, y: 5, width: 200, height: 90))//set these values as necessary
-        headerView.backgroundColor = UIColor.white
         
-        let label = UILabel(frame: CGRect(x:10  , y: 0, width: tableView.bounds.size.width - 10, height: 24))
-        label.text = headerTitleArray[section]
-        headerView.addSubview(label)
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            
+            let headerView = UIView(frame: CGRect(x: 0, y: 5, width: 400, height: 90))//set these values as necessary
+            headerView.backgroundColor = UIColor.white
+            
+            let label = UILabel(frame: CGRect(x:10  , y: 0, width: tableView.bounds.size.width - 10, height: 30))
+            label.font = label.font.withSize(35)
+            label.text = headerTitleArray[section]
+            headerView.addSubview(label)
+             return headerView
+        }
+        else{
+            
+            let headerView = UIView(frame: CGRect(x: 0, y: 5, width: 200, height: 90))//set these values as necessary
+            headerView.backgroundColor = UIColor.white
+                      
+            let label = UILabel(frame: CGRect(x:10  , y: 0, width: tableView.bounds.size.width - 10, height: 24))
+            label.font = label.font.withSize(20)
+            label.text = headerTitleArray[section]
+            headerView.addSubview(label)
+             return headerView
+        }
+        
 
-        return headerView
+       
     }
     
     
@@ -529,11 +609,17 @@ extension CheckOutVC: PromoCodeDelegate {
 }
 extension CheckOutVC: addAddressDelegate{
     func didTappedAddressButton(cell: DeliveryAddress) {
+        if(userPhone == ""){
+            
+            showAlert(title: "Complete Your Profile First", message: "Your profile is not completed kindly complete your profile first")
+            return
+        }
+        else{
         let userAddress = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddressVC")
         userAddress.title = "User Address"
         self.navigationController?.pushViewController(userAddress, animated: true)
     }
-    
+    }
 }
 extension CheckOutVC: TextFieldInSpecialInstructionDelegate{
     func textField(editingDidBeginIn cell: SpecialInstruction) {
@@ -548,6 +634,4 @@ extension CheckOutVC: TextFieldInSpecialInstructionDelegate{
         }
     }
 }
-
-
 

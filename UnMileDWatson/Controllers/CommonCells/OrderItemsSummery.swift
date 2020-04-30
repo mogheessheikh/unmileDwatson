@@ -15,6 +15,13 @@ class OrderItemsSummery: UITableViewCell, UITableViewDelegate, UITableViewDataSo
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell : OrderSummery = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! OrderSummery
+        
+        if (UIDevice.current.userInterfaceIdiom == .pad){
+            cell.lblItemName.font = cell.lblItemName.font.withSize(25)
+            cell.lblItemQuantity.font = cell.lblItemName.font.withSize(25)
+            cell.lblItemPrice.font = cell.lblItemName.font.withSize(25)
+        }
+        
         if let urlString = customerOrderItems?[indexPath.row].product.productPhotoURL,
             let url = URL(string: urlString) {
             cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: false)}

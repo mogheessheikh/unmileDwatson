@@ -74,11 +74,14 @@ class PlaceOrderVC: BaseViewController {
             orderDiscount = calculatePromoCodeDiscount(branch: branch, customerOrder: customerOrder)
         }
         
-        finalsubTotal = round(customerOrder.subTotal + surCharges + taxAmount - orderDiscount)
+        finalsubTotal = round(customerOrder.subTotal + customerOrder.deliveryCharge + taxAmount - orderDiscount)
         
         routeArray = [restuarentAddress,"\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
         
         tblOrderSummery.register(UINib(nibName: "Route", bundle: Bundle.main), forCellReuseIdentifier: "routecell")
+        tblOrderSummery.register(UINib(nibName: "InvoiceIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "InvoiceIpadCell")
+        
+        tblOrderSummery.register(UINib(nibName: "OrderDetailIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "OrderDetailIpadCell")
         tblOrderSummery.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblOrderSummery.register(UINib(nibName: "OrderDetail", bundle: Bundle.main), forCellReuseIdentifier: "detailcell")
         tblOrderSummery.register(UINib(nibName: "ContactSupport", bundle: Bundle.main), forCellReuseIdentifier: "contactcell")
@@ -114,6 +117,8 @@ class PlaceOrderVC: BaseViewController {
             newObj["product"] = aDict["product"]
             newObj["purchaseSubTotal"] = aDict["purchaseSubTotal"]
             newObj["quantity"] = aDict["quantity"]
+            newObj["productPrice"] = aDict["productPrice"]
+            newObj["discount"] = aDict["discount"]
             
             adjustedCustomerOrderItemArray.add(newObj)
             
@@ -219,7 +224,12 @@ class PlaceOrderVC: BaseViewController {
                         UIApplication.shared.endIgnoringInteractionEvents()
                 //self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
                         self.saveCustomerOrder(obj: customerOrder, key: "savedCustomerOrder" )
-                        
+                    
+                    let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+                    if (alreadyItems.count != 0){
+                    alreadyItems.removeAllObjects()
+                    self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
+                    }
                         let vc : UIViewController = Storyboard.main.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
                         self.present(vc, animated: true, completion: nil)
                         
@@ -440,7 +450,21 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
         
         if indexPath.section == 2
         {
-            
+            if UIDevice.current.userInterfaceIdiom == .pad {
+                
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "InvoiceIpadCell", for: indexPath) as? InvoiceIpadCell
+                else {
+                fatalError("Unknown cell")
+                }
+               cell.lblAmountValue.text = "\(customerOrder.amount)"
+               cell.lblOrderTime.text = "\(currentDateTime())"
+               cell.lblGST.text = "\(round(taxAmount))"
+               cell.lblSurCharge.text = "\(customerOrder.deliveryCharge)"
+               cell.lblDiscount.text = "\(round(orderDiscount))"
+               cell.lblSubTotal.text = "\(finalsubTotal) PKR"
+               return cell
+            }
+            else{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "ordercell", for: indexPath) as? OrderCompleteCell
                 else {
                     fatalError("Unknown cell")
@@ -448,15 +472,19 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             cell.lblAmountValue.text = "\(customerOrder.subTotal)"
             cell.lblOrderTime.text = "\(currentDateTime())"
             cell.lblGST.text = "\(round(taxAmount))"
-            cell.lblSurCharge.text = "\(round(surCharges))"
+            cell.lblSurCharge.text = "\(customerOrder.deliveryCharge)"
             cell.lblDiscount.text = "\(round(orderDiscount))"
             cell.lblSubTotal.text = "\(finalsubTotal) PKR"
             return cell
+            }
         }
         else if(indexPath.section == 3) {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "routecell", for: indexPath) as? Route
                 else {
                     fatalError("Unknown cell")
+            }
+            if(UIDevice.current.userInterfaceIdiom == .pad){
+                cell.lblRoute.font =   cell.lblRoute.font.withSize(25)
             }
             cell.imgRoute.image = routeLogo[indexPath.row]
             cell.lblRoute.text = routeArray[indexPath.row]
@@ -471,6 +499,25 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             return cell
         }
         else if (indexPath.section == 1) {
+            
+            if(UIDevice.current.userInterfaceIdiom == .pad){
+                
+                guard let cell = tableView.dequeueReusableCell(withIdentifier: "OrderDetailIpadCell", for: indexPath) as? OrderDetailIpadCell
+                    else {
+                    fatalError("Unknown cell")
+                    }
+                if(customerOrder.paymentType == "BANK"){
+                cell.lblPaymentType.text =  "\(branch.paymentMethods?[1].bankDetail ?? "")"
+                }
+                else{
+                cell.lblPaymentType.text =  "\(customerOrder.paymentType)"
+                }
+                           
+                cell.lblInstructions.text = "\(customerOrder.specialInstructions)"
+                cell.lblDeliveryTime.text = "Minimum Delivery Time is 3 hours & Max-24 Hours (Islamabad/Rawalpindi) Outside (2-3 days)"
+                return cell
+            }
+            else{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "detailcell", for: indexPath) as? OrderDetail
                 else {
                     fatalError("Unknown cell")
@@ -483,8 +530,9 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             }
             
             cell.lblInstruction.text = "\(customerOrder.specialInstructions)"
-            cell.lblDeliveryTime.text = "minimum 50-70 mints"
+            cell.lblDeliveryTime.text =  "Minimum Delivery Time is 3 hours & Max-24 Hours (Islamabad/Rawalpindi) Outside (2-3 days)"
             return cell
+            }
         }
         else{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "contactcell", for: indexPath) as? ContactSupport
@@ -504,6 +552,23 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
         }
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        
+        if UIDevice.current.userInterfaceIdiom == .pad{
+            if(indexPath.section == 2 )
+            {
+                return 800
+            }
+            else if (indexPath.section == 0){
+                
+                return 250
+            }
+                else if (indexPath.section == 1){
+                    
+                    return 400
+                }
+            else {return UITableView.automaticDimension}
+        }
+        else{
         if(indexPath.section == 2 )
         {
             return 434
@@ -517,6 +582,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 return 200
             }
         else {return UITableView.automaticDimension}
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

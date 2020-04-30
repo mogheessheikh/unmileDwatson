@@ -20,11 +20,11 @@ class BaseViewController: UIViewController {
     var currentAddress : Address!
     var address: AddressField?
     var isBranchClose = "true"
-   
     var saveCustomerAddress : [Address]!
     private var customerAddressDetails : [Address]!
     var companyObject: CompanyDetails!
     let activityIndicatorView:UIActivityIndicatorView = UIActivityIndicatorView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if let _ = UserDefaults.standard.object(forKey: keyForSavedCompany) as? Data{
@@ -177,8 +177,14 @@ class BaseViewController: UIViewController {
             
             deleteAlert.addAction(UIAlertAction(title: "Ok", style: .default, handler: { (action: UIAlertAction!) in
                
-                    UserDefaults.standard.removeObject(forKey: keyForSavedCustomer)//(forKey: "savedCustomer")
-                    UserDefaults.standard.removeObject(forKey:keyForSavedCustomerName)
+               UserDefaults.standard.removeObject(forKey: keyForSavedCustomer)//(forKey: "savedCustomer")
+               UserDefaults.standard.removeObject(forKey:keyForSavedCustomerName)
+                
+               let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+                if (alreadyItems.count != 0){
+                alreadyItems.removeAllObjects()
+                self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
+                }
                 
                     dataTable.reloadData()
             }))

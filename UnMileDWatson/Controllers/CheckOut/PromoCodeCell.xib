@@ -26,33 +26,37 @@
                                     <constraint firstAttribute="width" secondItem="NAw-bX-jUH" secondAttribute="height" multiplier="1:1" id="bcH-yr-jcN"/>
                                 </constraints>
                             </imageView>
-                            <stackView opaque="NO" contentMode="scaleAspectFit" distribution="fillEqually" spacing="123" translatesAutoresizingMaskIntoConstraints="NO" id="g5v-hn-s2Y">
-                                <rect key="frame" x="57" y="0.0" width="369" height="30"/>
-                                <subviews>
-                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Promo Code" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KwQ-4E-izb">
-                                        <rect key="frame" x="0.0" y="0.0" width="123" height="30"/>
-                                        <color key="backgroundColor" systemColor="tertiarySystemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="tintColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="go" textContentType="name"/>
-                                        <connections>
-                                            <action selector="didtextEnter:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="nET-4X-0kk"/>
-                                        </connections>
-                                    </textField>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wNi-zw-4Cv">
-                                        <rect key="frame" x="246" y="0.0" width="123" height="30"/>
-                                        <color key="backgroundColor" red="0.0" green="0.11002624501785567" blue="0.50585930264720802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <state key="normal" title="Verify">
-                                            <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="verifyButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="cri-fd-0kA"/>
-                                        </connections>
-                                    </button>
-                                </subviews>
-                            </stackView>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="249" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Promo Code" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="KwQ-4E-izb">
+                                <rect key="frame" x="57" y="0.0" width="302" height="30"/>
+                                <color key="backgroundColor" systemColor="tertiarySystemGroupedBackgroundColor" red="0.94901960780000005" green="0.94901960780000005" blue="0.96862745100000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="tintColor" red="0.93725490570000003" green="0.93725490570000003" blue="0.95686274770000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" keyboardType="webSearch" returnKeyType="go" textContentType="name"/>
+                                <connections>
+                                    <action selector="didtextEnter:" destination="KGk-i7-Jjw" eventType="editingDidEnd" id="nET-4X-0kk"/>
+                                </connections>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wNi-zw-4Cv">
+                                <rect key="frame" x="386" y="0.0" width="40" height="30"/>
+                                <color key="backgroundColor" red="0.0" green="0.11002624501785567" blue="0.50585930264720802" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Verify">
+                                    <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="verifyButtonTapped:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="cri-fd-0kA"/>
+                                </connections>
+                            </button>
                         </subviews>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="KwQ-4E-izb" secondAttribute="bottom" id="C5v-1p-KBk"/>
+                            <constraint firstItem="KwQ-4E-izb" firstAttribute="top" secondItem="lRa-v9-N7D" secondAttribute="top" id="M06-oh-KGG"/>
+                            <constraint firstAttribute="trailing" secondItem="wNi-zw-4Cv" secondAttribute="trailing" id="OO1-2D-MMu"/>
+                            <constraint firstItem="wNi-zw-4Cv" firstAttribute="top" secondItem="lRa-v9-N7D" secondAttribute="top" id="h1R-3U-2wL"/>
+                            <constraint firstAttribute="bottom" secondItem="wNi-zw-4Cv" secondAttribute="bottom" id="iN9-jI-oXR"/>
+                            <constraint firstItem="wNi-zw-4Cv" firstAttribute="leading" secondItem="KwQ-4E-izb" secondAttribute="trailing" constant="27" id="rXp-2u-cUm"/>
+                            <constraint firstItem="KwQ-4E-izb" firstAttribute="leading" secondItem="NAw-bX-jUH" secondAttribute="trailing" constant="27" id="xTe-hO-yse"/>
+                        </constraints>
                     </stackView>
                 </subviews>
                 <constraints>

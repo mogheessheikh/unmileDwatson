@@ -53,6 +53,9 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as? SideMenuCell else {
             fatalError("Unknown cell")
         }
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+            cell.lblSideMenu.font =   cell.lblSideMenu.font.withSize(25)
+        }
         
         if UserDefaults.standard.object(forKey: keyForSavedCustomerName) != nil{
             
@@ -68,13 +71,27 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         return cell
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        if(UIDevice.current.userInterfaceIdiom == .pad){
+            
+            return 140
+        }
+        else{
+            
         return 70
+        }
         
     }
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         
-        
+       if(UIDevice.current.userInterfaceIdiom == .pad){
+            
+            return 250
+        }
+        else{
+            
         return 165
+        }
+  
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -129,7 +146,7 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
                 performSegue(withIdentifier: "sideMenuToMore" , sender: self)
             }
             else if(indexPath.row == 8){
-                 logOutAlert(title: "Do You Want to LogOut?", message: "You will not able to place any order",dataTable: tblSlideMenu )
+                 logOutAlert(title: "Do You Want to LogOut?", message: ".You will not able to place any order \n.All Items in cart will be deleted",dataTable: tblSlideMenu )
             }
             
         }
@@ -189,7 +206,7 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         }
         
         else{
-            headerView.lblUserName.text = "User is Not LogIn"
+            headerView.lblUserName.text = "user is not logged in"
             headerView.lblUserEmail.text = ""
         }
         return headerView
@@ -200,7 +217,7 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
         footerView.frame = CGRect(x: 100, y: 100, width: 200, height: 50)
         let label = UILabel()
         label.frame = CGRect(x: 14  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
-        label.text = "legal"
+        label.text = "Version"
         footerView.addSubview(label)
        
         let label2 = UILabel()

@@ -1041,7 +1041,8 @@ extension NetworkManager {
 
 enum ServerURLs {
     static let stagingURL           = "http://130.211.192.1:8082/rest"
-    static let productionURL        = "http://35.153.13.41:8082/rest"
+    static let productionURLNew     = "https://rest.itsolhub.com/rest/v2"
+    static let productionURL        =  "http://35.153.13.41:8082/rest" //"http://130.211.192.1:8082/rest" 
     static let googleServerURL      = "http://35.243.235.232:8082/rest"
 }
 
@@ -1064,6 +1065,24 @@ enum Path {
     static let menuUrlV2                 = ServerURLs.stagingURL + "/v2/menu"
 }
 
+enum ProductionPathNew {
+    static let companyUrl                = ServerURLs.productionURL + "/company"
+    static let companyCityUrl            = ServerURLs.productionURL + "/city/all/"
+    static let branchUrl                 = ServerURLs.productionURL + "/branch"
+    static let menuUrl                   = ServerURLs.productionURL + "/menu"
+    static let categoryUrl               = ServerURLs.productionURL + "/category"
+    static let customerUrl               = ServerURLs.productionURL + "/customer"
+    static let addressUrl                = ServerURLs.productionURL + "/address"
+    static let transIdUrl                = ServerURLs.productionURL + "/transid"
+    static let customerOrderUrl          = ServerURLs.productionURL + "/customer-order"
+    static let optionGroupUrl            = ServerURLs.productionURL + "/optiongroup"
+    static let productUrl                = ServerURLs.productionURL + "/product"
+    static let pageContentUrl            = ServerURLs.productionURL + "/pagecontent"
+    static let imageUrl                  = ServerURLs.productionURL + "/image"
+    static let sendEmailUrl              = ServerURLs.productionURL + "/email-sender"
+    static let companyBannerUrl          = ServerURLs.productionURL + "/companybanner"
+    static let menuUrlV2                 = ServerURLs.productionURL  + "/menu"
+}
 enum ProductionPath {
     static let companyUrl                = ServerURLs.productionURL + "/company"
     static let companyCityUrl            = ServerURLs.productionURL + "/v2/city/all/"

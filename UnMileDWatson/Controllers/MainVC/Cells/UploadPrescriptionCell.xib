@@ -17,34 +17,56 @@
                 <rect key="frame" x="0.0" y="0.0" width="340" height="100"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Upload Prescription" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4c-le-biQ">
-                        <rect key="frame" x="79" y="26" width="202" height="25"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Upload Prescription" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4c-le-biQ">
+                        <rect key="frame" x="81" y="26" width="178.5" height="26.5"/>
                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Bold" family="Bodoni 72" pointSize="22"/>
                         <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Doctor Prescription will be add here." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HXr-Hq-8sb">
-                        <rect key="frame" x="79" y="51" width="211" height="21"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Doctor Prescription will be add here." textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HXr-Hq-8sb">
+                        <rect key="frame" x="79" y="52.5" width="211" height="18.5"/>
                         <fontDescription key="fontDescription" name="BodoniSvtyTwoITCTT-Book" family="Bodoni 72" pointSize="15"/>
                         <color key="textColor" red="0.0" green="0.16078431369999999" blue="0.50588235290000005" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="prescription" translatesAutoresizingMaskIntoConstraints="NO" id="niP-a6-EmX">
-                        <rect key="frame" x="15" y="26" width="48" height="43"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="prescription" translatesAutoresizingMaskIntoConstraints="NO" id="niP-a6-EmX">
+                        <rect key="frame" x="15" y="26" width="50" height="43"/>
                     </imageView>
-                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jJ0-IU-gIT">
+                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jJ0-IU-gIT">
                         <rect key="frame" x="0.0" y="0.0" width="340" height="100"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <inset key="imageEdgeInsets" minX="278" minY="23" maxX="0.0" maxY="22"/>
-                        <state key="normal" image="arrow-point-to-right"/>
                         <connections>
                             <action selector="didTappedUploadPrescription:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="wj2-oi-yf5"/>
                         </connections>
                     </button>
+                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow-point-to-right" translatesAutoresizingMaskIntoConstraints="NO" id="tXH-Le-EpZ">
+                        <rect key="frame" x="286" y="26" width="54" height="45"/>
+                        <constraints>
+                            <constraint firstAttribute="width" constant="54" id="Gx3-OQ-mSS"/>
+                            <constraint firstAttribute="height" constant="45" id="QQ2-xo-2bt"/>
+                        </constraints>
+                    </imageView>
                 </subviews>
+                <constraints>
+                    <constraint firstItem="HXr-Hq-8sb" firstAttribute="top" secondItem="e4c-le-biQ" secondAttribute="bottom" id="6Eg-0c-uQe"/>
+                    <constraint firstItem="tXH-Le-EpZ" firstAttribute="leading" secondItem="e4c-le-biQ" secondAttribute="trailing" constant="26.5" id="BlB-4I-PWC"/>
+                    <constraint firstAttribute="bottom" secondItem="niP-a6-EmX" secondAttribute="bottom" constant="31" id="HsR-R9-ytn"/>
+                    <constraint firstAttribute="bottom" secondItem="jJ0-IU-gIT" secondAttribute="bottom" id="JMp-gL-vUY"/>
+                    <constraint firstItem="jJ0-IU-gIT" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" id="KDH-ki-j0t"/>
+                    <constraint firstAttribute="trailing" secondItem="HXr-Hq-8sb" secondAttribute="trailing" constant="50" id="Lvj-hH-lkl"/>
+                    <constraint firstItem="niP-a6-EmX" firstAttribute="leading" secondItem="H2p-sc-9uM" secondAttribute="leading" constant="15" id="W8Z-wl-mN8"/>
+                    <constraint firstAttribute="trailing" secondItem="jJ0-IU-gIT" secondAttribute="trailing" id="WwY-9l-n4v"/>
+                    <constraint firstItem="jJ0-IU-gIT" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" id="YMn-a9-5qE"/>
+                    <constraint firstItem="e4c-le-biQ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="26" id="cXn-AH-U1N"/>
+                    <constraint firstItem="tXH-Le-EpZ" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="26" id="djr-FI-U6T"/>
+                    <constraint firstAttribute="bottom" secondItem="tXH-Le-EpZ" secondAttribute="bottom" constant="29" id="eF2-Zv-AWC"/>
+                    <constraint firstAttribute="trailing" secondItem="e4c-le-biQ" secondAttribute="trailing" constant="80.5" id="hV3-Z1-jcv"/>
+                    <constraint firstAttribute="bottom" secondItem="HXr-Hq-8sb" secondAttribute="bottom" constant="29" id="nBo-Q2-YI0"/>
+                    <constraint firstItem="HXr-Hq-8sb" firstAttribute="leading" secondItem="niP-a6-EmX" secondAttribute="trailing" constant="14" id="of2-aN-b26"/>
+                    <constraint firstAttribute="trailing" secondItem="tXH-Le-EpZ" secondAttribute="trailing" id="ref-qt-5V7"/>
+                    <constraint firstItem="niP-a6-EmX" firstAttribute="top" secondItem="H2p-sc-9uM" secondAttribute="top" constant="26" id="zRk-nf-LN8"/>
+                    <constraint firstItem="e4c-le-biQ" firstAttribute="leading" secondItem="niP-a6-EmX" secondAttribute="trailing" constant="16" id="zuO-pI-qGm"/>
+                </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <point key="canvasLocation" x="120.28985507246378" y="91.071428571428569"/>

@@ -8,10 +8,12 @@
 
 import UIKit
 
+
 class AddressVC: BaseViewController {
 
     var totalAddress : [Address]!
-    var addressList : [Address]?
+    var selectedAddress: Address?
+    var userAddressList : [Address]?
     var addressFields = [AddressField]()
     var addressField : CustomerOrderAddressField!
     var customerorderaddress : CustomerOrderAddress!
@@ -23,10 +25,14 @@ class AddressVC: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        if let savedAddress = UserDefaults.standard.object(forKey: keyForSavedCustomerAddress) as? Data  {
+            let decoder = JSONDecoder()
+            if let loadedAddress = try? decoder.decode(Address.self, from: savedAddress) {
+                selectedAddress = loadedAddress
+            }
+        }
         // Do any additional setup after loading the view.]
         fieldId.reserveCapacity(4)
-      
        getuserAddress()
 
     }
@@ -50,6 +56,7 @@ class AddressVC: BaseViewController {
             self.view.endEditing(true)
             
             do {
+                self.userAddressList?.removeAll()
                 let jsonData =  try json.rawData()
                 print(jsonData)
                 let customer = try JSONDecoder().decode(CustomerDetail.self, from: jsonData)
@@ -57,15 +64,18 @@ class AddressVC: BaseViewController {
                 self.totalAddress = customer.addresses
                 if self.totalAddress != nil{
                     
-                    self.addressList = self.totalAddress.filter { $0.archive == 0 }
+                    self.userAddressList = self.totalAddress.filter { $0.archive == 0 }
+                    self.tblAddress.reloadData()
+                    
                 }
                 else{
-                    self.addressList = []
+                    UserDefaults.standard.removeObject(forKey: keyForSavedCustomerAddress)
+                    self.userAddressList = []
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3 , execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
                     
-                    self.tblAddress.reloadData()
+                 
                     self.stopActivityIndicator()
                     
                 })
@@ -126,7 +136,7 @@ class AddressVC: BaseViewController {
 }
 extension AddressVC: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return addressList?.count ?? 0
+        return userAddressList?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -135,13 +145,13 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
         var customerAddress = ""
         var cityArea = ""
         
-        for i in 0...3
+        for i in 0..<((userAddressList?[indexPath.row].addressFields.count)!)
             {
-                if(addressList?[indexPath.row].addressFields[i].label == "addressLine1" || addressList![indexPath.row].addressFields[i].label == "addressLine2"){
-                    customerAddress += (addressList?[indexPath.row].addressFields[i].fieldValue)!
+                if(userAddressList?[indexPath.row].addressFields[i].label == "addressLine1" || userAddressList![indexPath.row].addressFields[i].label == "addressLine2" || userAddressList?[indexPath.row].addressFields[i].label == "addressline1"){
+                    customerAddress += (userAddressList?[indexPath.row].addressFields[i].fieldValue)!
                 }
-                else if(addressList?[indexPath.row].addressFields[i].label == "city" || addressList![indexPath.row].addressFields[i].label == "area"){
-                    cityArea += (addressList?[indexPath.row].addressFields[i].fieldValue)!
+                else if(userAddressList?[indexPath.row].addressFields[i].label == "city" || userAddressList![indexPath.row].addressFields[i].label == "area"){
+                    cityArea += (userAddressList?[indexPath.row].addressFields[i].fieldValue)!
                     
                 }
            
@@ -155,7 +165,7 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
       
-        currentAddress = addressList![indexPath.row]
+        currentAddress = userAddressList![indexPath.row]
         saveSelectedAddress(obj: currentAddress, key: keyForSavedCustomerAddress)
         dismiss(animated: true, completion: nil)
        self.navigationController?.popViewController(animated: true)
@@ -170,12 +180,14 @@ extension AddressVC: UITableViewDelegate, UITableViewDataSource{
 extension AddressVC : editAddressDelegate {
     func deleteButtonTapped(cell: AddressTableViewCell) {
           let indexPath = self.tblAddress.indexPath(for: cell)
-        let alreadyAddress = NSMutableArray.init(array: addressList!)
-        if (alreadyAddress.count != 0){
-            deleteAddress(addressId: (addressList?[(indexPath?.row)!].id)!)
-            alreadyAddress.removeObject(at: indexPath!.row)
-            //self.tblAddress.deleteRows(at: [indexPath!] , with: .fade)
-            totalAddress.remove(at: indexPath!.row)
+      
+        if (userAddressList?.count != 0){
+            deleteAddress(addressId: (userAddressList?[(indexPath?.row)!].id)!)
+            if(userAddressList?[(indexPath?.row)!].id == selectedAddress?.id){
+              UserDefaults.standard.removeObject(forKey: keyForSavedCustomerAddress)
+            }
+            userAddressList?.remove(at: indexPath!.row)
+            self.totalAddress.remove(at: indexPath!.row)
             tblAddress.reloadData()
             getuserAddress()
     }
@@ -183,13 +195,13 @@ extension AddressVC : editAddressDelegate {
     
     func didTappedEdit(cell: AddressTableViewCell) {
     let indexPath = self.tblAddress.indexPath(for: cell)
-        currentAddress = addressList?[(indexPath?.row)!]
+        currentAddress = userAddressList?[(indexPath?.row)!]
         edit = true
         fieldId.removeAll()
-        for field in 0...3{
-            fieldId.append((addressList?[(indexPath?.row)!].addressFields[field].id)!)
+        for i in 0..<((userAddressList?[indexPath!.row].addressFields.count)!){
+            fieldId.append((userAddressList?[(indexPath?.row)!].addressFields[i].id)!)
         }
-        addressId = (addressList?[(indexPath?.row)!].id)!
+        addressId = (userAddressList?[(indexPath?.row)!].id)!
         //performSegue(withIdentifier: "address2addAddress", sender: self)
         let userAddress = UIStoryboard.init(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "AddAddressVC") as! AddAddressVC
         //let navi =  UINavigationController.init(rootViewController: initialVC)

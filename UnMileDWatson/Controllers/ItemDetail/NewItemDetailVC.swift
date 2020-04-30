@@ -239,7 +239,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell6", for: indexPath) as! addToCartButtonCell
                 cell.addItemButton.layer.cornerRadius = 7
-                if(product.price == 0.0){
+                if(product.price == 0.0 && product.optionGroups.count != 0){
                     cell.productPrice.text = "\(product.optionGroups[indexPath.row].options![indexPath.row].price ?? 0.0)"
                 }
                 else{
@@ -304,7 +304,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 oG  =  CustomerOptionGroup.init(id: product.optionGroups[indexPath.section-3].id, name: product.optionGroups[indexPath.section-3].name, identifierName: product.optionGroups[indexPath.section-3].identifierName, listQuantity: product.optionGroups[indexPath.section-3].listQuantity, minChoice: product.optionGroups[indexPath.section-3].minChoice, maxChoice: product.optionGroups[indexPath.section-3].maxChoice, status: product.optionGroups[indexPath.section-3].status, archive: product.optionGroups[indexPath.section-3].archive, optID: product.optionGroups[indexPath.section-3].optID, options: [product.optionGroups[indexPath.section-3].options![indexPath.row]])
                 optionGroupOptions =  product.optionGroups[indexPath.section-3].options?[indexPath.row]
                 
-                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity: customerOptionGroupArray.count, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions, parentOptionGroup: product?.optionGroups[indexPath.section-3], customerOrderItem: items)
+                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity:1, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions, parentOptionGroup: product?.optionGroups[indexPath.section-3], customerOrderItem: items)
                 
 //                if(previusSelectedCellIndexPath != nil)
 //                {
@@ -439,7 +439,8 @@ extension NewItemDetailVC: itemDelegate{
                 items?.instructions = specialIstruction
                 print(String.init(format: "count before adding item is %i", alreadyItems.count))
                 
-                items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld" , forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray )
+                items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld", forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, productPrice: productPrice, discount: 0.0, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray)
+                
                 alreadyItems.append(items!)
                 
                 saveItems(allItems: alreadyItems)
@@ -554,13 +555,15 @@ struct CustomerOrderItem: Codable {
     var instructions: String?
     var quantity: Int?
     var purchaseSubTotal: Double
+    var productPrice: Double
+    var discount: Double
     var product: CustomerProduct
     var customerOrderItemOptions: [CustomerOrderItemOption]
     
     enum CodingKeys: String, CodingKey {
         case id
         case orderItemID = "orderItemId"
-        case forWho, instructions, quantity, purchaseSubTotal, product, customerOrderItemOptions
+        case forWho, instructions, quantity, purchaseSubTotal, product, customerOrderItemOptions,productPrice,discount
     }
 }
 
