@@ -14,7 +14,7 @@ class OrderDetailVC: BaseViewController {
     var sectionTitle = ["PREVIOUS ORDER","Route","Order Summery","Detail","Contact Support"]
     var sectionOneArrayTitle:[String?] = ["Sub Total","Sur Charge","GST","Discount","Order Number", "Order Time"]
     var routeLogo: UIImage =  UIImage(named: "location1")!
-    var route: String!
+    var route = ""
     var itemSummery : [CustomerOrderItem]!
      var sectionOneArrayValue:[String]!
     var preOrder : CustomerOrder!
@@ -27,8 +27,22 @@ class OrderDetailVC: BaseViewController {
         tblOrderDetail.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblOrderDetail.register(UINib(nibName: "OrderDetail", bundle: Bundle.main), forCellReuseIdentifier: "detailcell")
         tblOrderDetail.register(UINib(nibName: "ContactSupport", bundle: Bundle.main), forCellReuseIdentifier: "contactcell")
-        sectionOneArrayValue = ["\(preOrder.subTotal)","\(round(preOrder.surCharge!))","\(round(preOrder.customerOrderTaxes[0].taxAmount ))","\(round(preOrder.orderDiscount ?? 0 ))","\(preOrder.id)","\(preOrder.orderDate)"]
-        route = "\(preOrder.customerOrderAddress.customerOrderAddressFields[0].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[1].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[2].fieldValue + preOrder.customerOrderAddress.customerOrderAddressFields[3].fieldValue)"
+        var tax = 0.0
+        
+        if(preOrder.customerOrderTaxes.count != 0){
+            tax = preOrder.customerOrderTaxes[0].taxAmount
+            
+        }
+        else{
+            tax = 0.0
+        }
+        for i in preOrder.customerOrderAddress.customerOrderAddressFields{
+            
+            route += "  \(i.fieldValue)"
+        }
+        
+        sectionOneArrayValue = ["\(preOrder.subTotal)","\(round(preOrder.surCharge!))","\(round(tax))","\(round(preOrder.orderDiscount ?? 0 ))","\(preOrder.id)","\(preOrder.orderDate)"]
+   
             itemSummery = preOrder.customerOrderItem
     }
 }
@@ -54,9 +68,12 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
         
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        if(indexPath.section == 2 && indexPath.row == 1 || indexPath.section == 3)
+        if(indexPath.section == 2 && indexPath.row == 1)
         {
             return 100
+        }
+        else if (indexPath.section == 3){
+            return 150
         }
         else {return 60}
     }
@@ -101,7 +118,7 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
             
             cell.lblPaymentType.text =  preOrder.paymentType
             cell.lblInstruction.text = "\(preOrder.specialInstructions)"
-            cell.lblDeliveryTime.text = "minimum 50-75 mints"
+            cell.lblDeliveryTime.text = "Minimum Delivery Time is 3 hours & Max-24 Hours (Islamabad/Rawalpindi) Outside (2-3 days)"
             return cell
         }
         else{

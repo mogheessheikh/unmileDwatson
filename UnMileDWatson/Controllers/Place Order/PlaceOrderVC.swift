@@ -76,7 +76,14 @@ class PlaceOrderVC: BaseViewController {
         
         finalsubTotal = round(customerOrder.subTotal + customerOrder.deliveryCharge + taxAmount - orderDiscount)
         
-        routeArray = [restuarentAddress,"\(selectedAddress!.customerOrderAddressFields[0].fieldValue + selectedAddress!.customerOrderAddressFields[1].fieldValue + selectedAddress!.customerOrderAddressFields[2].fieldValue + selectedAddress!.customerOrderAddressFields[3].fieldValue)"]
+        
+        var customerAddress = ""
+        
+        for fields in selectedAddress!.customerOrderAddressFields{
+            customerAddress += "  \(fields.fieldValue)"
+        }
+        
+        routeArray = [restuarentAddress,"\(customerAddress)"]
         
         tblOrderSummery.register(UINib(nibName: "Route", bundle: Bundle.main), forCellReuseIdentifier: "routecell")
         tblOrderSummery.register(UINib(nibName: "InvoiceIpadCell", bundle: Bundle.main), forCellReuseIdentifier: "InvoiceIpadCell")
@@ -102,6 +109,26 @@ class PlaceOrderVC: BaseViewController {
         UIApplication.shared.beginIgnoringInteractionEvents()
         
         // customerOrder.customerOrderItem conversion into json data
+        
+        let customerAddress = try! JSONEncoder().encode(selectedAddress.customerOrderAddressFields) //Data
+        let customerAddressArray = try! JSONSerialization.jsonObject(with: customerAddress, options: []) as! Array<Dictionary<String, Any>>
+               
+               let adjustedCustomerAddressArray = NSMutableArray.init()
+               
+               for aDict in customerAddressArray{
+                   let newObj = NSMutableDictionary.init()
+                   
+                   newObj["fieldName"] = aDict["fieldName"]
+                   newObj["fieldValue"] = aDict["fieldValue"]
+                   newObj["label"] = aDict["label"]
+                   
+                   adjustedCustomerAddressArray.add(newObj)
+                   
+               }
+               print(adjustedCustomerAddressArray)
+        
+        
+        
         let jsonData = try! JSONEncoder().encode(customerOrder.customerOrderItem) //Data
         let jsonArray = try! JSONSerialization.jsonObject(with: jsonData, options: []) as! Array<Dictionary<String, Any>>
         
@@ -150,7 +177,7 @@ class PlaceOrderVC: BaseViewController {
             "customerFirstName":"\(customerOrder.customerFirstName)",
             "customerId": "\(customerOrder.customerID)",
             "customerLastName":"\(customerOrder.customerLastName)",
-            "customerOrderAddress":["customerOrderAddressFields":[["fieldName":"addressLine1","fieldValue":"\(selectedAddress.customerOrderAddressFields[0].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[0].label)"],["fieldName":"addressLine2","fieldValue":"\(selectedAddress.customerOrderAddressFields[1].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[1].label)"],["fieldName":"city","fieldValue":"\(selectedAddress.customerOrderAddressFields[2].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[2].label)"],["fieldName":"area","fieldValue":"\(selectedAddress.customerOrderAddressFields[3].fieldValue)","label":"\(selectedAddress.customerOrderAddressFields[3].label)"]]],
+            "customerOrderAddress":["customerOrderAddressFields": adjustedCustomerAddressArray],
             "customerOrderItem": adjustedCustomerOrderItemArray,
             "customerOrderTaxes": adjustedJsontaxArray,
             "customerPhone":"\(customerOrder.customerPhone)",

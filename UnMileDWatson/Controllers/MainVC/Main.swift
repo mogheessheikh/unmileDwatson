@@ -30,29 +30,13 @@ class Main: BaseViewController,UIPopoverPresentationControllerDelegate {
        
         // Do any additional setup after loading the view.
         
-        // ******************START-POPUPVIEW**********************
-             
-               
-               
-//               popUpView.btnCamera.layer.cornerRadius = 7
-//               popUpView.btnGallery.layer.cornerRadius = 7
-//
-//
-//               popUpView.btnCloseView.addTarget(self, action: #selector(closePopUp(with:)), for: .touchUpInside)
-//               popUpView.btnCamera.addTarget(self, action: #selector(openCamera(with:)), for: .touchUpInside)
-//               popUpView.btnGallery.addTarget(self, action: #selector(openGallery(with:)), for: .touchUpInside)
-               
-               // ******************END-POPUPVIEW***************************
 
         companyDetails = getCompanyObject(keyForSavedCompany)
-     
-       initiateCartButton()
-       registerTableViewCells()
-       slideMenu()
-//        categotyCollection.delegate = self as! UICollectionViewDelegate
-//        categotyCollection.dataSource = self
-           getBranchCategories()
-           getbranchDetail()
+        initiateCartButton()
+        registerTableViewCells()
+        slideMenu()
+        getBranchCategories()
+        getbranchDetail()
     
     }
      override func viewWillAppear(_ animated: Bool) {
@@ -65,7 +49,8 @@ class Main: BaseViewController,UIPopoverPresentationControllerDelegate {
       }
     func getbranchDetail(){
               
-              self.startActivityIndicator()
+        self.startActivityIndicator()
+        
         UIApplication.shared.beginIgnoringInteractionEvents()
               let path = ProductionPath.branchUrl + "/\(branchId)"
               print(path)
@@ -102,6 +87,7 @@ class Main: BaseViewController,UIPopoverPresentationControllerDelegate {
           func getBranchCategories() {
               
               self.startActivityIndicator()
+            
               let path = ProductionPath.menuUrlV2 + "/?branchId=\(branchId)&productName="
               print(path)
               
@@ -248,7 +234,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
                        
                    }
                    else if (section == 1){
-                          let message =  companyDetails.companyAlertNotification[0].message
+                          let message =  companyDetails.companyAlertNotification[1].message
                        let cell = tableView.dequeueReusableCell(withIdentifier: "WebViewCell", for: indexPath) as! WebViewCell
                        cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='3'><b><marquee style='color:red' scrollamount= '10'>\(message ?? "")</b></marquee></font></body></html>", baseURL: nil)
                        return cell
@@ -297,9 +283,14 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             
         }
         else if (section == 1){
-               let message =  companyDetails.companyAlertNotification[0].message
+            var message = ""
+            for i in companyDetails.companyAlertNotification
+            {
+                message +=  i.message ?? ""
+            }
+                
             let cell = tableView.dequeueReusableCell(withIdentifier: "WebViewCell", for: indexPath) as! WebViewCell
-            cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='3'><b><marquee style='color:red' scrollamount= '10'>\(message ?? "")</b></marquee></font></body></html>", baseURL: nil)
+            cell.movingTextWebView.loadHTMLString("<html><body><font face='Bodoni 72' size='4'><b><marquee style='color:red' scrollamount= '6'>\(message)</b></marquee></font></body></html>", baseURL: nil)
             return cell
             
             
@@ -379,7 +370,7 @@ extension Main: UITableViewDelegate,UITableViewDataSource{
             return 250
         }
         else if(indexPath.section == 1){
-         return 40
+         return 50
         }
         else if(indexPath.section == 2){
          return 60
@@ -426,7 +417,12 @@ extension Main: IpadOrderCellDelegate{
     
 extension Main: SearchBarDelegate{
     func didTappedSearchBar(cell: SearchBarCell) {
-        performSegue(withIdentifier: "MainToSearch", sender: self)
+
+        let searchVC = Storyboard.main.instantiateViewController(withIdentifier: "MainViewSearch") as! MainViewSearch
+       // self.present(searchVC, animated: true, completion: nil)
+        let navVC = UINavigationController(rootViewController:searchVC)
+        navVC.isNavigationBarHidden = true
+        self.present(navVC, animated: true, completion:nil)
     }
     
     
@@ -467,7 +463,7 @@ struct ProductWraper: Codable {
 struct ProductWrapperList: Codable {
     let product: Product?
     let categoryName: String
-    let categoryID: Int
+    let categoryID: Int?
     
     enum CodingKeys: String, CodingKey {
         case product, categoryName

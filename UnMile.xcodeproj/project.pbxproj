@@ -109,7 +109,7 @@
 		CE24C6CD23BF69B4007EFEDF /* SearchBarCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE24C6CB23BF69B4007EFEDF /* SearchBarCell.xib */; };
 		CE24C6CF23BFD301007EFEDF /* StartMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE24C6CE23BFD301007EFEDF /* StartMenu.swift */; };
 		CE261F5D23D2F8320019AADE /* GernalSearchCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */; };
-		CE261F5F23D2F86B0019AADE /* GernalSearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */; };
+		CE261F5F23D2F86B0019AADE /* Reachability.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE261F5E23D2F86B0019AADE /* Reachability.swift */; };
 		CE31517F243FAB2200E80BD6 /* InvoiceIpadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE31517D243FAB2200E80BD6 /* InvoiceIpadCell.swift */; };
 		CE315180243FAB2200E80BD6 /* InvoiceIpadCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = CE31517E243FAB2200E80BD6 /* InvoiceIpadCell.xib */; };
 		CE315183243FB59E00E80BD6 /* OrderDetailIpadCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CE315181243FB59E00E80BD6 /* OrderDetailIpadCell.swift */; };
@@ -243,6 +243,7 @@
 		88EEE1912238D68E007C41BC /* UserRegistrationVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRegistrationVC.swift; sourceTree = "<group>"; };
 		CE0D6C8C235B3C44006C64E7 /* OrderDetailVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailVC.swift; sourceTree = "<group>"; };
 		CE0D6C8F235B4FE2006C64E7 /* detailOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = detailOrderCell.swift; sourceTree = "<group>"; };
+		CE0EEAB62465737200ADB63A /* UnMile-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnMile-Bridging-Header.h"; sourceTree = "<group>"; };
 		CE18E9C92438539C002B52D0 /* UploadPrescription.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadPrescription.swift; sourceTree = "<group>"; };
 		CE18E9CA2438539C002B52D0 /* UploadPrescription.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UploadPrescription.xib; sourceTree = "<group>"; };
 		CE18E9CD24386286002B52D0 /* SliderViewIpadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SliderViewIpadCell.swift; sourceTree = "<group>"; };
@@ -268,7 +269,7 @@
 		CE24C6CB23BF69B4007EFEDF /* SearchBarCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = SearchBarCell.xib; sourceTree = "<group>"; };
 		CE24C6CE23BFD301007EFEDF /* StartMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartMenu.swift; sourceTree = "<group>"; };
 		CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchCellTableViewCell.swift; sourceTree = "<group>"; };
-		CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GernalSearchVC.swift; sourceTree = "<group>"; };
+		CE261F5E23D2F86B0019AADE /* Reachability.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Reachability.swift; sourceTree = "<group>"; };
 		CE31517D243FAB2200E80BD6 /* InvoiceIpadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InvoiceIpadCell.swift; sourceTree = "<group>"; };
 		CE31517E243FAB2200E80BD6 /* InvoiceIpadCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = InvoiceIpadCell.xib; sourceTree = "<group>"; };
 		CE315181243FB59E00E80BD6 /* OrderDetailIpadCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderDetailIpadCell.swift; sourceTree = "<group>"; };
@@ -473,6 +474,7 @@
 				73C9E13021E0824300AB8BB4 /* Products */,
 				D99DC04818B10B193BD205B3 /* Pods */,
 				79E003D93CB1AEFDB6C8CAE5 /* Frameworks */,
+				CE0EEAB62465737200ADB63A /* UnMile-Bridging-Header.h */,
 			);
 			sourceTree = "<group>";
 			usesTabs = 0;
@@ -770,7 +772,7 @@
 			isa = PBXGroup;
 			children = (
 				CE261F5C23D2F8320019AADE /* GernalSearchCellTableViewCell.swift */,
-				CE261F5E23D2F86B0019AADE /* GernalSearchVC.swift */,
+				CE261F5E23D2F86B0019AADE /* Reachability.swift */,
 				CE38A8D0242F87DF000EE9E6 /* MainViewSearch.swift */,
 			);
 			path = "Genral Search";
@@ -893,6 +895,7 @@
 				TargetAttributes = {
 					73C9E12E21E0824300AB8BB4 = {
 						CreatedOnToolsVersion = 10.1;
+						LastSwiftMigration = 1130;
 					};
 				};
 			};
@@ -1091,7 +1094,7 @@
 				CE18E9D7243882AD002B52D0 /* CollectionViewCell.swift in Sources */,
 				39CE844022BA5C8D00B6C2FC /* SideMenuHeaderViewCell.swift in Sources */,
 				CE24C6C723BF58E6007EFEDF /* CategoryCollection.swift in Sources */,
-				CE261F5F23D2F86B0019AADE /* GernalSearchVC.swift in Sources */,
+				CE261F5F23D2F86B0019AADE /* Reachability.swift in Sources */,
 				8837602722422C1C0060625C /* CheckOutVC.swift in Sources */,
 				73C9E14F21E0C0F600AB8BB4 /* AFManager.swift in Sources */,
 				39086EE122CB82150077B6D4 /* OrderItemsSummery.swift in Sources */,
@@ -1276,9 +1279,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.7;
 				DEVELOPMENT_TEAM = M6UQV69FU8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1295,6 +1299,8 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = D.Watson;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnMile-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1306,9 +1312,10 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1.0.1;
+				CURRENT_PROJECT_VERSION = 1.0.7;
 				DEVELOPMENT_TEAM = M6UQV69FU8;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1325,6 +1332,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.itsol.dwatson;
 				PRODUCT_NAME = D.Watson;
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "UnMile-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

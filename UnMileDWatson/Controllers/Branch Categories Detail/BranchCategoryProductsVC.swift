@@ -54,25 +54,26 @@ class BranchCategoryProductsVC: BaseViewController {
         getCategoryDiscount(catId: branchCategoryDetails.categories[0].id)
         }
         
-        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(UIInputViewController.dismissKeyboard))
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tap)
+            tap.cancelsTouchesInView = false
         
 
     }
     override func viewDidAppear(_ animated: Bool) {
-        productSearchBar.becomeFirstResponder()
+//        productSearchBar.becomeFirstResponder()
     }
     override var preferredStatusBarStyle : UIStatusBarStyle {
         return .lightContent
     }
     
    @objc func dismissKeyboard() {
-       //Causes the view (or one of its embedded text fields) to resign the first responder status.
+       
+       
        view.endEditing(true)
    }
     
     func getProductsBy(pageNo: String, pageSize: String , productName: String = "", categoryId: String) {
-        //UIApplication.shared.beginIgnoringInteractionEvents()
         self.startActivityIndicator()
         UIApplication.shared.beginIgnoringInteractionEvents()
         
@@ -85,8 +86,6 @@ class BranchCategoryProductsVC: BaseViewController {
         let path = ProductionPath.productUrl + "/get-active-bycategoryId/"
         print(path)
         NetworkManager.getDetails(path: path, params: parameters, success: { (json, isError) in
-            
-            self.view.endEditing(true)
             
             do {
                 let jsonData =  try json.rawData()
@@ -106,7 +105,9 @@ class BranchCategoryProductsVC: BaseViewController {
                 UIApplication.shared.endIgnoringInteractionEvents()
                 self.stopActivityIndicator()
                     
-                    if (self.isSearchingMore){ self.productSearchBar.becomeFirstResponder() }
+                    if (self.isSearchingMore){ //self.productSearchBar.becomeFirstResponder()
+                        
+                    }
                     
                     self.isSearchingMore = true
                   
@@ -189,6 +190,10 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
       
         
     }
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        self.view.endEditing(true)
+    }
+
 
     func didPresentSearchController(searchController: UISearchController) {
         productSearchBar.becomeFirstResponder()
@@ -197,7 +202,7 @@ extension BranchCategoryProductsVC:UISearchBarDelegate{
 
 extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return productWrapperlist?.count ?? 10
+        return productWrapperlist?.count ?? 0
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {

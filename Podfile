@@ -20,5 +20,6 @@ target 'UnMile' do
   pod 'Firebase/Auth'
   pod 'GoogleSignIn'
   pod 'Firebase/Analytics'
+  pod 'SDWebImage'
  
 end 

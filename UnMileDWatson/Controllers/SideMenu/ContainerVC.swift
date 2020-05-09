@@ -213,20 +213,15 @@ extension ContainerVC : UITableViewDataSource, UITableViewDelegate{
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String else {return nil}
         let footerView = UIView()
         footerView.frame = CGRect(x: 100, y: 100, width: 200, height: 50)
         let label = UILabel()
-        label.frame = CGRect(x: 14  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
-        label.text = "Version"
-        footerView.addSubview(label)
-       
-        let label2 = UILabel()
-        label2.frame = CGRect(x: (tableView.bounds.size.width) - 24 , y: 0, width: tableView.bounds.size.width - 10, height: 24)
-        let appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String
-        label2.text = appVersion
-        label2.textColor = Color.blue
-        footerView.addSubview(label2)
         
+        label.frame = CGRect(x: 0  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
+        label.textColor = Color.blue
+        label.text = "Version \(String(describing: appVersion))"
+        footerView.addSubview(label)
         return footerView
     }
 }

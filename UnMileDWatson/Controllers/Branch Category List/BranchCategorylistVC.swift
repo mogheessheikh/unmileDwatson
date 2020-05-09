@@ -32,7 +32,8 @@ class BranchCategorylistVC: BaseViewController {
 
    func getBranchCategories() {
               
-              self.startActivityIndicator()
+    self.startActivityIndicator()
+ 
               let path = ProductionPath.menuUrlV2 + "/?branchId=\(branchId)&productName="
               print(path)
               
@@ -110,8 +111,8 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
                    
         if let urlString = branchCategories?.categories[indexPath.row].imageURL,
          let url = URL(string: urlString)  {
-        cell.categoryImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
-            // cell.delegate = self as? CategoryCellDelegate
+            cell.categoryImg.sd_imageIndicator = SDWebImageActivityIndicator.gray
+            cell.categoryImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
             }
 
 
@@ -125,8 +126,10 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
         cell.categoryLabel.text = branchCategories?.categories[indexPath.row].name
         
         if let urlString = branchCategories?.categories[indexPath.row].imageURL,
-            let url = URL(string: urlString)  {
-            cell.popularImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+             let url = URL(string: urlString)  {
+                cell.popularImg.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                cell.popularImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
+                      
             cell.delegate = self as? CategoryCellDelegate
         }
         return cell

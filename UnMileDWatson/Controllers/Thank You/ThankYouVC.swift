@@ -160,7 +160,11 @@ extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
             }
             cell.lblOrderNumber.text = "\(orderSummery.id)"
             cell.lblBranchAddress.text = "Dwatson Group of Company, Islamabad Capital Territory"
-            cell.lblCustomerAddress.text = "\(orderSummery.customerOrderAddress.customerOrderAddressFields[0].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[1].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[2].fieldValue + orderSummery.customerOrderAddress.customerOrderAddressFields[3].fieldValue)"
+            var address = ""
+            for feilds in orderSummery.customerOrderAddress.customerOrderAddressFields{
+                address += "  \(feilds.fieldValue)"
+            }
+            cell.lblCustomerAddress.text = address
            
         return cell
         }

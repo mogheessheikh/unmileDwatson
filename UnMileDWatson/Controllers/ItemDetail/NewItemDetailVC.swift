@@ -555,8 +555,8 @@ struct CustomerOrderItem: Codable {
     var instructions: String?
     var quantity: Int?
     var purchaseSubTotal: Double
-    var productPrice: Double
-    var discount: Double
+    var productPrice: Double?
+    var discount: Double?
     var product: CustomerProduct
     var customerOrderItemOptions: [CustomerOrderItemOption]
     

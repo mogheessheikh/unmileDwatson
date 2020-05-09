@@ -63,26 +63,27 @@ class PreviousOrderDetailVC: BaseViewController {
                 let jsonData =  try json.rawData()
                 print(jsonData)
                 self.preOrder = try JSONDecoder().decode(CustomerPreviousOrder.self, from: jsonData)
-                
-                
+
                 if self.preOrder?.number == 0 {
                     self.customerOrders = self.preOrder.customerOrders
-                } else {
+                }
+                else {
                     self.customerOrders =  self.customerOrders! + self.preOrder.customerOrders
                 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.8, execute: {
+                DispatchQueue.main.asyncAfter(deadline: .now() , execute: {
                     self.tblpreviousOrder.reloadData()
-                    
                     self.stopActivityIndicator()
-                    UIApplication.shared.beginReceivingRemoteControlEvents()
+                    UIApplication.shared.endIgnoringInteractionEvents()
                 })
             } catch let myJSONError {
                 print(myJSONError)
+                UIApplication.shared.endIgnoringInteractionEvents()
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
             }
             
         }) { (error) in
             //self.dismissHUD()
+             UIApplication.shared.endIgnoringInteractionEvents()
             self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
         }
     }
@@ -91,7 +92,7 @@ class PreviousOrderDetailVC: BaseViewController {
 
 extension PreviousOrderDetailVC : UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return customerOrders?.count ?? 1
+        return customerOrders?.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -102,20 +103,10 @@ extension PreviousOrderDetailVC : UITableViewDelegate, UITableViewDataSource{
         
         return cell
     }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        let offsetY = scrollView.contentOffset.y
-//        let contentHeight = scrollView.contentSize.height
-//        if offsetY > contentHeight - scrollView.frame.height {
-//            if !fetchingMore{
-//                if self.preOrder.hasNext {
-//                    getCustomerPreviousOrder(pageNo:"\((preOrder?.number)! + 1)", pageSize: "10", productName: "", customerId: "\(customerId)")
-//
-//                }
-//                fetchingMore = true
-//            }
-//        }
-//    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+ 
 }
 
 
@@ -137,7 +128,9 @@ extension PreviousOrderDetailVC: orderDetailDelegate{
             
             alreadyItems.append(items!)
             saveItems(allItems: alreadyItems)
+            
         }
+        showAlert(title:"Items Added Successfully !", message: "Repeated order items are added in the cart")
     }
     
     

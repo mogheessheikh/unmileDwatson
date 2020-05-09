@@ -1041,9 +1041,15 @@ extension NetworkManager {
 
 enum ServerURLs {
     static let stagingURL           = "http://130.211.192.1:8082/rest"
-    static let productionURLNew     = "https://rest.itsolhub.com/rest/v2"
-    static let productionURL        =  "http://35.153.13.41:8082/rest" //"http://130.211.192.1:8082/rest" 
+    static let stagingURLV2         = "http://130.211.192.1:8082/rest/v2"
+    static let productionURLV2      = "http://130.211.192.1:8082/rest/v2"
+    
+    static let productionURL        =  "http://130.211.192.1:8082/rest"  //"http://35.153.13.41:8082/rest" // 
+    
+    
     static let googleServerURL      = "http://35.243.235.232:8082/rest"
+    
+//    static let productionURLNew     = "https://rest.itsolhub.com/rest/v2"
 }
 
 enum Path {
@@ -1082,6 +1088,25 @@ enum ProductionPathNew {
     static let sendEmailUrl              = ServerURLs.productionURL + "/email-sender"
     static let companyBannerUrl          = ServerURLs.productionURL + "/companybanner"
     static let menuUrlV2                 = ServerURLs.productionURL  + "/menu"
+}
+
+enum ProductionPathV2 {
+    static let companyUrl                = ServerURLs.productionURLV2 + "/company"
+    static let companyCityUrl            = ServerURLs.productionURLV2 + "/city/all/"
+    static let branchUrl                 = ServerURLs.productionURLV2 + "/branch"
+    static let menuUrl                   = ServerURLs.productionURLV2 + "/menu"
+    static let categoryUrl               = ServerURLs.productionURLV2 + "/category"
+    static let customerUrl               = ServerURLs.productionURLV2 + "/customer"
+    static let addressUrl                = ServerURLs.productionURLV2 + "/address"
+    static let transIdUrl                = ServerURLs.productionURLV2 + "/transid"
+    static let customerOrderUrl          = ServerURLs.productionURLV2 + "/customer-order"
+    static let optionGroupUrl            = ServerURLs.productionURLV2 + "/optiongroup"
+    static let productUrl                = ServerURLs.productionURLV2 + "/product"
+    static let pageContentUrl            = ServerURLs.productionURLV2 + "/pagecontent"
+    static let imageUrl                  = ServerURLs.productionURLV2 + "/image"
+    static let sendEmailUrl              = ServerURLs.productionURLV2 + "/email-sender"
+    static let companyBannerUrl          = ServerURLs.productionURLV2 + "/companybanner"
+    static let menuUrlV2                 = ServerURLs.productionURLV2  + "/menu"
 }
 enum ProductionPath {
     static let companyUrl                = ServerURLs.productionURL + "/company"

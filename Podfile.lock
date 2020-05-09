@@ -98,6 +98,9 @@ PODS:
   - nanopb/decode (0.3.9011)
   - nanopb/encode (0.3.9011)
   - ScrollableSegmentedControl (1.5.0)
+  - SDWebImage (5.7.4):
+    - SDWebImage/Core (= 5.7.4)
+  - SDWebImage/Core (5.7.4)
   - SideMenu (6.4.7)
   - SVProgressHUD (2.2.5)
   - SwiftyJSON (5.0.0)
@@ -120,6 +123,7 @@ DEPENDENCIES:
   - GoogleSignIn
   - IQKeyboardManagerSwift
   - ScrollableSegmentedControl (~> 1.5.0)
+  - SDWebImage
   - SideMenu
   - SVProgressHUD
   - SwiftyJSON
@@ -150,6 +154,7 @@ SPEC REPOS:
     - IQKeyboardManagerSwift
     - nanopb
     - ScrollableSegmentedControl
+    - SDWebImage
     - SideMenu
     - SVProgressHUD
     - SwiftyJSON
@@ -179,12 +184,13 @@ SPEC CHECKSUMS:
   IQKeyboardManagerSwift: 2dde0fc70110e8eac7ccce2a46fdbec6a850b414
   nanopb: 18003b5e52dab79db540fe93fe9579f399bd1ccd
   ScrollableSegmentedControl: 2e64bbe8968a7fcd8aae5014434481464fcdfe60
+  SDWebImage: 48b88379b798fd1e4298f95bb25d2cdabbf4deb3
   SideMenu: 928a015669c3afc201e1fe3a87f1b0bc8993a664
   SVProgressHUD: 1428aafac632c1f86f62aa4243ec12008d7a51d6
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   SZTextView: 094dc6acc9beec537685c545d6e3e0d4975174e1
   ZDCChat: 02340a2389a4b7d9f6c78bf2374130875ebffb9b
 
-PODFILE CHECKSUM: c9f10edfe5e941bb0a12824fe192760ed1ecb281
+PODFILE CHECKSUM: 75c309cead3e9d35aab7d52818f5c40271089de2
 
 COCOAPODS: 1.8.4

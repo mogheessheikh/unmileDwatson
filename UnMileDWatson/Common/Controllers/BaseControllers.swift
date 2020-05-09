@@ -36,6 +36,16 @@ class BaseViewController: UIViewController {
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         return (formatter.string(from: Date()) as NSString) as String
     }
+    func checkInternetConnection(){
+        if Reachability.isConnectedToNetwork(){
+            print("Internet Connection Available!")
+        }
+        else{
+        showAlert(title: "No Internet Connection", message: "Make sure your device is connected to the internet.")
+        self.stopActivityIndicator()
+        return
+        }
+    }
     
     func getDeviceIP() -> String{
         
@@ -136,6 +146,7 @@ class BaseViewController: UIViewController {
         activityIndicatorView.transform = CGAffineTransform(scaleX: 1.5, y: 1.5)
         view.addSubview(activityIndicatorView)
         activityIndicatorView.startAnimating()
+        checkInternetConnection()
         
     }
     

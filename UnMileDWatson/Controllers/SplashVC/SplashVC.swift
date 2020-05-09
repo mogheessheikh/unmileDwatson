@@ -27,7 +27,7 @@ class SplashVC: BaseViewController {
     // MARK: - API Calls
     
     func getCompanyDetails() {
-
+        checkInternetConnection()
         let path = ProductionPath.companyUrl + "/\(companyId)"
         print(path)
         NetworkManager.getDetails(path: path, params: nil, success: { (json, isError) in

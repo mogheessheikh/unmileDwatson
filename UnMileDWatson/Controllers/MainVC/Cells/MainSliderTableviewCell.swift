@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class MainSliderTableviewCell: UITableViewCell, UICollectionViewDelegate, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout  {
    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
@@ -22,7 +23,11 @@ class MainSliderTableviewCell: UITableViewCell, UICollectionViewDelegate, UIColl
         if(companyBanner?[indexPath.row].status == 1){
         if let urlSliderString =  companyBanner?[indexPath.row].mobileBannerUrl,
         let url = URL(string: urlSliderString)  {
-        cell.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+            cell.sliderImg.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+            cell.sliderImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
+                                 
+            
+//        cell.sliderImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
                    }
         }
         
