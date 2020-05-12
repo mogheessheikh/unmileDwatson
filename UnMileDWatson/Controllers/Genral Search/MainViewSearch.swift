@@ -99,11 +99,13 @@ class MainViewSearch: BaseViewController {
                     
                 } catch let myJSONError {
                     print(myJSONError)
+                       UIApplication.shared.endIgnoringInteractionEvents()
                     self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
                 }
                 
             }) { (error) in
                 //self.dismissHUD()
+                   UIApplication.shared.endIgnoringInteractionEvents()
                 self.showAlert(title: Strings.error, message: Strings.somethingWentWrong)
             }
         }
