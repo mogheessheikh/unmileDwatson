@@ -127,7 +127,7 @@ extension BranchCategorylistVC: UICollectionViewDelegate,UICollectionViewDataSou
         
         if let urlString = branchCategories?.categories[indexPath.row].imageURL,
              let url = URL(string: urlString)  {
-                cell.popularImg.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                cell.popularImg.sd_imageIndicator = SDWebImageActivityIndicator.whiteLarge
                 cell.popularImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
                       
             cell.delegate = self as? CategoryCellDelegate

@@ -541,7 +541,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
                 }
                            
                 cell.lblInstructions.text = "\(customerOrder.specialInstructions)"
-                cell.lblDeliveryTime.text = "Minimum Delivery Time is 3 hours & Max-24 Hours (Islamabad/Rawalpindi) Outside (2-3 days)"
+                cell.lblDeliveryTime.text = "Delivery Time is minimum 3 hours and Max 24 hours ( For islamabad & Rawalpindi) Outside (4-5) working days "
                 return cell
             }
             else{

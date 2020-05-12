@@ -5302,6 +5302,7 @@ Cg
                         <viewLayoutGuide key="safeArea" id="2Xe-Xh-9Rs"/>
                     </view>
                     <connections>
+                        <outlet property="btnAddAddress" destination="ONc-3h-uhL" id="feu-5j-4rS"/>
                         <outlet property="btnArea" destination="6Fx-De-qo3" id="Qvb-0W-1Ch"/>
                         <outlet property="btnCity" destination="FJc-oB-Z7y" id="1nU-Pt-xFP"/>
                         <outlet property="cityAreaPickerView" destination="xao-X5-tmC" id="MyD-no-iaa"/>
@@ -5310,7 +5311,7 @@ Cg
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Tf5-If-SAx" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-2639" y="1632"/>
+            <point key="canvasLocation" x="-2639.1999999999998" y="1631.3343328335834"/>
         </scene>
     </scenes>
     <resources>

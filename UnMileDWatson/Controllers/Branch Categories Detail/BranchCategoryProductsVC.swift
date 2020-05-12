@@ -229,7 +229,9 @@ extension BranchCategoryProductsVC: UICollectionViewDataSource,UICollectionViewD
         if let urlString = productWrapperlist?[indexPath.row].product?.productPhotoURL,
             let url = URL(string: urlString) {
         
-            cell.productImg.af_setImage(withURL: url, placeholderImage: UIImage(), imageTransition: .crossDissolve(1), runImageTransitionIfCached: true)
+            cell.productImg.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                          
+            cell.productImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
       
         
         }

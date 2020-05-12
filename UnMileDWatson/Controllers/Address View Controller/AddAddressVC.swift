@@ -11,6 +11,7 @@ import Alamofire
 
 class AddAddressVC: BaseViewController {
 
+    @IBOutlet var btnAddAddress: UIButton!
     @IBOutlet var addressView2: UIView!
     @IBOutlet var addressView1: UIView!
     @IBOutlet var txtAddress1: UITextField!
@@ -70,10 +71,13 @@ class AddAddressVC: BaseViewController {
            coustomerId = customerCheck.id
         }
         if(edit == true ){
-        
+            
            txtAddress1.text = editAddress?.addressFields[0].fieldValue
+            btnAddAddress.setTitle("UPDATE", for: UIControl.State.normal)
             
-            
+        }
+        else{
+            btnAddAddress.setTitle("ADD", for: UIControl.State.normal)
         }
         self.navigationController?.isNavigationBarHidden = false
         //self.showNavigationBar()
@@ -216,7 +220,8 @@ class AddAddressVC: BaseViewController {
                             self.stopActivityIndicator()
                             self.txtAddress1.text = ""
                            
-                            self.showAlert(title: "Request Completed", message: "")
+                            //self.showAlert(title: "Request Completed", message: "")
+                            _ = self.navigationController?.popViewController(animated: true)
                         }
                         else
                         {
@@ -286,7 +291,8 @@ class AddAddressVC: BaseViewController {
                                 self.stopActivityIndicator()
                                 self.txtAddress1.text = ""
                                
-                                self.showAlert(title: "Request Completed", message: "")
+                                //self.showAlert(title: "Request Completed", message: "")
+                            _ = self.navigationController?.popViewController(animated: true)
                             }
                             else
                             {

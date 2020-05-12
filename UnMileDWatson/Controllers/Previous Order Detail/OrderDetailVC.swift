@@ -118,7 +118,7 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
             
             cell.lblPaymentType.text =  preOrder.paymentType
             cell.lblInstruction.text = "\(preOrder.specialInstructions)"
-            cell.lblDeliveryTime.text = "Minimum Delivery Time is 3 hours & Max-24 Hours (Islamabad/Rawalpindi) Outside (2-3 days)"
+            cell.lblDeliveryTime.text = "Delivery Time is minimum 3 hours and Max 24 hours ( For islamabad & Rawalpindi) Outside (4-5) working days "
             return cell
         }
         else{
@@ -191,7 +191,7 @@ extension OrderDetailVC : UITableViewDataSource,UITableViewDelegate{
             imageView.image = image
             let label2 = UILabel()
             label2.frame = CGRect(x: (tableView.bounds.size.width / 3) + 30  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
-            label2.text = "ASAP 55 Mints"
+            label2.text = "ASAP 3 Hours "
             label2.textColor = UIColor.orange
             footerView.addSubview(label2)
             footerView.addSubview(imageView)
