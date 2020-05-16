@@ -36,7 +36,11 @@ class ThankYouVC: BaseViewController {
        hideNavigationBar()
         company  = getCompanyObject("SavedCompany")
          itemSummery = getAlreadyCartItems()
-        
+        let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+            if (alreadyItems.count != 0){
+            alreadyItems.removeAllObjects()
+            self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
+            }
         tblCompleteSummery.register(UINib(nibName: "thankYouCell", bundle: Bundle.main), forCellReuseIdentifier: "thankyoucell")
         tblCompleteSummery.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblCompleteSummery.register(UINib(nibName: "orderDetailCell", bundle: Bundle.main), forCellReuseIdentifier: "orderdetailcell")

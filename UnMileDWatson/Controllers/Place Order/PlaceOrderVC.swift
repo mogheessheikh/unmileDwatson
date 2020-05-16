@@ -252,11 +252,11 @@ class PlaceOrderVC: BaseViewController {
                 //self.orderPlaceAlert(title: "Order Placed", message: "Your Order is PLACED")
                         self.saveCustomerOrder(obj: customerOrder, key: "savedCustomerOrder" )
                     
-                    let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
-                    if (alreadyItems.count != 0){
-                    alreadyItems.removeAllObjects()
-                    self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
-                    }
+//                    let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+//                    if (alreadyItems.count != 0){
+//                    alreadyItems.removeAllObjects()
+//                    self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
+//                    }
                         let vc : UIViewController = Storyboard.main.instantiateViewController(withIdentifier: "ThankYouVC") as! ThankYouVC
                         self.present(vc, animated: true, completion: nil)
                         
@@ -664,7 +664,7 @@ extension PlaceOrderVC: UITableViewDataSource,UITableViewDelegate{
             imageView.image = image
             let label2 = UILabel()
             label2.frame = CGRect(x: (tableView.bounds.size.width / 3) + 30  , y: 0, width: tableView.bounds.size.width - 10, height: 24)
-            label2.text = "ASAP 55 Mints"
+            label2.text = "Minimum Delivery Time is 3 hours"
             label2.font = UIFont(name: "Bodoni 72", size: 15)
             label2.textColor = Color.red
             footerView.addSubview(label2)

@@ -209,13 +209,15 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
             if indexPath.section == 0{
                 let cell = tableView.dequeueReusableCell(withIdentifier: "cell1", for: indexPath) as! productImgCell
-                Alamofire.request(product.productPhotoURL ?? "").responseImage { response in
-                    if let image = response.result.value {
-                        cell.productImg.image = image
-                    } else {
-                        cell.productImg.image  = UIImage(named: "logo")
-                    }
-                }
+               if let urlString = product.productPhotoURL,
+                let url = URL(string: urlString) {
+                      
+                          cell.productImg.sd_imageIndicator = SDWebImageActivityIndicator.grayLarge
+                                        
+                          cell.productImg.sd_setImage(with: url, placeholderImage: UIImage(named: "logo"))
+                    
+                      
+                      }
                 return cell
             }
               
