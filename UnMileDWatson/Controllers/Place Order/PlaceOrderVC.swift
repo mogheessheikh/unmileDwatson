@@ -38,7 +38,7 @@ class PlaceOrderVC: BaseViewController {
     var orderDiscount = 0.0
     var taxAmount = 0.0
     var imagePath = ""
-    var promoCodeMatch = false
+    var promoCodeMatch = ""
     
     override func viewDidLoad() {
         
@@ -66,7 +66,7 @@ class PlaceOrderVC: BaseViewController {
         taxAmount = calculateTaxes(restbranch: branch, customerOrder: customerOrder)
         surCharges = chargeSurcharge(customerOrder:customerOrder, paymentMethod: paymentMethod)
         
-        if !promoCodeMatch{
+        if promoCodeMatch == ""{
             orderDiscount = calculateDiscounts(branch: branch, customerOrder: customerOrder)
         }
         else{
@@ -353,7 +353,7 @@ class PlaceOrderVC: BaseViewController {
         var discountAmount = 0.0
         for promo: PromoCodeDiscountRule in branch.promoCodeDiscountRules{
             
-            if(promo.orderType.name == customerOrder.orderType && promo.status == 1 && promo.paymentType.name == customerOrder.paymentType){
+            if(promo.orderType.name == customerOrder.orderType && promo.status == 1 && promo.paymentType.name == customerOrder.paymentType ){
                 
                 discountAmount  = ((customerOrder.subTotal - customerOrder.deliveryCharge) * promo.discount)
             }
@@ -363,14 +363,14 @@ class PlaceOrderVC: BaseViewController {
     
     func calculateDiscounts(branch: Branch,  customerOrder: CustomerOrder)-> Double {
         
-        var discount = [Double : Double]()
+        var discountAmount = 0.0
         for  orderDiscountRule: OrderDiscountRule  in branch.orderDiscountRules {
             
             let  expiryDate = orderDiscountRule.expiryDate
-            let  today = currentDateTime()            //customerOrder.orderType
-            if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == "DELIVERY" && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today)
-            {
-                var discountAmount = 0.0
+            let  today = currentDateTime()
+            if(orderDiscountRule.status == 1 && orderDiscountRule.orderType.name == customerOrder.orderType && orderDiscountRule.paymentType.name == customerOrder.paymentType && expiryDate > today)
+                {
+                
                 
                 if(orderDiscountRule.chargeMode.id == 1)
                 {
@@ -378,37 +378,21 @@ class PlaceOrderVC: BaseViewController {
                 }
                 else if(orderDiscountRule.chargeMode.id == 2)
                 {
-                    discountAmount = ((customerOrder.subTotal - customerOrder.deliveryCharge) * orderDiscountRule.discount)
+                    discountAmount = ((customerOrder.subTotal - customerOrder.deliveryCharge) * (orderDiscountRule.discount/100))
                 }
-                discount = [orderDiscountRule.subTotal : discountAmount]
                 
             }
             else
             {
-                discount = [0.0 : 0.0]
-                //customerOrder.setOrderDiscount(BigDecimal.ZERO)
+               discountAmount = 0.0
+              
             }
             
         }
         
-        if ((discount[0.0] != nil) )
-        {
-            discount.removeValue(forKey: 0.0)
-        }
+    
         
-        if (discount.count > 0)
-        {
-            let lower = discount.values.min()
-            let discount = discount[lower ?? 0.0]
-            
-            orderDiscount = lower ?? 0.0
-            finalsubTotal = finalsubTotal - orderDiscount
-        }
-        else {
-            orderDiscount = 0.0
-        }
-        
-        return orderDiscount
+        return discountAmount
     }
     
     func sendOrderDetailToSender(customerOrder: CustomerOrder){

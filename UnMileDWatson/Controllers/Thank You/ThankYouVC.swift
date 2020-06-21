@@ -45,6 +45,7 @@ class ThankYouVC: BaseViewController {
         tblCompleteSummery.register(UINib(nibName: "OrderItemsSummery", bundle: Bundle.main), forCellReuseIdentifier: "itemcell")
         tblCompleteSummery.register(UINib(nibName: "orderDetailCell", bundle: Bundle.main), forCellReuseIdentifier: "orderdetailcell")
         tblCompleteSummery.register(UINib(nibName: "needHelpCell", bundle: Bundle.main), forCellReuseIdentifier: "needhelpcell")
+        tblCompleteSummery.register(UINib(nibName: "TotalPriceCell", bundle: Bundle.main), forCellReuseIdentifier: "TotalPriceCell")
        
         
         
@@ -131,7 +132,7 @@ class ThankYouVC: BaseViewController {
 }
 extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 4
+        return 5
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
       return 1
@@ -141,7 +142,9 @@ extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
         if (indexPath.section == 1){
             return 344
         }
+        else if (indexPath.section == 3){return 65}
         else if (indexPath.section == 4){return 95}
+            
         else{return 200}
         
     }
@@ -181,13 +184,21 @@ extension ThankYouVC : UITableViewDataSource,UITableViewDelegate{
             
           return cell
         }
-       
+       else if (indexPath.section == 3){
+           guard let cell = tableView.dequeueReusableCell(withIdentifier: "TotalPriceCell", for: indexPath) as? TotalPriceCell
+               else {
+                   fatalError("Unknown cell")
+           }
+            cell.totalAmountLbl.text =  "\(customerOrder.subTotal)"
+           
+         return cell
+       }
         else{
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "needhelpcell", for: indexPath) as? needHelpCell
                 else {
                     fatalError("Unknown cell")
             }
-            cell.lblTotalPrice.text = "\(customerOrder.subTotal)"
+            
            cell.delegate = self
             
             return cell

@@ -206,8 +206,12 @@ extension CartVC: CartDelegate{
     func didTappedAddButton(cell: CartTableViewCell) {
         addMoreItems = getAlreadyCartItems()
         let indexPath = self.tblCart.indexPath(for: cell)
-        
-        itemPrice = Double(addMoreItems[(indexPath?.row)!].product.price)
+        if(addMoreItems[(indexPath?.row)!].product.optionGroups.count >= 1){
+            itemPrice = Double(addMoreItems[(indexPath?.row)!].product.optionGroups[0].options[0].price ?? 0.0)
+        }
+        else {
+            itemPrice = Double(addMoreItems[(indexPath?.row)!].product.price)
+        }
         quantity = addMoreItems[(indexPath?.row)!].quantity!
         
             quantity += 1
@@ -233,7 +237,13 @@ extension CartVC: CartDelegate{
         let indexPath = self.tblCart.indexPath(for: cell)
         addMoreItems = getAlreadyCartItems()
         quantity = addMoreItems[indexPath!.row].quantity!
-        itemPrice = Double(addMoreItems[indexPath!.row].product.price)
+        if(addMoreItems[(indexPath?.row)!].product.optionGroups.count >= 1){
+            itemPrice = Double(addMoreItems[(indexPath?.row)!].product.optionGroups[0].options[0].price ?? 0.0)
+        }
+        else {
+            itemPrice = Double(addMoreItems[(indexPath?.row)!].product.price)
+        }
+        
         if quantity  > 1 {
             quantity -= 1
           itemTotalPrice = itemPrice * Double(quantity)
@@ -245,7 +255,7 @@ extension CartVC: CartDelegate{
             for (_,j) in addMoreItems.enumerated(){
                 subTotal  += j.purchaseSubTotal
             }
-        cell.Quantity.text = " \(quantity)"
+        cell.Quantity.text = "\(quantity)"
         cell.TotalPrice.text = "Total Pkr: \(itemTotalPrice)"
         lblTotalPrice.text = "Grand Total : \(subTotal)"
             

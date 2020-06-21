@@ -89,6 +89,7 @@ class NewItemDetailVC: BaseViewController,UIPopoverPresentationControllerDelegat
         bag = alreadyItems.count
         UserDefaults.standard.set(bag, forKey: "bag")
         cartBag.badge = String(bag)
+        tblOptionGroup.reloadData()
     }
     
     func addSelectedCellWithSection(_ indexPath:IndexPath) ->IndexPath?
@@ -259,6 +260,7 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 if(product.optionGroups[indexPath.section-3].maxChoice ?? 0 <= 1)
                 {
                     if(self.indexPathIsSelected(indexPath)) {
+                        
                         cell.radio_check_button.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
                         
                     } else {
@@ -301,28 +303,25 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
         if (indexPath.section == 3 && !product.optionGroups.isEmpty){
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)
             let cell = self.tblOptionGroup.cellForRow(at: indexPath) as! productOptionGroupCell
+            
             if(product.optionGroups[indexPath.section-3].maxChoice <= 1)
             {
                 oG  =  CustomerOptionGroup.init(id: product.optionGroups[indexPath.section-3].id, name: product.optionGroups[indexPath.section-3].name, identifierName: product.optionGroups[indexPath.section-3].identifierName, listQuantity: product.optionGroups[indexPath.section-3].listQuantity, minChoice: product.optionGroups[indexPath.section-3].minChoice, maxChoice: product.optionGroups[indexPath.section-3].maxChoice, status: product.optionGroups[indexPath.section-3].status, archive: product.optionGroups[indexPath.section-3].archive, optID: product.optionGroups[indexPath.section-3].optID, options: [product.optionGroups[indexPath.section-3].options![indexPath.row]])
+                
                 optionGroupOptions =  product.optionGroups[indexPath.section-3].options?[indexPath.row]
                 
-                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity:1, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions, parentOptionGroup: product?.optionGroups[indexPath.section-3], customerOrderItem: items)
-                
-//                if(previusSelectedCellIndexPath != nil)
-//                {
-//                    let previusSelectedCell = self.tblOptionGroup.cellForRow(at: previusSelectedCellIndexPath!) as! productOptionGroupCell
-//                    previusSelectedCell.radio_check_button.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
-//                    selectedIndex = indexPath as NSIndexPath
-//                    customerOrderItemOptionArray.append(customerOrderItemOptionObj)
-//                    mustArray.replaceObject(at: indexPath.section-3, with:oG)
-//                    tblOptionGroup.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
-//
-//                    tblOptionGroup.reloadData()
-//                }
-                //else{
-                    cell.radio_check_button.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
+                customerOrderItemOptionObj  =
+                    CustomerOrderItemOption.init(quantity:1, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions, parentOptionGroup: product?.optionGroups[indexPath.section-3], customerOrderItem: items)
+
+                   
                     mustArray.replaceObject(at: indexPath.section-3, with:oG)
+                
                     customerOrderItemOptionArray.append(customerOrderItemOptionObj)
+                
+                
+                
+                
+                 cell.radio_check_button.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
                     tblOptionGroup.reloadData()
                 //}
             }
@@ -331,32 +330,32 @@ extension NewItemDetailVC :  UITableViewDataSource,UITableViewDelegate{
                 
                 optionGroupOptions =  product.optionGroups[indexPath.section-3].options?[indexPath.row]
                 
-                customerOrderItemOptionObj  = CustomerOrderItemOption.init(quantity: customerOptionGroupArray.count, purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions,  parentOptionGroup:product?.optionGroups[indexPath.section-3],customerOrderItem: items)
+                customerOrderItemOptionObj  = CustomerOrderItemOption.init(  quantity:1 , purchaseSubTotal: Int(product.optionGroups[indexPath.section-3].options![indexPath.row].price!), option: optionGroupOptions,  parentOptionGroup:product?.optionGroups[indexPath.section-3],customerOrderItem: items)
                 
-                customerOrderItemOptionArray.append(customerOrderItemOptionObj)
+                //customerOrderItemOptionArray.append(customerOrderItemOptionObj)
                 
                 if(rowsWhichAreChecked.contains(indexPath as NSIndexPath) == false){
                     
                     cell.radio_check_button.setImage(UIImage(named: "check"),for:UIControl.State.normal)
-                    
-                    if((optionalArray[indexPath.section - 3 - mustCount]) is String)
-                    {
-                        optionalArray[indexPath.section - 3 - mustCount ] = [oG]
-                        customerOptionGroupArray += [oG]
-                    }
-                    else{
-                        customerOptionGroupArray[indexPath.section - 3 - mustCount].options.append(contentsOf: oG.options)
-                    }
+                    customerOrderItemOptionArray.append(customerOrderItemOptionObj)
+//                    if((optionalArray[indexPath.section - 3 - mustCount]) is String)
+//                    {
+//                        optionalArray[indexPath.section - 3 - mustCount ] = [oG]
+//                        customerOptionGroupArray += [oG]
+//                    }
+//                    else{
+//                        customerOptionGroupArray[indexPath.section - 3 - mustCount].options.append(contentsOf: oG.options)
+//                    }
                     rowsWhichAreChecked.append(indexPath as NSIndexPath)
                     tblOptionGroup.deselectRow(at: indexPath, animated: true)
                 }
                 else{
                     if let checkedItemIndex = rowsWhichAreChecked.index(of: indexPath as NSIndexPath){
                         cell.radio_check_button.setImage(UIImage(named: "uncheck"),for:UIControl.State.normal)
-                        if let index = customerOptionGroupArray[indexPath.section - 3 - mustCount].options.index(where: {$0.name == optionGroupOptions.name})
-                        {
-                            customerOptionGroupArray[indexPath.section - 3 - mustCount].options.remove(at: index)
-                        }
+//                        if let index = customerOptionGroupArray[indexPath.section - 3 - mustCount].options.index(where: {$0.name == optionGroupOptions.name})
+//                        {
+//                            customerOptionGroupArray[indexPath.section - 3 - mustCount].options.remove(at: index)
+//                        }
                         customerOrderItemOptionArray.remove(at: checkedItemIndex)
                         rowsWhichAreChecked.remove(at: checkedItemIndex)
                         tblOptionGroup.deselectRow(at: indexPath, animated: true)
@@ -394,15 +393,14 @@ extension NewItemDetailVC: itemDelegate{
             
             let specialIstruction = ""
             var productPrice = 0.0
-            if !(optionGroup.isEmpty){
+            if !(customerOrderItemOptionArray.isEmpty){
                 customerOptionGroupArray += mustArray as! Array<CustomerOptionGroup>
                 var optionsSubtotal = 0.0
-                
-                for i in 0..<customerOptionGroupArray[0].options.count {
-                 optionsSubtotal += customerOptionGroupArray[0].options[i].price!
+                for i in 0..<customerOrderItemOptionArray.count {
+                    optionsSubtotal += customerOrderItemOptionArray[i].option?.price ?? 0.0
                 }
                 itemPurchaseSubTotal = (Double(qNumber)) * optionsSubtotal
-                productPrice = customerOptionGroupArray[0].options[0].price!
+                productPrice = customerOrderItemOptionArray[0].option?.price ?? 0.0
             }
             else{
 
@@ -415,27 +413,27 @@ extension NewItemDetailVC: itemDelegate{
             
             // update existing item in cart
             
-            if alreadyItems.contains(where: { $0.product.name == product.name }) {
-
-                for i in alreadyItems.indices {
-                    if(alreadyItems[i].product.name == product.name){
-                        if(alreadyItems[i].quantity == qNumber || alreadyItems[i].quantity! > qNumber ){
-                            qNumber = (alreadyItems[i].quantity!) + 1
-                            itemPurchaseSubTotal =  alreadyItems[i].product.price * Double(qNumber)
-                            // alreadyItems[i].quantity = qNumber
-                        }
-            alreadyItems[i].quantity = qNumber
-            alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
-            alreadyItems[i].instructions = specialIstruction
-            alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
-                    }
-                }
-                
-                saveItems(allItems: alreadyItems)
-            }
+//            if alreadyItems.contains(where: { $0.product.name == product.name }) {
+//
+//                for i in alreadyItems.indices {
+//                    if(alreadyItems[i].product.name == product.name){
+//                        if(alreadyItems[i].quantity == qNumber || alreadyItems[i].quantity! > qNumber ){
+//                            qNumber = (alreadyItems[i].quantity!) + 1
+//                            itemPurchaseSubTotal =  alreadyItems[i].product.price * Double(qNumber)
+//                            // alreadyItems[i].quantity = qNumber
+//                        }
+//            alreadyItems[i].quantity = qNumber
+//            alreadyItems[i].purchaseSubTotal = itemPurchaseSubTotal
+//            alreadyItems[i].instructions = specialIstruction
+//            alreadyItems[i].customerOrderItemOptions = customerOrderItemOptionArray
+//                    }
+//                }
+//
+//                saveItems(allItems: alreadyItems)
+//            }
                 // add new item in cart
                 
-            else{
+            //else{
                 items?.quantity = qNumber
                 items?.purchaseSubTotal = itemPurchaseSubTotal
                 items?.instructions = specialIstruction
@@ -444,10 +442,16 @@ extension NewItemDetailVC: itemDelegate{
                 items =  CustomerOrderItem.init(id: 0, orderItemID: "v1px5bld", forWho: "", instructions: specialIstruction, quantity: qNumber, purchaseSubTotal: itemPurchaseSubTotal, productPrice: productPrice, discount: 0.0, product: cProduct, customerOrderItemOptions: customerOrderItemOptionArray)
                 
                 alreadyItems.append(items!)
-                
                 saveItems(allItems: alreadyItems)
+                customerOrderItemOptionArray.removeAll()
+                customerOptionGroupArray.removeAll()
+                rowsWhichAreChecked.removeAll()
+                selectedSingleRows.removeAll()
+                tblOptionGroup.reloadData()
+            
+            
                 
-            }
+            //}
             
             bag = alreadyItems.count
             UserDefaults.standard.set(bag, forKey: "bag")

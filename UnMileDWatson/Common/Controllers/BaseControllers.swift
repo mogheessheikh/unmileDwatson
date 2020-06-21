@@ -191,9 +191,12 @@ class BaseViewController: UIViewController {
                UserDefaults.standard.removeObject(forKey: keyForSavedCustomer)//(forKey: "savedCustomer")
                UserDefaults.standard.removeObject(forKey:keyForSavedCustomerName)
                 
-               let alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
+                var alreadyItems = NSMutableArray.init(array: self.getAlreadyCartItems())
                 if (alreadyItems.count != 0){
                 alreadyItems.removeAllObjects()
+               // alreadyItems = self.getAlreadyCartItems() as! NSMutableArray
+                let bag = alreadyItems.count
+                UserDefaults.standard.set(bag, forKey: "bag")
                 self.saveItems(allItems: alreadyItems as! [CustomerOrderItem])
                 }
                 

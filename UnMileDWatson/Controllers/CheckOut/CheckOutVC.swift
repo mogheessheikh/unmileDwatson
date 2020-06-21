@@ -48,12 +48,15 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate,Ref
     var reSizeOrderTypeCell = false
     var reSizePayementTypeCell = false
     var promoCodeText = ""
-    var promoCodeMatch = false
+    var promoCodeMatch = ""
     var specialIstruction = ""
     var services: [String] = []
+    var paymentMethods:[String] = []
     var userSectionImagesArray :[UIImage] = [UIImage(named: "Suser.png")!,UIImage(named: "mail.png")!,UIImage(named: "phone-1.png")!]
     var headerTitleArray :[String] = ["Customer Information", "Have a Coupn?", "Delivery Address","Order Type", "Payment Type","General Requst(Optional)" ]
    
+    @IBOutlet var btnCheckOutContinue: UIButton!
+    
     override func viewDidLoad() {
         
         super.viewDidLoad()
@@ -72,6 +75,12 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate,Ref
           if (i.archive == 0){
             services.append(i.orderType.name)
              }
+        }
+        for i in branch.paymentMethods!{
+            
+            if  i.status != 0 {
+                paymentMethods.append(i.paymentType.name)
+            }
         }
         
         tblCheckOut.register(UINib(nibName: "OrderType", bundle: Bundle.main), forCellReuseIdentifier: "odercell")
@@ -96,12 +105,18 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate,Ref
         vc?.customerOrder = customerOrder
         vc?.promoCodeMatch = self.promoCodeMatch
         }
+    else{
+        let vc = segue.destination as? CardInfoVC
+        vc?.customerOrder = customerOrder
+        }
     }
+    
     
     @IBAction func goToSummary(_ sender: Any) {
         
        let area = getSavedAreaObject(key: keyForSavedArea)
         let deliveryCharges = deliverCharges()
+         customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: deliveryCharges, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
         
         if (selectedAddress == nil )
         {
@@ -120,11 +135,13 @@ class CheckOutVC: BaseViewController,UIPopoverPresentationControllerDelegate,Ref
         else{
             
             if(paymentType == "CARD"){
-                showAlert(title: "no card", message: "cant select card")
+            performSegue(withIdentifier: "checkouttoPayment", sender: self)
+//                showAlert(title: "no card", message: "cant select card")
+                
             }
             else{
-                customerOrder = CustomerOrder.init(id: 0, customerType: customer.customerType, transID: transId, ipAddress: customer.ipAddress, orderDate: orderDate, specialInstructions: specialIstruction , customerPhone: customer.phone, customerFirstName: customer.firstName, customerLastName: customer.lastName, orderStatus: "PENDING", billingStatus: "false", printingStatus: "false", creditStatus: "false", orderType: oderType, paymentType: paymentType, orderTime: "ASAP (Around 75 Minutes)", promoCode: "false", sitePreference: "false", paymentGateway: "false", paymentGatewayReference: "false", orderConfirmationStatus: "PENDING", orderConfirmationStatusMessage: "PENDING", deliveryCharge: deliveryCharges, surCharge: 0.0, amount: subTotal, subTotal: totalprice, orderDiscount: 0.0, promoCodeDiscount: 0.0, orderCredit: "false", customerID: customer.id, branchID: branchId, processedBySoftware: 0, phoneNotify: false, sendFax: false, sendSMS: false, firstCustomerOrder: false, preOrdered: 0, companyID: companyId, customerOrderAddress: selectedAddress! , customerOrderTaxes: [], customerOrderItem: customerOrderItem, invoiceOrderDetailID: "false", cardOption: "false")
-                    performSegue(withIdentifier: "checkout2Summary", sender: self)
+               
+            performSegue(withIdentifier: "checkout2Summary", sender: self)
         }
         }
         
@@ -267,7 +284,8 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             
         else if(section == 4){
             
-            return branch.paymentMethods!.count
+         
+            return paymentMethods.count
         }
             
         else {
@@ -365,16 +383,17 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
             if UIDevice.current.userInterfaceIdiom == .pad{
               paymentTypeCell.lblPaymentMethod.font =   paymentTypeCell.lblPaymentMethod.font.withSize(30)
             }
-            
-            paymentTypeCell.lblPaymentMethod.text = branch.paymentMethods![indexPath.row].paymentType.name
-            
+         
+            paymentTypeCell.lblPaymentMethod.text =  paymentMethods[indexPath.row]
             if(self.indexPathIsSelected(indexPath)) {
             paymentTypeCell.radioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
-                }
+            }
             else {
             paymentTypeCell.radioButton.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
-                                             
+                                                                                    
             }
+                
+           
             
             return paymentTypeCell
         }
@@ -421,21 +440,29 @@ extension CheckOutVC : UITableViewDelegate, UITableViewDataSource{
         else if (indexPath.section == 4){
             
             let previusSelectedCellIndexPath = self.addSelectedCellWithSection(indexPath)
-                       let cell = self.tblCheckOut.cellForRow(at: indexPath) as! PaymentMethodCell
-                       if(previusSelectedCellIndexPath != nil)
-                                     {
-                                         let previusSelectedCell = self.tblCheckOut.cellForRow(at: previusSelectedCellIndexPath!) as! PaymentMethodCell
-                                        previusSelectedCell.radioButton.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
+            let cell = self.tblCheckOut.cellForRow(at: indexPath) as! PaymentMethodCell
+            if(previusSelectedCellIndexPath != nil)
+            {
+            let previusSelectedCell = self.tblCheckOut.cellForRow(at: previusSelectedCellIndexPath!) as! PaymentMethodCell
+                previusSelectedCell.radioButton.setImage(UIImage(named: "uncheckradiobutton"),for:UIControl.State.normal)
                                          selectedIndex = indexPath as NSIndexPath
                                          
-                                         tblCheckOut.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
-                                         paymentType = branch.paymentMethods![indexPath.row].paymentType.name   
-                                         tblCheckOut.reloadData()
-                                     }
-                       else{
-                        paymentType = branch.paymentMethods![indexPath.row].paymentType.name
-                           cell.radioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
-                       }
+                tblCheckOut.deselectRow(at: previusSelectedCellIndexPath!, animated: true)
+                paymentType = branch.paymentMethods![indexPath.row].paymentType.name
+                tblCheckOut.reloadData()
+            }
+            else{
+               
+            paymentType = branch.paymentMethods![indexPath.row].paymentType.name
+            cell.radioButton.setImage(UIImage(named: "radiobutton"),for:UIControl.State.normal)
+                
+            }
+        }
+        if(paymentType == "CARD"){
+        btnCheckOutContinue.setTitle("Pay Now", for: .normal)
+        }
+        else{
+           btnCheckOutContinue.setTitle("Continue", for: .normal)
         }
         tblCheckOut.deselectRow(at: indexPath, animated: false)
     }
@@ -587,11 +614,11 @@ extension CheckOutVC: PromoCodeDelegate {
                 if(Int(totalprice) < promoCode.subTotal){
                     
                 showAlert(title: "", message: "Add more items in your cart to avail discount on this promo Code")
-                promoCodeMatch = false
+                promoCodeMatch = ""
                 }
                 else{
                     showAlert(title: "Promocode Matched", message: "")
-                    promoCodeMatch = true
+                    promoCodeMatch = "true"
                 }
             }
             else{
